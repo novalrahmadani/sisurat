@@ -1,0 +1,293 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+    --font-sans: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+    --radius-lg: var(--radius);
+    --radius-md: calc(var(--radius) - 2px);
+    --radius-sm: calc(var(--radius) - 4px);
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-destructive: var(--destructive);
+    --color-destructive-foreground: var(--destructive-foreground);
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+    --color-chart-1: var(--chart-1);
+    --color-chart-2: var(--chart-2);
+    --color-chart-3: var(--chart-3);
+    --color-chart-4: var(--chart-4);
+    --color-chart-5: var(--chart-5);
+    --color-sidebar: var(--sidebar-background);
+    --color-sidebar-foreground: var(--sidebar-foreground);
+    --color-sidebar-primary: var(--sidebar-primary);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-accent: var(--sidebar-accent);
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-ring: var(--sidebar-ring);
+}
+
+:root {
+    --background: #f5f8f6;
+    --foreground: #182d24;
+    --card: #ffffff;
+    --card-foreground: #182d24;
+    --popover: #ffffff;
+    --popover-foreground: #182d24;
+    --primary: #005a36;
+    --primary-foreground: #ffffff;
+    --secondary: #edf5f0;
+    --secondary-foreground: #005a36;
+    --muted: #edf3ef;
+    --muted-foreground: #61746a;
+    --accent: #e2f1e8;
+    --accent-foreground: #005a36;
+    --destructive: #c03636;
+    --destructive-foreground: #ffffff;
+    --border: #dce7e0;
+    --input: #d4e1d9;
+    --ring: #218b60;
+    --chart-1: #005a36;
+    --chart-2: #218b60;
+    --chart-3: #70ae8f;
+    --chart-4: #add2bd;
+    --chart-5: #dceee3;
+    --radius: 0.75rem;
+    --sidebar-background: #005a36;
+    --sidebar-foreground: #ffffff;
+    --sidebar-primary: #ffffff;
+    --sidebar-primary-foreground: #005a36;
+    --sidebar-accent: #23724f;
+    --sidebar-accent-foreground: #ffffff;
+    --sidebar-border: #337d5e;
+    --sidebar-ring: #a7ddbf;
+    --sidebar: #005a36;
+}
+
+.dark {
+    --background: #10231b;
+    --foreground: #edf6f0;
+    --card: #182f24;
+    --card-foreground: #edf6f0;
+    --popover: #182f24;
+    --popover-foreground: #edf6f0;
+    --primary: #8cdbb3;
+    --primary-foreground: #123622;
+    --secondary: #223e30;
+    --secondary-foreground: #d5eddf;
+    --muted: #203a2d;
+    --muted-foreground: #b0c9bb;
+    --accent: #284e3a;
+    --accent-foreground: #edf6f0;
+    --destructive: #f48080;
+    --destructive-foreground: #291516;
+    --border: #34503f;
+    --input: #42604e;
+    --ring: #83cba4;
+    --sidebar-background: #005a36;
+    --sidebar-foreground: #ffffff;
+    --sidebar-primary: #ffffff;
+    --sidebar-primary-foreground: #005a36;
+    --sidebar-accent: #23724f;
+    --sidebar-accent-foreground: #ffffff;
+    --sidebar-border: #337d5e;
+    --sidebar-ring: #a7ddbf;
+    --sidebar: #005a36;
+}
+
+@layer base {
+    * {
+        @apply border-border outline-ring/50;
+    }
+
+    body {
+        @apply bg-background font-sans text-foreground antialiased;
+    }
+
+    ::selection {
+        background: #cce8d8;
+        color: #005a36;
+    }
+}
+
+@layer components {
+    .sisurat-page {
+        @apply w-full min-w-0 p-5 sm:p-6 lg:p-8;
+    }
+
+    .sisurat-panel {
+        @apply rounded-2xl border border-border bg-card text-card-foreground;
+        box-shadow: 0 3px 20px rgb(20 62 39 / 4%);
+    }
+
+    .sisurat-gradient {
+        background:
+            radial-gradient(
+                ellipse at top right,
+                rgb(102 198 148 / 27%),
+                transparent 58%
+            ),
+            linear-gradient(125deg, #005a36 10%, #006b42 62%, #198159);
+        color: #ffffff;
+    }
+
+    .sisurat-kicker {
+        @apply text-xs font-semibold tracking-widest text-primary uppercase dark:text-emerald-200;
+    }
+
+    .sisurat-title {
+        @apply text-2xl leading-tight font-semibold tracking-tight sm:text-3xl;
+    }
+
+    .sisurat-subtitle {
+        @apply text-sm leading-7 text-muted-foreground;
+    }
+
+    .sisurat-icon-tile {
+        @apply flex size-12 shrink-0 items-center justify-center rounded-xl bg-secondary text-secondary-foreground;
+    }
+
+    .sisurat-input {
+        @apply min-h-11 w-full rounded-lg border border-input bg-card px-3 py-2.5 text-sm text-foreground outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/15 disabled:cursor-not-allowed disabled:opacity-60;
+    }
+
+    .sisurat-primary-action {
+        @apply inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-lg bg-[#005a36] px-4 py-2.5 text-sm font-medium text-white hover:bg-[#006f43] focus-visible:ring-3 focus-visible:ring-ring/30 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50;
+        box-shadow: 0 3px 8px rgb(0 90 54 / 12%);
+    }
+
+    .sisurat-secondary-action {
+        @apply inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-lg border border-border bg-card px-4 py-2.5 text-sm font-medium text-foreground hover:bg-accent focus-visible:ring-3 focus-visible:ring-ring/20 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50;
+    }
+
+    .sisurat-sidebar [data-sidebar='sidebar'],
+    [data-sidebar='sidebar'][data-mobile='true'] {
+        background:
+            radial-gradient(
+                ellipse at top right,
+                rgb(107 185 139 / 15%),
+                transparent 65%
+            ),
+            linear-gradient(165deg, #005a36 5%, #004a2d 90%);
+    }
+
+    .sisurat-sidebar [data-sidebar='menu-button'],
+    .sisurat-sidebar [data-sidebar='menu-sub-button'] {
+        @apply rounded-lg;
+    }
+
+    .sisurat-sidebar [data-sidebar='menu-button'][data-active='true'] {
+        @apply bg-white font-medium text-[#005a36] shadow-sm;
+    }
+
+    .sisurat-sidebar [data-sidebar='menu-sub-button'][data-active='true'] {
+        @apply bg-white/15 font-medium text-white;
+    }
+
+    .sisurat-auth [data-slot='input'],
+    .sisurat-auth input[type='password'] {
+        min-height: 2.875rem;
+        background-color: var(--card);
+    }
+
+    .sisurat-auth button[type='submit'] {
+        min-height: 2.875rem;
+    }
+}
+
+@media screen {
+    html {
+        scroll-behavior: smooth;
+    }
+
+    .sisurat-page section[id] {
+        scroll-margin-top: 6rem;
+    }
+
+    .sisurat-workspace {
+        background:
+            radial-gradient(
+                ellipse at top right,
+                rgb(226 241 232 / 55%),
+                transparent 45%
+            ),
+            var(--background);
+    }
+
+    .dark .sisurat-workspace {
+        background: var(--background);
+    }
+
+    :where(a, button, [role='button'], input, select, textarea) {
+        transition-property:
+            background-color, border-color, color, box-shadow, opacity;
+        transition-duration: 180ms;
+        transition-timing-function: ease-out;
+    }
+
+    .sisurat-page-enter {
+        animation: sisurat-enter 220ms ease-out both;
+    }
+
+    .sisurat-card-link {
+        transition:
+            transform 200ms ease-out,
+            box-shadow 200ms ease-out,
+            border-color 200ms ease-out;
+    }
+
+    .sisurat-card-link:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgb(0 90 54 / 8%);
+        border-color: #9ec6ae;
+    }
+
+    @keyframes sisurat-enter {
+        from {
+            opacity: 0;
+            transform: translateY(6px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+@media print {
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+}

@@ -1,0 +1,4069 @@
+[
+  {
+    "source_number": 1,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN MODERN AL-MANAR MUHAMMADIYAH",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa KEPAHYANG, Kecamatan LEMPUING"
+  },
+  {
+    "source_number": 2,
+    "institution_type": "school",
+    "name": "MAS AL-MANAR",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa KEPAHYANG, Kecamatan LEMPUING"
+  },
+  {
+    "source_number": 3,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN AN-NUR",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa TEBING SULUH, Kecamatan LEMPUING"
+  },
+  {
+    "source_number": 4,
+    "institution_type": "school",
+    "name": "MAS AN NUR",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa TEBING SULUH, Kecamatan LEMPUING"
+  },
+  {
+    "source_number": 5,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN DARUSSALAM LEMPUING OKI",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa BUMI AGUNG, Kecamatan LEMPUING"
+  },
+  {
+    "source_number": 6,
+    "institution_type": "school",
+    "name": "MAS DARUSSALAM",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa BUMI AGUNG, Kecamatan LEMPUING"
+  },
+  {
+    "source_number": 7,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN DARUSSYAFA'AT",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa TUGU JAYA, Kecamatan LEMPUING"
+  },
+  {
+    "source_number": 8,
+    "institution_type": "school",
+    "name": "MAS DARUSSYAFAAT",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa TUGU JAYA, Kecamatan LEMPUING"
+  },
+  {
+    "source_number": 9,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN MIFTAHUL HUDA",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa TUGU AGUNG, Kecamatan LEMPUING"
+  },
+  {
+    "source_number": 10,
+    "institution_type": "school",
+    "name": "MAS MIFTAHUL HUDA",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa TUGU AGUNG, Kecamatan LEMPUING"
+  },
+  {
+    "source_number": 11,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN NURUL QOLAM",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa DABUK REJO, Kecamatan LEMPUING"
+  },
+  {
+    "source_number": 12,
+    "institution_type": "school",
+    "name": "MAS NURUL QOLAM",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa DABUK REJO, Kecamatan LEMPUING"
+  },
+  {
+    "source_number": 13,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN NURUL HIDAYAH KEPAYANG",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa KEPAHYANG, Kecamatan LEMPUING"
+  },
+  {
+    "source_number": 14,
+    "institution_type": "school",
+    "name": "MAS TRI BHAKTI AT-TAQWA",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa KEPAHYANG, Kecamatan LEMPUING"
+  },
+  {
+    "source_number": 15,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN DARUSSALAM TUGUMULYO",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa TUGUMULYO, Kecamatan LEMPUING"
+  },
+  {
+    "source_number": 16,
+    "institution_type": "school",
+    "name": "SMAS ISLAM DARUSSALAM",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa TUGUMULYO, Kecamatan LEMPUING"
+  },
+  {
+    "source_number": 17,
+    "institution_type": "school",
+    "name": "SMK AN NUR",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa TEBING SULUH, Kecamatan LEMPUING"
+  },
+  {
+    "source_number": 18,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN MODERN AL-KAUTSAR MUHAMMADIYAH LEMPUING",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa TUGU JAYA, Kecamatan LEMPUING"
+  },
+  {
+    "source_number": 19,
+    "institution_type": "school",
+    "name": "SMKS AL KAUTSAR SRIWIJAYA",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa TUGU JAYA, Kecamatan LEMPUING"
+  },
+  {
+    "source_number": 20,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN DARUSSALAM TUGUMULYO LEMPUING OKI",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa TUGUMULYO, Kecamatan LEMPUING"
+  },
+  {
+    "source_number": 21,
+    "institution_type": "school",
+    "name": "SMKS ISLAM RADEN FATAH",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa TUGUMULYO, Kecamatan LEMPUING"
+  },
+  {
+    "source_number": 22,
+    "institution_type": "school",
+    "name": "SMKS KESEHATAN TRI BHAKTI AT-TAQWA",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa KEPAHYANG, Kecamatan LEMPUING"
+  },
+  {
+    "source_number": 23,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN AL-MU'AWANAH",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa SUKA MUKTI, Kecamatan MESUJI"
+  },
+  {
+    "source_number": 24,
+    "institution_type": "school",
+    "name": "SMA ISLAM AL MUAWANAH",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa SUKA MUKTI, Kecamatan MESUJI"
+  },
+  {
+    "source_number": 25,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN SHOLAATUL FATIKH",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa SUMBER DERAS, Kecamatan MESUJI"
+  },
+  {
+    "source_number": 26,
+    "institution_type": "school",
+    "name": "SMAS ISLAM SHOLAATUL FATIKH",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa SUMBER DERAS, Kecamatan MESUJI"
+  },
+  {
+    "source_number": 27,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN MUKHTAR SYAFA'AT",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa SUKA MUKTI, Kecamatan MESUJI"
+  },
+  {
+    "source_number": 28,
+    "institution_type": "school",
+    "name": "SMKS MUKHTAR SYAFA AT",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa SUKA MUKTI, Kecamatan MESUJI"
+  },
+  {
+    "source_number": 29,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN AL-MUMTAAZAH PEDAMARAN",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa MENANG RAYA, Kecamatan PEDAMARAN"
+  },
+  {
+    "source_number": 30,
+    "institution_type": "school",
+    "name": "MA AL-MUMTAAZAH",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa MENANG RAYA, Kecamatan PEDAMARAN"
+  },
+  {
+    "source_number": 31,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN NURUL ULUM",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa MUARA BURNAI II, Kecamatan LEMPUING JAYA"
+  },
+  {
+    "source_number": 32,
+    "institution_type": "school",
+    "name": "MA NURUL ULUM",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa MUARA BURNAI II, Kecamatan LEMPUING JAYA"
+  },
+  {
+    "source_number": 33,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN BABUL ULUM",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa MUARA BURNAI, Kecamatan LEMPUING JAYA"
+  },
+  {
+    "source_number": 34,
+    "institution_type": "school",
+    "name": "SMK BABUL ULUM",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa MUARA BURNAI, Kecamatan LEMPUING JAYA"
+  },
+  {
+    "source_number": 35,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN AL-HIDAYAT JAMANTRAS",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa MUARA BURNAI 1, Kecamatan LEMPUING JAYA"
+  },
+  {
+    "source_number": 36,
+    "institution_type": "school",
+    "name": "MADRASAH ALIYAH",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa MUARA BURNAI 1, Kecamatan LEMPUING JAYA"
+  },
+  {
+    "source_number": 37,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN AS-SHIDDIQIYAH",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa LUBUK SEBERUK, Kecamatan LEMPUING JAYA"
+  },
+  {
+    "source_number": 38,
+    "institution_type": "school",
+    "name": "SMKS AS-SHIDDIQIYAH",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa LUBUK SEBERUK, Kecamatan LEMPUING JAYA"
+  },
+  {
+    "source_number": 39,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN AL-ISHLAH",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa TULUNG SELAPAN ILIR, Kecamatan TULUNG SELAPAN"
+  },
+  {
+    "source_number": 40,
+    "institution_type": "school",
+    "name": "MAS AL ISHLAH",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa TULUNG SELAPAN ILIR, Kecamatan TULUNG SELAPAN"
+  },
+  {
+    "source_number": 41,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN DARUSSALAM",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa KAMPUNG BARU, Kecamatan MESUJI MAKMUR"
+  },
+  {
+    "source_number": 42,
+    "institution_type": "school",
+    "name": "MAS DARUSSALAM",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa KAMPUNG BARU, Kecamatan MESUJI MAKMUR"
+  },
+  {
+    "source_number": 43,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN FUTUHIYYAH",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa CAHAYA MAS, Kecamatan MESUJI MAKMUR"
+  },
+  {
+    "source_number": 44,
+    "institution_type": "school",
+    "name": "MAS FUTUHIYYAH",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa CAHAYA MAS, Kecamatan MESUJI MAKMUR"
+  },
+  {
+    "source_number": 45,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN AL-FURQON PAMPANGAN",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa PAMPANGAN, Kecamatan PAMPANGAN"
+  },
+  {
+    "source_number": 46,
+    "institution_type": "school",
+    "name": "MAS AL FURQON PAMPANGAN",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa PAMPANGAN, Kecamatan PAMPANGAN"
+  },
+  {
+    "source_number": 47,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN IBNUL FALLAH",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa BANGSAL, Kecamatan PAMPANGAN"
+  },
+  {
+    "source_number": 48,
+    "institution_type": "school",
+    "name": "MAS IBNUL FALLAAH",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa BANGSAL, Kecamatan PAMPANGAN"
+  },
+  {
+    "source_number": 49,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN NURUL MARIFAH",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa ULAK TEMBAGA, Kecamatan JEJAWI"
+  },
+  {
+    "source_number": 50,
+    "institution_type": "school",
+    "name": "SMAS NURUL MARIFAH",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa ULAK TEMBAGA, Kecamatan JEJAWI"
+  },
+  {
+    "source_number": 51,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN DARUL KHUKAMAA",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa SRI JAYA BARU, Kecamatan AIR SUGIHAN"
+  },
+  {
+    "source_number": 52,
+    "institution_type": "school",
+    "name": "SMA DARUL KHUKAMAA",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa SRI JAYA BARU, Kecamatan AIR SUGIHAN"
+  },
+  {
+    "source_number": 53,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN DI'AYATUL ISLAMIYAH SERIGUNA",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa SERIGUNA, Kecamatan TELUK GELAM"
+  },
+  {
+    "source_number": 54,
+    "institution_type": "school",
+    "name": "MAS DIAYATUL ISLAMIYAH",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa SERIGUNA, Kecamatan TELUK GELAM"
+  },
+  {
+    "source_number": 55,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN NURUL HUDA",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa SINAR HARAPAN MULYA, Kecamatan TELUK GELAM"
+  },
+  {
+    "source_number": 56,
+    "institution_type": "school",
+    "name": "MAS PSA NURUL HUDA",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa SINAR HARAPAN MULYA, Kecamatan TELUK GELAM"
+  },
+  {
+    "source_number": 57,
+    "institution_type": "school",
+    "name": "MAS AL AQIDAH",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa CAHYA TANI, Kecamatan LEMPUING"
+  },
+  {
+    "source_number": 58,
+    "institution_type": "school",
+    "name": "SMA IT CIPTA INSAN CENDIKIA",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa TUGUMULYO, Kecamatan LEMPUING"
+  },
+  {
+    "source_number": 59,
+    "institution_type": "school",
+    "name": "SMAN 1 LEMPUING",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa TEBING SULUH, Kecamatan LEMPUING"
+  },
+  {
+    "source_number": 60,
+    "institution_type": "school",
+    "name": "SMKN 1 LEMPUING",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa SINDANG SARI, Kecamatan LEMPUING"
+  },
+  {
+    "source_number": 61,
+    "institution_type": "school",
+    "name": "SMKS BINA KARSA SRIWIJAYA",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa TUGUMULYO, Kecamatan LEMPUING"
+  },
+  {
+    "source_number": 62,
+    "institution_type": "school",
+    "name": "SMKS CENDEKIA",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa CAHYA MAJU, Kecamatan LEMPUING"
+  },
+  {
+    "source_number": 63,
+    "institution_type": "school",
+    "name": "SMKS MIFTAHUL HUDA TUGUAGUNG",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa TUGU AGUNG, Kecamatan LEMPUING"
+  },
+  {
+    "source_number": 64,
+    "institution_type": "school",
+    "name": "SMKN 1 KAYUAGUNG",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa KOTA RAYA, Kecamatan KOTA KAYU AGUNG"
+  },
+  {
+    "source_number": 65,
+    "institution_type": "school",
+    "name": "SMKN 2 KAYUAGUNG",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa KEDATON, Kecamatan KOTA KAYU AGUNG"
+  },
+  {
+    "source_number": 66,
+    "institution_type": "school",
+    "name": "SMKN 3 KAYUAGUNG",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa KEDATON, Kecamatan KOTA KAYU AGUNG"
+  },
+  {
+    "source_number": 67,
+    "institution_type": "school",
+    "name": "SMKS BINA BANGSA KAYUAGUNG",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa PAKU, Kecamatan KOTA KAYU AGUNG"
+  },
+  {
+    "source_number": 68,
+    "institution_type": "school",
+    "name": "SMKS PGRI 1 KAYUAGUNG",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa PAKU, Kecamatan KOTA KAYU AGUNG"
+  },
+  {
+    "source_number": 69,
+    "institution_type": "school",
+    "name": "MAN 2 OGAN KOMERING ILIR",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa SURYAADI, Kecamatan MESUJI"
+  },
+  {
+    "source_number": 70,
+    "institution_type": "school",
+    "name": "SMAN 1 MESUJI",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa PEMATANG PANGGANG, Kecamatan MESUJI"
+  },
+  {
+    "source_number": 71,
+    "institution_type": "school",
+    "name": "SMAN 2 MESUJI",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa MAKARTI MULYA, Kecamatan MESUJI"
+  },
+  {
+    "source_number": 72,
+    "institution_type": "school",
+    "name": "SMKN 1 MESUJI",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa KALI DERAS, Kecamatan MESUJI"
+  },
+  {
+    "source_number": 73,
+    "institution_type": "school",
+    "name": "SMKS AL-HIKMAH",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa MAKARTI MULYA, Kecamatan MESUJI"
+  },
+  {
+    "source_number": 74,
+    "institution_type": "school",
+    "name": "MAN 1 OGAN KOMERING ILIR",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa BALIAN MAKMUR, Kecamatan MESUJI RAYA"
+  },
+  {
+    "source_number": 75,
+    "institution_type": "school",
+    "name": "SMAN 1 MESUJI RAYA",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa SUMBU SARI, Kecamatan MESUJI RAYA"
+  },
+  {
+    "source_number": 76,
+    "institution_type": "school",
+    "name": "SMAN 2 MESUJI RAYA",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa KERTA MUKTI, Kecamatan MESUJI RAYA"
+  },
+  {
+    "source_number": 77,
+    "institution_type": "school",
+    "name": "SMAN 3 MESUJI RAYA",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa BALIAN, Kecamatan MESUJI RAYA"
+  },
+  {
+    "source_number": 78,
+    "institution_type": "school",
+    "name": "SMKN 1 MESUJI RAYA",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa MESUJI RAYA, Kecamatan MESUJI RAYA"
+  },
+  {
+    "source_number": 79,
+    "institution_type": "school",
+    "name": "SMAN 1 PEDAMARAN",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa MENANG RAYA, Kecamatan PEDAMARAN"
+  },
+  {
+    "source_number": 80,
+    "institution_type": "school",
+    "name": "SMAS MERANTI",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa PEDAMARAN VI, Kecamatan PEDAMARAN"
+  },
+  {
+    "source_number": 81,
+    "institution_type": "school",
+    "name": "SMAS PERSATUAN",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa MENANG RAYA, Kecamatan PEDAMARAN"
+  },
+  {
+    "source_number": 82,
+    "institution_type": "school",
+    "name": "SMAS ISLAM TELADAN",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa MUARA BURNAI II, Kecamatan LEMPUING JAYA"
+  },
+  {
+    "source_number": 83,
+    "institution_type": "school",
+    "name": "SMKS BUDI UTOMO",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa MUARA BURNAI II, Kecamatan LEMPUING JAYA"
+  },
+  {
+    "source_number": 84,
+    "institution_type": "school",
+    "name": "SMKS WALI SONGO",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa RANTAU DURIAN, Kecamatan LEMPUING JAYA"
+  },
+  {
+    "source_number": 85,
+    "institution_type": "school",
+    "name": "SMAN 1 TANJUNG LUBUK",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa PULAU GEMANTUNG, Kecamatan TANJUNG LUBUK"
+  },
+  {
+    "source_number": 86,
+    "institution_type": "school",
+    "name": "SMAS SYIHABUDDIN",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa TANJUNG BARU, Kecamatan TANJUNG LUBUK"
+  },
+  {
+    "source_number": 87,
+    "institution_type": "school",
+    "name": "SMKN 1 TANJUNG LUBUK",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa PULAU GEMANTUNG ULU, Kecamatan TANJUNG LUBUK"
+  },
+  {
+    "source_number": 88,
+    "institution_type": "school",
+    "name": "SMAN 1 TULUNG SELAPAN",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa TULUNG SELAPAN ULU, Kecamatan TULUNG SELAPAN"
+  },
+  {
+    "source_number": 89,
+    "institution_type": "school",
+    "name": "SMAS MUHAMMADIYAH TULUNG SELAPAN",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa LEBUNG ITAM, Kecamatan TULUNG SELAPAN"
+  },
+  {
+    "source_number": 90,
+    "institution_type": "school",
+    "name": "SMKN 1 TULUNG SELAPAN",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa PULU BERUANG, Kecamatan TULUNG SELAPAN"
+  },
+  {
+    "source_number": 91,
+    "institution_type": "school",
+    "name": "SMAN 1 MESUJI MAKMUR",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa CAHAYA MAS, Kecamatan MESUJI MAKMUR"
+  },
+  {
+    "source_number": 92,
+    "institution_type": "school",
+    "name": "SMAN 2 MESUJI MAKMUR",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa SURYA KARTA, Kecamatan MESUJI MAKMUR"
+  },
+  {
+    "source_number": 93,
+    "institution_type": "school",
+    "name": "SMKN 1 MESUJI MAKMUR",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa CATUR TUNGGAL, Kecamatan MESUJI MAKMUR"
+  },
+  {
+    "source_number": 94,
+    "institution_type": "school",
+    "name": "MA AL - HIDAYAH",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa GADING MAS, Kecamatan SUNGAI MENANG"
+  },
+  {
+    "source_number": 95,
+    "institution_type": "school",
+    "name": "SMAN 1 SUNGAI MENANG",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa SUNGAI MENANG, Kecamatan SUNGAI MENANG"
+  },
+  {
+    "source_number": 96,
+    "institution_type": "school",
+    "name": "SMAS BINA DHARMA MANDIRA",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa BUMI PRATAMA MANDIRA, Kecamatan SUNGAI MENANG"
+  },
+  {
+    "source_number": 97,
+    "institution_type": "school",
+    "name": "SMKN 1 SUNGAI MENANG",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa BUMI PRATAMA MANDIRA, Kecamatan SUNGAI MENANG"
+  },
+  {
+    "source_number": 98,
+    "institution_type": "school",
+    "name": "SMA NEGERI 27 OKI",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa BALAM JERUJU, Kecamatan CENGAL"
+  },
+  {
+    "source_number": 99,
+    "institution_type": "school",
+    "name": "SMAN 1 CENGAL",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa CENGAL, Kecamatan CENGAL"
+  },
+  {
+    "source_number": 100,
+    "institution_type": "school",
+    "name": "SMAN 1 PAMPANGAN",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa PAMPANGAN, Kecamatan PAMPANGAN"
+  },
+  {
+    "source_number": 101,
+    "institution_type": "school",
+    "name": "SMK TI NUSANTARA",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa SRI MULYA, Kecamatan PAMPANGAN"
+  },
+  {
+    "source_number": 102,
+    "institution_type": "school",
+    "name": "SMAN 1 JEJAWI",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa LINGKIS, Kecamatan JEJAWI"
+  },
+  {
+    "source_number": 103,
+    "institution_type": "school",
+    "name": "SMKN 1 JEJAWI",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa JEJAWI, Kecamatan JEJAWI"
+  },
+  {
+    "source_number": 104,
+    "institution_type": "school",
+    "name": "MAS KHOIRUL UMMAH",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa NUSA KARTA, Kecamatan AIR SUGIHAN"
+  },
+  {
+    "source_number": 105,
+    "institution_type": "school",
+    "name": "SMAN 1 AIR SUGIHAN",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa KERTA MUKTI, Kecamatan AIR SUGIHAN"
+  },
+  {
+    "source_number": 106,
+    "institution_type": "school",
+    "name": "SMAN 2 AIR SUGIHAN",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa SIMPANG HERAN, Kecamatan AIR SUGIHAN"
+  },
+  {
+    "source_number": 107,
+    "institution_type": "school",
+    "name": "SMAN 1 SIRAH PULAU PADANG",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa SMAN 1 SIRAH PULAU PADANG, Kecamatan SIRAH PULAU PADANG"
+  },
+  {
+    "source_number": 108,
+    "institution_type": "school",
+    "name": "SMAS AL HIJRAH SIRAH PULAU PADANG",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa RAWANG BESAR, Kecamatan SIRAH PULAU PADANG"
+  },
+  {
+    "source_number": 109,
+    "institution_type": "school",
+    "name": "SMAN 1 PANGKALAN LAMPAM",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa PANGKALAN LAMPAM, Kecamatan PANGKALAN LAMPAM"
+  },
+  {
+    "source_number": 110,
+    "institution_type": "school",
+    "name": "MAN INSAN CENDEKIA OKI",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa SERIGUNA, Kecamatan TELUK GELAM"
+  },
+  {
+    "source_number": 111,
+    "institution_type": "school",
+    "name": "SMAN 1 TELUK GELAM",
+    "district": "Kabupaten Ogan Komering Ilir",
+    "address": "Desa SERIGUNA, Kecamatan TELUK GELAM"
+  },
+  {
+    "source_number": 112,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN MATHLA'UL ANWAR",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Tiuh Balak Pasar, Kecamatan Baradatu"
+  },
+  {
+    "source_number": 113,
+    "institution_type": "school",
+    "name": "MAS MATHLAUL ANWAR",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Tiuh Balak Pasar, Kecamatan Baradatu"
+  },
+  {
+    "source_number": 114,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN MIFTAHUL ULUM",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Campur Asri, Kecamatan Baradatu"
+  },
+  {
+    "source_number": 115,
+    "institution_type": "school",
+    "name": "MAS MIFTAHUL ULUM BARADATU",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Campur Asri, Kecamatan Baradatu"
+  },
+  {
+    "source_number": 116,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN DARUL HIKMAH",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Taman Asri, Kecamatan Baradatu"
+  },
+  {
+    "source_number": 117,
+    "institution_type": "school",
+    "name": "SMA ISLAM DARUL HIKMAH",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Taman Asri, Kecamatan Baradatu"
+  },
+  {
+    "source_number": 118,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN BAHRUL ULUM GUNUNG SARI",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Gunung Sari, Kecamatan Rebang Tangkas"
+  },
+  {
+    "source_number": 119,
+    "institution_type": "school",
+    "name": "SMK BAHRUL ULUM",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Gunung Sari, Kecamatan Rebang Tangkas"
+  },
+  {
+    "source_number": 120,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN FATHUL ULUM BANDAR SARI",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Bandar Sari, Kecamatan Way Tuba"
+  },
+  {
+    "source_number": 121,
+    "institution_type": "school",
+    "name": "MAS MIFTAHUL ULUM WAY TUBA",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Bandar Sari, Kecamatan Way Tuba"
+  },
+  {
+    "source_number": 122,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN FATHUL ULUM",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Bandar Sari, Kecamatan Way Tuba"
+  },
+  {
+    "source_number": 123,
+    "institution_type": "school",
+    "name": "SMK FATHUL ULUM",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Bandar Sari, Kecamatan Way Tuba"
+  },
+  {
+    "source_number": 124,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN PSM SUKA AGUNG",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Suka Agung, Kecamatan Buay Bahuga"
+  },
+  {
+    "source_number": 125,
+    "institution_type": "school",
+    "name": "MAS PSM SUKA AGUNG",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Suka Agung, Kecamatan Buay Bahuga"
+  },
+  {
+    "source_number": 126,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTERA DARUL ULUM",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Bumi Harjo, Kecamatan Buay Bahuga"
+  },
+  {
+    "source_number": 127,
+    "institution_type": "school",
+    "name": "MAS DARUL ULUM BAHUGA",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Bumi Harjo, Kecamatan Buay Bahuga"
+  },
+  {
+    "source_number": 128,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN TAHFIDZ AL HIKMAH ISTIQOMAH",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Sukabumi, Kecamatan Buay Bahuga"
+  },
+  {
+    "source_number": 129,
+    "institution_type": "school",
+    "name": "SMK Islam Al Hikmah Istiqomah",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Sukabumi, Kecamatan Buay Bahuga"
+  },
+  {
+    "source_number": 130,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN MIFTAHUL HUDA",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Bumi Harjo, Kecamatan Buay Bahuga"
+  },
+  {
+    "source_number": 131,
+    "institution_type": "school",
+    "name": "SMK Miftakhul Huda",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Bumi Harjo, Kecamatan Buay Bahuga"
+  },
+  {
+    "source_number": 132,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN ROUDLOTUL MUTTAQIN",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Bumi Agung, Kecamatan Bumi Agung"
+  },
+  {
+    "source_number": 133,
+    "institution_type": "school",
+    "name": "SMA AN-NASHIH",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Bumi Agung, Kecamatan Bumi Agung"
+  },
+  {
+    "source_number": 134,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN ROUDHOTU TOLIBIN",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Pisang Indah, Kecamatan Bumi Agung"
+  },
+  {
+    "source_number": 135,
+    "institution_type": "school",
+    "name": "SMKS ROUDHOTU TOLIBIN",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Pisang Indah, Kecamatan Bumi Agung"
+  },
+  {
+    "source_number": 136,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN ALFALAKHUSSA'ADAH.",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Tanjung Serupa, Kecamatan Pakuan Ratu"
+  },
+  {
+    "source_number": 137,
+    "institution_type": "school",
+    "name": "SMA Alfalakhussaadah",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Tanjung Serupa, Kecamatan Pakuan Ratu"
+  },
+  {
+    "source_number": 138,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN MODERN MAKKAH",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Karta Jaya, Kecamatan Negara Batin"
+  },
+  {
+    "source_number": 139,
+    "institution_type": "school",
+    "name": "MAS PONDOK MODERN MAKKAH",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Karta Jaya, Kecamatan Negara Batin"
+  },
+  {
+    "source_number": 140,
+    "institution_type": "school",
+    "name": "SMAS PONDOK MAKKAH N BATIN",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Karta Jaya, Kecamatan Negara Batin"
+  },
+  {
+    "source_number": 141,
+    "institution_type": "school",
+    "name": "MAS GUPPI BANJIT",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Argomulyo, Kecamatan Banjit"
+  },
+  {
+    "source_number": 142,
+    "institution_type": "school",
+    "name": "MAS NURUL ISLAM",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Simpang Asam, Kecamatan Banjit"
+  },
+  {
+    "source_number": 143,
+    "institution_type": "school",
+    "name": "SMA Islam Bina Sejahtera",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Simpang Asam, Kecamatan Banjit"
+  },
+  {
+    "source_number": 144,
+    "institution_type": "school",
+    "name": "SMA NEGERI 2 BANJIT",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Simpang Asam, Kecamatan Banjit"
+  },
+  {
+    "source_number": 145,
+    "institution_type": "school",
+    "name": "SMAN 1 BANJIT",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Bali Sadar Selatan, Kecamatan Banjit"
+  },
+  {
+    "source_number": 146,
+    "institution_type": "school",
+    "name": "SMAS MUHAMMADIYAH BANJIT",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Rantau Temiang, Kecamatan Banjit"
+  },
+  {
+    "source_number": 147,
+    "institution_type": "school",
+    "name": "SMKN 1 BANJIT",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Bali Sadar Utara, Kecamatan Banjit"
+  },
+  {
+    "source_number": 148,
+    "institution_type": "school",
+    "name": "SMKN 2 BANJIT",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Kemu, Kecamatan Banjit"
+  },
+  {
+    "source_number": 149,
+    "institution_type": "school",
+    "name": "MAN 1 WAY KANAN",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Banjar Negara, Kecamatan Baradatu"
+  },
+  {
+    "source_number": 150,
+    "institution_type": "school",
+    "name": "SLB N Baradatu",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Tiuh Balak, Kecamatan Baradatu"
+  },
+  {
+    "source_number": 151,
+    "institution_type": "school",
+    "name": "SMAN 1 BARADATU",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Banjar Negara, Kecamatan Baradatu"
+  },
+  {
+    "source_number": 152,
+    "institution_type": "school",
+    "name": "SMAS BAKTI BARADATU",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Tiuh Balak Pasar, Kecamatan Baradatu"
+  },
+  {
+    "source_number": 153,
+    "institution_type": "school",
+    "name": "SMKN 1 BARADATU",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Cugah, Kecamatan Baradatu"
+  },
+  {
+    "source_number": 154,
+    "institution_type": "school",
+    "name": "SMKS AL MAARIF",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa HAKTI NEGARA, Kecamatan Baradatu"
+  },
+  {
+    "source_number": 155,
+    "institution_type": "school",
+    "name": "SMKS YP 17 BARADATU",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Setia Negara, Kecamatan Baradatu"
+  },
+  {
+    "source_number": 156,
+    "institution_type": "school",
+    "name": "SMAN 02 GUNUNG LABUHAN",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Way Tuba, Kecamatan Gunung Labuhan"
+  },
+  {
+    "source_number": 157,
+    "institution_type": "school",
+    "name": "SMAN 1 GUNUNG LABUHAN",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Gunung Labuhan, Kecamatan Gunung Labuhan"
+  },
+  {
+    "source_number": 158,
+    "institution_type": "school",
+    "name": "SMK NEGERI 1 GUNUNG LABUHAN",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Bengkulu, Kecamatan Gunung Labuhan"
+  },
+  {
+    "source_number": 159,
+    "institution_type": "school",
+    "name": "SMAN 1 KASUI",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Kasui Pasar, Kecamatan Kasui"
+  },
+  {
+    "source_number": 160,
+    "institution_type": "school",
+    "name": "SMAN 2 KASUI",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Tanjung Bulan, Kecamatan Kasui"
+  },
+  {
+    "source_number": 161,
+    "institution_type": "school",
+    "name": "SMK NURUL HIDAYAH",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa LEBAK PENIANGAN, Kecamatan Rebang Tangkas"
+  },
+  {
+    "source_number": 162,
+    "institution_type": "school",
+    "name": "SMKN BLAMBANGAN UMPU",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Blambangan Umpu, Kecamatan Blambangan Umpu"
+  },
+  {
+    "source_number": 163,
+    "institution_type": "school",
+    "name": "SMAN 1 WAY TUBA",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Way Tuba, Kecamatan Way Tuba"
+  },
+  {
+    "source_number": 164,
+    "institution_type": "school",
+    "name": "SMKS TUNAS WIYATA",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Way Tuba, Kecamatan Way Tuba"
+  },
+  {
+    "source_number": 165,
+    "institution_type": "school",
+    "name": "SMAN 02 NEGERI AGUNG",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Kali Papan, Kecamatan Negeri Agung"
+  },
+  {
+    "source_number": 166,
+    "institution_type": "school",
+    "name": "SMAN 1 GEDUNG HARAPAN",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Gedung Harapan, Kecamatan Negeri Agung"
+  },
+  {
+    "source_number": 167,
+    "institution_type": "school",
+    "name": "SMAN 1 NEGERI AGUNG",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Bandar Dalam, Kecamatan Negeri Agung"
+  },
+  {
+    "source_number": 168,
+    "institution_type": "school",
+    "name": "SMKN 01 BAHUGA",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Mesir Ilir, Kecamatan Bahuga"
+  },
+  {
+    "source_number": 169,
+    "institution_type": "school",
+    "name": "SMAN 1 BUAY BAHUGA",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Bumi Harjo, Kecamatan Buay Bahuga"
+  },
+  {
+    "source_number": 170,
+    "institution_type": "school",
+    "name": "SMAN 2 BUAY BAHUGA",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Suka Agung, Kecamatan Buay Bahuga"
+  },
+  {
+    "source_number": 171,
+    "institution_type": "school",
+    "name": "SMKN 1 BUAY BAHUGA",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa WAY AGUNG, Kecamatan Buay Bahuga"
+  },
+  {
+    "source_number": 172,
+    "institution_type": "school",
+    "name": "MAS GUPPI PISANG BARU",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Pisang Baru, Kecamatan Bumi Agung"
+  },
+  {
+    "source_number": 173,
+    "institution_type": "school",
+    "name": "SMAN 1 BUMI AGUNG",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Pisang Baru, Kecamatan Bumi Agung"
+  },
+  {
+    "source_number": 174,
+    "institution_type": "school",
+    "name": "SMKN 1 BUMI AGUNG",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Mulyo Harjo, Kecamatan Bumi Agung"
+  },
+  {
+    "source_number": 175,
+    "institution_type": "school",
+    "name": "SMKS PERSADA NUSANTARA",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Pisang Baru, Kecamatan Bumi Agung"
+  },
+  {
+    "source_number": 176,
+    "institution_type": "school",
+    "name": "MAS AL MAARIF SERUPA INDAH",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Serupa Indah, Kecamatan Pakuan Ratu"
+  },
+  {
+    "source_number": 177,
+    "institution_type": "school",
+    "name": "MAS MAARIF 1 BUMI MULYA",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Tanjung Serupa, Kecamatan Pakuan Ratu"
+  },
+  {
+    "source_number": 178,
+    "institution_type": "school",
+    "name": "SMAN 1 PAKUAN RATU",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Pakuan Ratu, Kecamatan Pakuan Ratu"
+  },
+  {
+    "source_number": 179,
+    "institution_type": "school",
+    "name": "SMAS BERINGIN RATU/P RT",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Serupa Indah, Kecamatan Pakuan Ratu"
+  },
+  {
+    "source_number": 180,
+    "institution_type": "school",
+    "name": "SMAS MMT PAKUAN RATU",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Pakuan Baru, Kecamatan Pakuan Ratu"
+  },
+  {
+    "source_number": 181,
+    "institution_type": "school",
+    "name": "SMKN 01 PAKUAN RATU",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Sukabumi, Kecamatan Pakuan Ratu"
+  },
+  {
+    "source_number": 182,
+    "institution_type": "school",
+    "name": "SMAN 1 NEGARA BATIN",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Negara Batin, Kecamatan Negara Batin"
+  },
+  {
+    "source_number": 183,
+    "institution_type": "school",
+    "name": "SMAN 2 NEGARA BATIN",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Adi Jaya, Kecamatan Negara Batin"
+  },
+  {
+    "source_number": 184,
+    "institution_type": "school",
+    "name": "SMAS HIDAYATUL M NEGARA BATIN",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Bumi Jaya, Kecamatan Negara Batin"
+  },
+  {
+    "source_number": 185,
+    "institution_type": "school",
+    "name": "SMKN 1 NEGARA BATIN",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Gisting Jaya, Kecamatan Negara Batin"
+  },
+  {
+    "source_number": 186,
+    "institution_type": "school",
+    "name": "MAS NURUL HUDA TEGAL MUKTI",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Tegal Mukti, Kecamatan Negeri Besar"
+  },
+  {
+    "source_number": 187,
+    "institution_type": "school",
+    "name": "SMAN 1 NEGERI BESAR",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Tiuh Baru, Kecamatan Negeri Besar"
+  },
+  {
+    "source_number": 188,
+    "institution_type": "school",
+    "name": "SMAN 2 NEGERI BESAR",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Sri Basuki, Kecamatan Negeri Besar"
+  },
+  {
+    "source_number": 189,
+    "institution_type": "school",
+    "name": "SMKN 1 NEGERI BESAR",
+    "district": "Kabupaten Way Kanan",
+    "address": "Desa Tegal Mukti, Kecamatan Negeri Besar"
+  },
+  {
+    "source_number": 190,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN ASY-SYIFA BATURAJA",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa SUKARAYA, Kecamatan BATURAJA TIMUR"
+  },
+  {
+    "source_number": 191,
+    "institution_type": "school",
+    "name": "MA ASSYIFA",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa SUKARAYA, Kecamatan BATURAJA TIMUR"
+  },
+  {
+    "source_number": 192,
+    "institution_type": "pesantren",
+    "name": "YAYASAN PESANTREN ISLAM AL AZHAR",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa SUKAJADI, Kecamatan BATURAJA TIMUR"
+  },
+  {
+    "source_number": 193,
+    "institution_type": "school",
+    "name": "MA AL-AZHAR CENTER",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa SUKAJADI, Kecamatan BATURAJA TIMUR"
+  },
+  {
+    "source_number": 194,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN AL-FAKHRIYAH",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa TANJUNG BARU, Kecamatan BATURAJA TIMUR"
+  },
+  {
+    "source_number": 195,
+    "institution_type": "school",
+    "name": "MA AL-FAKHRIYAH BATURAJA",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa TANJUNG BARU, Kecamatan BATURAJA TIMUR"
+  },
+  {
+    "source_number": 196,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN BAHRUL ULUM PGRI BATURAJA",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa SUKARAYA, Kecamatan BATURAJA TIMUR"
+  },
+  {
+    "source_number": 197,
+    "institution_type": "school",
+    "name": "MA BAHRUL ULUM YPLP PGRI BATURAJA",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa SUKARAYA, Kecamatan BATURAJA TIMUR"
+  },
+  {
+    "source_number": 198,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN MAQOMAM MAHMUDA BATURAJA",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa KEMELAK BINDUNG LANGIT, Kecamatan BATURAJA TIMUR"
+  },
+  {
+    "source_number": 199,
+    "institution_type": "school",
+    "name": "MA MA MAQOMAM MAHMUDA",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa KEMELAK BINDUNG LANGIT, Kecamatan BATURAJA TIMUR"
+  },
+  {
+    "source_number": 200,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN RABIATUL ADAWIYAH BATURAJA",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa KEMELAK BINDUNG LANGIT, Kecamatan BATURAJA TIMUR"
+  },
+  {
+    "source_number": 201,
+    "institution_type": "school",
+    "name": "MA RABIATUL ADAWIYAH BATURAJA",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa KEMELAK BINDUNG LANGIT, Kecamatan BATURAJA TIMUR"
+  },
+  {
+    "source_number": 202,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN AN NUR KEDATON",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa KEDATON, Kecamatan KEDATON PENINJAUAN RAYA"
+  },
+  {
+    "source_number": 203,
+    "institution_type": "school",
+    "name": "SMA ISLAM TERPADU AN NUR",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa KEDATON, Kecamatan KEDATON PENINJAUAN RAYA"
+  },
+  {
+    "source_number": 204,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN DARUL MUTTAQIN",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa KURUP, Kecamatan LUBUK BATANG"
+  },
+  {
+    "source_number": 205,
+    "institution_type": "school",
+    "name": "MAS DARUL MUTTAQIN",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa KURUP, Kecamatan LUBUK BATANG"
+  },
+  {
+    "source_number": 206,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN AL-MADANI",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa BATUMARTA II, Kecamatan LUBUK RAJA"
+  },
+  {
+    "source_number": 207,
+    "institution_type": "school",
+    "name": "MA MADANI GLOBAL",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa BATUMARTA II, Kecamatan LUBUK RAJA"
+  },
+  {
+    "source_number": 208,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN AL FALAAH",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa LEKIS REJO, Kecamatan LUBUK RAJA"
+  },
+  {
+    "source_number": 209,
+    "institution_type": "school",
+    "name": "MAS AL-FALAAH",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa LEKIS REJO, Kecamatan LUBUK RAJA"
+  },
+  {
+    "source_number": 210,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN LUQMANUL HAKIM",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa BATUMARTA II, Kecamatan LUBUK RAJA"
+  },
+  {
+    "source_number": 211,
+    "institution_type": "school",
+    "name": "MAS LUQMANUL HAKIM",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa BATUMARTA II, Kecamatan LUBUK RAJA"
+  },
+  {
+    "source_number": 212,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN MIFTAHUL JANNAH",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa PENINJAUAN, Kecamatan PENINJAUAN"
+  },
+  {
+    "source_number": 213,
+    "institution_type": "school",
+    "name": "MAS MIFTAHUL JANNAH",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa PENINJAUAN, Kecamatan PENINJAUAN"
+  },
+  {
+    "source_number": 214,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN FATHAN DAIMAN MENDALA",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa MENDALA, Kecamatan PENINJAUAN"
+  },
+  {
+    "source_number": 215,
+    "institution_type": "school",
+    "name": "SMA ISLAM FATHAN DAIMAN MENDALA",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa MENDALA, Kecamatan PENINJAUAN"
+  },
+  {
+    "source_number": 216,
+    "institution_type": "pesantren",
+    "name": "PONPES PERSATUAN ISLAM (PERSIS) AL-MUYASSAR RAKSA JIWA",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa RAKSA JIWA, Kecamatan SEMIDANG AJI"
+  },
+  {
+    "source_number": 217,
+    "institution_type": "school",
+    "name": "SMA PERSIS AL-MUYASSAR",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa RAKSA JIWA, Kecamatan SEMIDANG AJI"
+  },
+  {
+    "source_number": 218,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN BAMBU SEMBILAN SYIFAAUNNAJAH",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa SRI MULYA, Kecamatan SINAR PENINJAUAN"
+  },
+  {
+    "source_number": 219,
+    "institution_type": "school",
+    "name": "MA MA. BAMBU SEMBILAN SYIFAAUNNAJAH",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa SRI MULYA, Kecamatan SINAR PENINJAUAN"
+  },
+  {
+    "source_number": 220,
+    "institution_type": "pesantren",
+    "name": "PON-PES TAHFIDZ MANBAUL KIROM",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa MARGA BAKTI, Kecamatan SINAR PENINJAUAN"
+  },
+  {
+    "source_number": 221,
+    "institution_type": "school",
+    "name": "MA TAHFIDZ MANBAUL KIROM",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa MARGA BAKTI, Kecamatan SINAR PENINJAUAN"
+  },
+  {
+    "source_number": 222,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN NAHDOTL MUSLIMIN",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa KARYA MUKTI, Kecamatan SINAR PENINJAUAN"
+  },
+  {
+    "source_number": 223,
+    "institution_type": "school",
+    "name": "MAS NAHDLOTUL MUSLIMIN",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa KARYA MUKTI, Kecamatan SINAR PENINJAUAN"
+  },
+  {
+    "source_number": 224,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN DARUL KHULDI",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa SRI MULYA, Kecamatan SINAR PENINJAUAN"
+  },
+  {
+    "source_number": 225,
+    "institution_type": "school",
+    "name": "SMK DARUL KHULDI",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa SRI MULYA, Kecamatan SINAR PENINJAUAN"
+  },
+  {
+    "source_number": 226,
+    "institution_type": "school",
+    "name": "SMAN 3 OGAN KOMERING ULU",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa LAYA, Kecamatan BATURAJA BARAT"
+  },
+  {
+    "source_number": 227,
+    "institution_type": "school",
+    "name": "SMAS XAVERIUS BATURAJA",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa PUSAR, Kecamatan BATURAJA BARAT"
+  },
+  {
+    "source_number": 228,
+    "institution_type": "school",
+    "name": "MAN 1 OGAN KOMERING ULU",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa SUKARAYA, Kecamatan BATURAJA TIMUR"
+  },
+  {
+    "source_number": 229,
+    "institution_type": "school",
+    "name": "SEKOLAH RAKYAT MENENGAH ATAS 45 OGAN KOMERING ULU",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa SEPANCAR LAWANG KULON, Kecamatan BATURAJA TIMUR"
+  },
+  {
+    "source_number": 230,
+    "institution_type": "school",
+    "name": "SMA IT TUNAS CENDIKIA",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa TANJUNG BARU, Kecamatan BATURAJA TIMUR"
+  },
+  {
+    "source_number": 231,
+    "institution_type": "school",
+    "name": "SMAN 1 OGAN KOMERING ULU",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa SUKARAYA, Kecamatan BATURAJA TIMUR"
+  },
+  {
+    "source_number": 232,
+    "institution_type": "school",
+    "name": "SMAN 4 OGAN KOMERING ULU",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa SEKAR JAYA, Kecamatan BATURAJA TIMUR"
+  },
+  {
+    "source_number": 233,
+    "institution_type": "school",
+    "name": "SMAN 5 OGAN KOMERING ULU",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa BATURAJA LAMA, Kecamatan BATURAJA TIMUR"
+  },
+  {
+    "source_number": 234,
+    "institution_type": "school",
+    "name": "SMAS KADER PEMBANGUNAN BATURAJA",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa SUKARAYA, Kecamatan BATURAJA TIMUR"
+  },
+  {
+    "source_number": 235,
+    "institution_type": "school",
+    "name": "SMAS MUHAMMADIYAH 1 BATURAJA",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa BATURAJA LAMA, Kecamatan BATURAJA TIMUR"
+  },
+  {
+    "source_number": 236,
+    "institution_type": "school",
+    "name": "SMAS PGRI 3 BATURAJA",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa SUKARAYA, Kecamatan BATURAJA TIMUR"
+  },
+  {
+    "source_number": 237,
+    "institution_type": "school",
+    "name": "SMAS SENTOSA BHAKTI BATURAJA",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa SUKARAYA, Kecamatan BATURAJA TIMUR"
+  },
+  {
+    "source_number": 238,
+    "institution_type": "school",
+    "name": "SMAS TARUNA TUNAS BANGSA BATURAJA",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa AIR PAUH, Kecamatan BATURAJA TIMUR"
+  },
+  {
+    "source_number": 239,
+    "institution_type": "school",
+    "name": "SMAS TRISAKTI BATURAJA",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa TANJUNG BARU, Kecamatan BATURAJA TIMUR"
+  },
+  {
+    "source_number": 240,
+    "institution_type": "school",
+    "name": "SMAS YADIKA BATURAJA",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa SUKARAYA, Kecamatan BATURAJA TIMUR"
+  },
+  {
+    "source_number": 241,
+    "institution_type": "school",
+    "name": "SMK KESEHATAN RIZKY PATYA",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa AIR PAUH, Kecamatan BATURAJA TIMUR"
+  },
+  {
+    "source_number": 242,
+    "institution_type": "school",
+    "name": "SMKN 1 OGAN KOMERING ULU",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa BATURAJA LAMA, Kecamatan BATURAJA TIMUR"
+  },
+  {
+    "source_number": 243,
+    "institution_type": "school",
+    "name": "SMKN 2 OGAN KOMERING ULU",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa AIR PAUH, Kecamatan BATURAJA TIMUR"
+  },
+  {
+    "source_number": 244,
+    "institution_type": "school",
+    "name": "SMKN 3 OGAN KOMERING ULU",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa AIR PAUH, Kecamatan BATURAJA TIMUR"
+  },
+  {
+    "source_number": 245,
+    "institution_type": "school",
+    "name": "SMKS KADER PEMBANGUNAN BATURAJA",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa TANJUNG BARU, Kecamatan BATURAJA TIMUR"
+  },
+  {
+    "source_number": 246,
+    "institution_type": "school",
+    "name": "SMKS KESEHATAN BINA MARTA",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa KEMALA RAJA, Kecamatan BATURAJA TIMUR"
+  },
+  {
+    "source_number": 247,
+    "institution_type": "school",
+    "name": "SMKS SENTOSA BHAKTI BATURAJA",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa SUKARAYA, Kecamatan BATURAJA TIMUR"
+  },
+  {
+    "source_number": 248,
+    "institution_type": "school",
+    "name": "SMKS TRISAKTI BATURAJA",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa TANJUNG BARU, Kecamatan BATURAJA TIMUR"
+  },
+  {
+    "source_number": 249,
+    "institution_type": "school",
+    "name": "SMKS YADIKA BATURAJA",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa SUKARAYA, Kecamatan BATURAJA TIMUR"
+  },
+  {
+    "source_number": 250,
+    "institution_type": "school",
+    "name": "SMAN 10 OGAN KOMERING ULU",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa TANJUNG LENGKAYAP, Kecamatan LENGKITI"
+  },
+  {
+    "source_number": 251,
+    "institution_type": "school",
+    "name": "SMAN 16 OGAN KOMERING ULU",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa TUALANG, Kecamatan LENGKITI"
+  },
+  {
+    "source_number": 252,
+    "institution_type": "school",
+    "name": "SMAS MUHAMMADIYAH TANJUNG LENGKAYAP",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa TANJUNG LENGKAYAP, Kecamatan LENGKITI"
+  },
+  {
+    "source_number": 253,
+    "institution_type": "school",
+    "name": "SMAN 11 OKU",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa LUBUK BATANG BARU, Kecamatan LUBUK BATANG"
+  },
+  {
+    "source_number": 254,
+    "institution_type": "school",
+    "name": "SMAN 14 OGAN KOMERING ULU",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa LUBUK BANJAR, Kecamatan LUBUK RAJA"
+  },
+  {
+    "source_number": 255,
+    "institution_type": "school",
+    "name": "SMAN 2 OGAN KOMERING ULU",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa BATU RADEN, Kecamatan LUBUK RAJA"
+  },
+  {
+    "source_number": 256,
+    "institution_type": "school",
+    "name": "SMAS KURNIA JAYA BATUMARTA",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa BATUMARTA I, Kecamatan LUBUK RAJA"
+  },
+  {
+    "source_number": 257,
+    "institution_type": "school",
+    "name": "SMKN 4 OGAN KOMERING ULU",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa BATUMARTA II, Kecamatan LUBUK RAJA"
+  },
+  {
+    "source_number": 258,
+    "institution_type": "school",
+    "name": "SMAN 6 OGAN KOMERING ULU",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa SEMANDING, Kecamatan PENGANDONAN"
+  },
+  {
+    "source_number": 259,
+    "institution_type": "school",
+    "name": "SMAS MUHAMMADIYAH GUNUNG LIWAT",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa GUNUNG LIWAT, Kecamatan PENGANDONAN"
+  },
+  {
+    "source_number": 260,
+    "institution_type": "school",
+    "name": "SMKS MUHAMMADIYAH GUNUNG LIWAT",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa GUNUNG LIWAT, Kecamatan PENGANDONAN"
+  },
+  {
+    "source_number": 261,
+    "institution_type": "school",
+    "name": "SMKS PGRI 2 BATURAJA",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa UJAN MAS, Kecamatan PENGANDONAN"
+  },
+  {
+    "source_number": 262,
+    "institution_type": "school",
+    "name": "MAS ISLAMIYAH",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa BINDU, Kecamatan PENINJAUAN"
+  },
+  {
+    "source_number": 263,
+    "institution_type": "school",
+    "name": "SMAN 15 OGAN KOMERING ULU",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa RANTAU PANJANG, Kecamatan PENINJAUAN"
+  },
+  {
+    "source_number": 264,
+    "institution_type": "school",
+    "name": "SMAN 17 OKU",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa MAKARTI JAYA, Kecamatan PENINJAUAN"
+  },
+  {
+    "source_number": 265,
+    "institution_type": "school",
+    "name": "SMAN 7 OGAN KOMERING ULU",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa PENINJAUAN, Kecamatan PENINJAUAN"
+  },
+  {
+    "source_number": 266,
+    "institution_type": "school",
+    "name": "SMKN 5 OKU",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa DURIAN, Kecamatan PENINJAUAN"
+  },
+  {
+    "source_number": 267,
+    "institution_type": "school",
+    "name": "SMAN 9 OGAN KOMERING ULU",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa ULAK PANDAN, Kecamatan SEMIDANG AJI"
+  },
+  {
+    "source_number": 268,
+    "institution_type": "school",
+    "name": "SMAS MUHAMMADIYAH TUBOHAN",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa TUBOHAN, Kecamatan SEMIDANG AJI"
+  },
+  {
+    "source_number": 269,
+    "institution_type": "school",
+    "name": "SMAN 8 OGAN KOMERING ULU",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa KARYA MUKTI, Kecamatan SINAR PENINJAUAN"
+  },
+  {
+    "source_number": 270,
+    "institution_type": "school",
+    "name": "SMAN 13 OGAN KOMERING ULU",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa PENYANDINGAN, Kecamatan SOSOH BUAY RAYAP"
+  },
+  {
+    "source_number": 271,
+    "institution_type": "school",
+    "name": "SMAN 12 OGAN KOMERING ULU",
+    "district": "Kabupaten Ogan Komering Ulu",
+    "address": "Desa ULAK LEBAR, Kecamatan ULU OGAN"
+  },
+  {
+    "source_number": 272,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN AL-FALAH",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa PENANTIAN, Kecamatan Banding Agung"
+  },
+  {
+    "source_number": 273,
+    "institution_type": "school",
+    "name": "MA AL-FALAH PENANTIAN",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa PENANTIAN, Kecamatan Banding Agung"
+  },
+  {
+    "source_number": 274,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN ROUDLOTUSSHOLIHIN",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa PENANTIAN, Kecamatan Banding Agung"
+  },
+  {
+    "source_number": 275,
+    "institution_type": "school",
+    "name": "MA ROUDLOTUSSHOLIHIN",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa PENANTIAN, Kecamatan Banding Agung"
+  },
+  {
+    "source_number": 276,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN DARUL HUDA",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa SRI MENANTI, Kecamatan Mekakau Ilir"
+  },
+  {
+    "source_number": 277,
+    "institution_type": "school",
+    "name": "MAS Darul Huda",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa SRI MENANTI, Kecamatan Mekakau Ilir"
+  },
+  {
+    "source_number": 278,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN TAHFIZH QUR'AN NURUL IMAN",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa TANJUNG SARI, Kecamatan Buay Pematang Ribu Ranau Tengah"
+  },
+  {
+    "source_number": 279,
+    "institution_type": "school",
+    "name": "MAS NURUL IMAN",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa TANJUNG SARI, Kecamatan Buay Pematang Ribu Ranau Tengah"
+  },
+  {
+    "source_number": 280,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN ROUDLOTUL QUR'AN",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa SIMPANG SENDER, Kecamatan Buay Pematang Ribu Ranau Tengah"
+  },
+  {
+    "source_number": 281,
+    "institution_type": "school",
+    "name": "MAS ROUDLOTUL QUR`AN",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa SIMPANG SENDER, Kecamatan Buay Pematang Ribu Ranau Tengah"
+  },
+  {
+    "source_number": 282,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN AL HANNAN AL-ITTIFAQIAH",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa ULU DANAU, Kecamatan Sindang Danau"
+  },
+  {
+    "source_number": 283,
+    "institution_type": "school",
+    "name": "SMAS PLUS ALHANNAN",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa ULU DANAU, Kecamatan Sindang Danau"
+  },
+  {
+    "source_number": 284,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN AL-ITTIFAQIAH INDRALAYA",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa KURIPAN, Kecamatan Tiga Dihaji"
+  },
+  {
+    "source_number": 285,
+    "institution_type": "school",
+    "name": "MA al-Ittifaqiah Indralaya",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa KURIPAN, Kecamatan Tiga Dihaji"
+  },
+  {
+    "source_number": 286,
+    "institution_type": "school",
+    "name": "MAN 2 OGAN KOMERING ULU SELATAN",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa SUGIH WARAS, Kecamatan BANDING AGUNG"
+  },
+  {
+    "source_number": 287,
+    "institution_type": "school",
+    "name": "SMAN 1 BANDING AGUNG",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa RANTAU NIPIS, Kecamatan BANDING AGUNG"
+  },
+  {
+    "source_number": 288,
+    "institution_type": "school",
+    "name": "SMKN 2 OKU SELATAN",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa SIPATUHU, Kecamatan BANDING AGUNG"
+  },
+  {
+    "source_number": 289,
+    "institution_type": "school",
+    "name": "SMKN 3 OKU SELATAN",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa JAGARAGA, Kecamatan Buana Pemaca"
+  },
+  {
+    "source_number": 290,
+    "institution_type": "school",
+    "name": "MAS AL-AZHAR TIGA SERANGKAI",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa SUMBER RINGIN, Kecamatan BUAY PEMACA"
+  },
+  {
+    "source_number": 291,
+    "institution_type": "school",
+    "name": "SMA NEGERI 2 BUAY PEMACA",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa TANJUNG JAYA, Kecamatan BUAY PEMACA"
+  },
+  {
+    "source_number": 292,
+    "institution_type": "school",
+    "name": "SMAN 1 BUAY PEMACA",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa TALANG PADANG, Kecamatan BUAY PEMACA"
+  },
+  {
+    "source_number": 293,
+    "institution_type": "school",
+    "name": "SMAS HANURA",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa TANJUNG JAYA, Kecamatan BUAY PEMACA"
+  },
+  {
+    "source_number": 294,
+    "institution_type": "school",
+    "name": "SMAN 1 RANAU TENGAH",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa HANGKUSA, Kecamatan BUAY PEMATANG RIBU RANAU TENGAH"
+  },
+  {
+    "source_number": 295,
+    "institution_type": "school",
+    "name": "SMKS MHD 1 SIMPANG SENDER",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa TANJUNG BARU RANAU, Kecamatan BUAY PEMATANG RIBU RANAU TENGAH"
+  },
+  {
+    "source_number": 296,
+    "institution_type": "school",
+    "name": "SMAN 1 BUAY RAWAN",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa GUNUNG CAHYA, Kecamatan Buay Rawan"
+  },
+  {
+    "source_number": 297,
+    "institution_type": "school",
+    "name": "MAS BELAMBANGAN",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa BELAMBANGAN, Kecamatan Buay Runjung"
+  },
+  {
+    "source_number": 298,
+    "institution_type": "school",
+    "name": "SMAN 1 BUAY RUNJUNG",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa BEDENG BLAMBANGAN, Kecamatan Buay Runjung"
+  },
+  {
+    "source_number": 299,
+    "institution_type": "school",
+    "name": "SMAN 1 BUAY SANDANG AJI",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa GUNUNG TERANG, Kecamatan Buay Sandang Aji"
+  },
+  {
+    "source_number": 300,
+    "institution_type": "school",
+    "name": "SMKN 1 OKU SELATAN",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa GUNUNG TERANG, Kecamatan Buay Sandang Aji"
+  },
+  {
+    "source_number": 301,
+    "institution_type": "school",
+    "name": "SMAN 1 KISAM ILIR",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa SIMPANG CAMPANG, Kecamatan Kisam Ilir"
+  },
+  {
+    "source_number": 302,
+    "institution_type": "school",
+    "name": "SMAN 1 KISAM TINGGI",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa PULAU PANGGUNG, Kecamatan Kisam Tinggi"
+  },
+  {
+    "source_number": 303,
+    "institution_type": "school",
+    "name": "SMAN 1 MEKAKAU ILIR",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa TANJUNG BESAR, Kecamatan Mekakau Ilir"
+  },
+  {
+    "source_number": 304,
+    "institution_type": "school",
+    "name": "MAN 1 OGAN KOMERING ULU SELATAN",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa BATU BELANG JAYA, Kecamatan Muara Dua"
+  },
+  {
+    "source_number": 305,
+    "institution_type": "school",
+    "name": "SLB SERASAN SEANDANAN",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa BATU BELANG JAYA, Kecamatan Muara Dua"
+  },
+  {
+    "source_number": 306,
+    "institution_type": "school",
+    "name": "SMAS MUHAMMADIYAH 1 MUARADUA",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa PANCUR PUNGAH, Kecamatan Muara Dua"
+  },
+  {
+    "source_number": 307,
+    "institution_type": "school",
+    "name": "SMAN 1 MUARADUA",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa BATU BELANG JAYA, Kecamatan Muara Dua"
+  },
+  {
+    "source_number": 308,
+    "institution_type": "school",
+    "name": "SMKS COKRO AMINOTO",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa PASAR MUARA DUA, Kecamatan Muara Dua"
+  },
+  {
+    "source_number": 309,
+    "institution_type": "school",
+    "name": "SMAN 2 MUARADUA",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa BATU BELANG JAYA, Kecamatan Muara Dua"
+  },
+  {
+    "source_number": 310,
+    "institution_type": "school",
+    "name": "SMKS PGRI MUARADUA",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa BATU BELANG JAYA, Kecamatan Muara Dua"
+  },
+  {
+    "source_number": 311,
+    "institution_type": "school",
+    "name": "SMAN 1 MUARADUA KISAM",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa DUSUN TENGAH, Kecamatan Muara Dua Kisam"
+  },
+  {
+    "source_number": 312,
+    "institution_type": "school",
+    "name": "SMAN 2 MUARADUA KISAM",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa BAYUR TENGAH, Kecamatan Muara Dua Kisam"
+  },
+  {
+    "source_number": 313,
+    "institution_type": "school",
+    "name": "SMAN 1 PULAU BERINGIN",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa PULAU BERINGIN, Kecamatan Pulau Beringin"
+  },
+  {
+    "source_number": 314,
+    "institution_type": "school",
+    "name": "SMAN 2 PULAU BERINGIN",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa KEMU, Kecamatan Pulau Beringin"
+  },
+  {
+    "source_number": 315,
+    "institution_type": "school",
+    "name": "SMAN 1 RUNJUNG AGUNG",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa GEDUNG WANI, Kecamatan Runjung Agung"
+  },
+  {
+    "source_number": 316,
+    "institution_type": "school",
+    "name": "SMAS MUHAMMADIYAH 3 PENANGGUNGAN",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa PENANGGUNGAN, Kecamatan Runjung Agung"
+  },
+  {
+    "source_number": 317,
+    "institution_type": "school",
+    "name": "MAS ISLAMIYAH",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa SIMPANGAN, Kecamatan Simpang"
+  },
+  {
+    "source_number": 318,
+    "institution_type": "school",
+    "name": "SMAN 1 SIMPANG",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa SIMPANG AGUNG, Kecamatan Simpang"
+  },
+  {
+    "source_number": 319,
+    "institution_type": "school",
+    "name": "SMKS PIRI SIMPANG",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa SIMPANG AGUNG, Kecamatan Simpang"
+  },
+  {
+    "source_number": 320,
+    "institution_type": "school",
+    "name": "SMAN 1 SINDANG DANAU",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa ULU DANAU, Kecamatan Sindang Danau"
+  },
+  {
+    "source_number": 321,
+    "institution_type": "school",
+    "name": "SMAN 1 SUNGAI ARE",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa PECAH PINGGAN, Kecamatan Sungai Are"
+  },
+  {
+    "source_number": 322,
+    "institution_type": "school",
+    "name": "SMAN 1 TIGA DIHAJI",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa PENINGGIRAN, Kecamatan TIGA DIHAJI"
+  },
+  {
+    "source_number": 323,
+    "institution_type": "school",
+    "name": "MAS AL-AZHAR GUNUNG RAYA",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa GUNUNG RAYA, Kecamatan Warkuk Ranau Selatan"
+  },
+  {
+    "source_number": 324,
+    "institution_type": "school",
+    "name": "SMAN 1 RANAU SELATAN",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa KOTA BATU, Kecamatan Warkuk Ranau Selatan"
+  },
+  {
+    "source_number": 325,
+    "institution_type": "school",
+    "name": "SMAS PGRI GUNUNG RAYA",
+    "district": "Kabupaten Ogan Komering Ulu Selatan",
+    "address": "Desa GUNUNG RAYA, Kecamatan Warkuk Ranau Selatan"
+  },
+  {
+    "source_number": 326,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN NAHDOTUL ULAMA",
+    "district": "Kota Prabumulih",
+    "address": "Desa MUARA SUNGAI, Kecamatan Cambai"
+  },
+  {
+    "source_number": 327,
+    "institution_type": "school",
+    "name": "MA AL MA`ARIF NU",
+    "district": "Kota Prabumulih",
+    "address": "Desa MUARA SUNGAI, Kecamatan Cambai"
+  },
+  {
+    "source_number": 328,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN MODERN DARUSSALAM",
+    "district": "Kota Prabumulih",
+    "address": "Desa CAMBAI, Kecamatan Cambai"
+  },
+  {
+    "source_number": 329,
+    "institution_type": "school",
+    "name": "MAS DARUSSALAM",
+    "district": "Kota Prabumulih",
+    "address": "Desa CAMBAI, Kecamatan Cambai"
+  },
+  {
+    "source_number": 330,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN AL-MADINA PRABUMULIH",
+    "district": "Kota Prabumulih",
+    "address": "Desa GUNUNG IBUL, Kecamatan Prabumulih Timur"
+  },
+  {
+    "source_number": 331,
+    "institution_type": "school",
+    "name": "SPM ULYA PONDOK PESANTREN AL-MADINA AL-ISLAMI",
+    "district": "Kota Prabumulih",
+    "address": "Desa GUNUNG IBUL, Kecamatan Prabumulih Timur"
+  },
+  {
+    "source_number": 332,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN AL-MUNAWWAROH PRABUMULIH (NU)",
+    "district": "Kota Prabumulih",
+    "address": "Desa PATIH GALUNG, Kecamatan Prabumulih Barat"
+  },
+  {
+    "source_number": 333,
+    "institution_type": "school",
+    "name": "MA AL-MUNAWWAROH",
+    "district": "Kota Prabumulih",
+    "address": "Desa PATIH GALUNG, Kecamatan Prabumulih Barat"
+  },
+  {
+    "source_number": 334,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN MODERN AL FURQON PRABUMULIH",
+    "district": "Kota Prabumulih",
+    "address": "Desa TANJUNG RAMBANG, Kecamatan Rambang Kapak Tengah"
+  },
+  {
+    "source_number": 335,
+    "institution_type": "school",
+    "name": "MAS AL-FURQON",
+    "district": "Kota Prabumulih",
+    "address": "Desa TANJUNG RAMBANG, Kecamatan Rambang Kapak Tengah"
+  },
+  {
+    "source_number": 336,
+    "institution_type": "school",
+    "name": "SMAN 6 PRABUMULIH",
+    "district": "Kota Prabumulih",
+    "address": "Desa CAMBAI, Kecamatan Cambai"
+  },
+  {
+    "source_number": 337,
+    "institution_type": "school",
+    "name": "SMK Negeri 3 Prabumulih",
+    "district": "Kota Prabumulih",
+    "address": "Desa SUNGAI MEDANG, Kecamatan Cambai"
+  },
+  {
+    "source_number": 338,
+    "institution_type": "school",
+    "name": "MA AZZAHRO",
+    "district": "Kota Prabumulih",
+    "address": "Desa GUNUNG IBUL, Kecamatan Prabumulih Timur"
+  },
+  {
+    "source_number": 339,
+    "institution_type": "school",
+    "name": "MAN 1 KOTA PRABUMULIH",
+    "district": "Kota Prabumulih",
+    "address": "Desa GUNUNG IBUL BARAT, Kecamatan Prabumulih Timur"
+  },
+  {
+    "source_number": 340,
+    "institution_type": "school",
+    "name": "SMA IT ISHLAHUL UMMAH",
+    "district": "Kota Prabumulih",
+    "address": "Desa KARANG RAJA, Kecamatan Prabumulih Timur"
+  },
+  {
+    "source_number": 341,
+    "institution_type": "school",
+    "name": "SMAN 3 PRABUMULIH",
+    "district": "Kota Prabumulih",
+    "address": "Desa SUKAJADI, Kecamatan Prabumulih Timur"
+  },
+  {
+    "source_number": 342,
+    "institution_type": "school",
+    "name": "SMAN 7 PRABUMULIH",
+    "district": "Kota Prabumulih",
+    "address": "Desa MUARA DUA, Kecamatan Prabumulih Timur"
+  },
+  {
+    "source_number": 343,
+    "institution_type": "school",
+    "name": "SMAS MUHAMMADIYAH 1",
+    "district": "Kota Prabumulih",
+    "address": "Desa PRABU JAYA, Kecamatan Prabumulih Timur"
+  },
+  {
+    "source_number": 344,
+    "institution_type": "school",
+    "name": "SMK MUHAMMADIYAH PRABUMULIH",
+    "district": "Kota Prabumulih",
+    "address": "Desa PRABU JAYA, Kecamatan Prabumulih Timur"
+  },
+  {
+    "source_number": 345,
+    "institution_type": "school",
+    "name": "SMK PELITA INSANI PRABUMULIH",
+    "district": "Kota Prabumulih",
+    "address": "Desa GUNUNG IBUL BARAT, Kecamatan Prabumulih Timur"
+  },
+  {
+    "source_number": 346,
+    "institution_type": "school",
+    "name": "SMKN 1 PRABUMULIH",
+    "district": "Kota Prabumulih",
+    "address": "Desa SUKAJADI, Kecamatan Prabumulih Timur"
+  },
+  {
+    "source_number": 347,
+    "institution_type": "school",
+    "name": "SMKS PGRI 1 PRABUMULIH",
+    "district": "Kota Prabumulih",
+    "address": "Desa MUARA DUA, Kecamatan Prabumulih Timur"
+  },
+  {
+    "source_number": 348,
+    "institution_type": "school",
+    "name": "SMKS YP MANDIRI PRABUMULIH",
+    "district": "Kota Prabumulih",
+    "address": "Desa GUNUNG IBUL, Kecamatan Prabumulih Timur"
+  },
+  {
+    "source_number": 349,
+    "institution_type": "school",
+    "name": "SMKS YPN ABADI PRABUMULIH",
+    "district": "Kota Prabumulih",
+    "address": "Desa GUNUNG IBUL, Kecamatan Prabumulih Timur"
+  },
+  {
+    "source_number": 350,
+    "institution_type": "school",
+    "name": "SMAN 1 PRABUMULIH",
+    "district": "Kota Prabumulih",
+    "address": "Desa PRABUMULIH, Kecamatan Prabumulih Barat"
+  },
+  {
+    "source_number": 351,
+    "institution_type": "school",
+    "name": "SMAN 5 PRABUMULIH",
+    "district": "Kota Prabumulih",
+    "address": "Desa GUNUNG KEMALA, Kecamatan Prabumulih Barat"
+  },
+  {
+    "source_number": 352,
+    "institution_type": "school",
+    "name": "SMAN 8 PRABUMULIH",
+    "district": "Kota Prabumulih",
+    "address": "Desa PATIH GALUNG, Kecamatan Prabumulih Barat"
+  },
+  {
+    "source_number": 353,
+    "institution_type": "school",
+    "name": "SMAS TAMAN SISWA",
+    "district": "Kota Prabumulih",
+    "address": "Desa MUNTANG TAPUS, Kecamatan Prabumulih Barat"
+  },
+  {
+    "source_number": 354,
+    "institution_type": "school",
+    "name": "SMK Aisyiyah Insan Utama Prabumulih",
+    "district": "Kota Prabumulih",
+    "address": "Desa TANJUNG TELANG, Kecamatan Prabumulih Barat"
+  },
+  {
+    "source_number": 355,
+    "institution_type": "school",
+    "name": "SMKS YPS PRABUMULIH",
+    "district": "Kota Prabumulih",
+    "address": "Desa MUNTANG TAPUS, Kecamatan Prabumulih Barat"
+  },
+  {
+    "source_number": 356,
+    "institution_type": "school",
+    "name": "SMAN 4 PRABUMULIH",
+    "district": "Kota Prabumulih",
+    "address": "Desa TANJUNG RAMBANG, Kecamatan Rambang Kapak Tengah"
+  },
+  {
+    "source_number": 357,
+    "institution_type": "school",
+    "name": "SMAS BUDI UTOMO",
+    "district": "Kota Prabumulih",
+    "address": "Desa PASAR II PRABUMULIH, Kecamatan Prabumulih Utara"
+  },
+  {
+    "source_number": 358,
+    "institution_type": "school",
+    "name": "SMAS PGRI PRABUMULIH",
+    "district": "Kota Prabumulih",
+    "address": "Desa MANGGA BESAR, Kecamatan Prabumulih Utara"
+  },
+  {
+    "source_number": 359,
+    "institution_type": "school",
+    "name": "SMAS YAYASAN BAKTI",
+    "district": "Kota Prabumulih",
+    "address": "Desa WONOSARI, Kecamatan Prabumulih Utara"
+  },
+  {
+    "source_number": 360,
+    "institution_type": "school",
+    "name": "SMK YAYASAN BAKTI PRABUMULIH",
+    "district": "Kota Prabumulih",
+    "address": "Desa WONOSARI, Kecamatan Prabumulih Utara"
+  },
+  {
+    "source_number": 361,
+    "institution_type": "school",
+    "name": "SMKS PGRI 2 PRABUMULIH",
+    "district": "Kota Prabumulih",
+    "address": "Desa MANGGA BESAR, Kecamatan Prabumulih Utara"
+  },
+  {
+    "source_number": 362,
+    "institution_type": "school",
+    "name": "SMKS PRATIWI PRABUMULIH",
+    "district": "Kota Prabumulih",
+    "address": "Desa MANGGA BESAR, Kecamatan Prabumulih Utara"
+  },
+  {
+    "source_number": 363,
+    "institution_type": "school",
+    "name": "SMAN 2 PRABUMULIH",
+    "district": "Kota Prabumulih",
+    "address": "Desa TANJUNG RAMAN, Kecamatan Prabumulih Selatan"
+  },
+  {
+    "source_number": 364,
+    "institution_type": "school",
+    "name": "SMAS TUNAS BAKTI",
+    "district": "Kota Prabumulih",
+    "address": "Desa SUKA RAJA, Kecamatan Prabumulih Selatan"
+  },
+  {
+    "source_number": 365,
+    "institution_type": "school",
+    "name": "SMKN 2 PRABUMULIH",
+    "district": "Kota Prabumulih",
+    "address": "Desa TANJUNG RAMAN, Kecamatan Prabumulih Selatan"
+  },
+  {
+    "source_number": 366,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN AL-HAROMAIN",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa MUARA DUA, Kecamatan Semende Darat Laut"
+  },
+  {
+    "source_number": 367,
+    "institution_type": "school",
+    "name": "MAS BAROKAH AL HAROMAIN",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa MUARA DUA, Kecamatan Semende Darat Laut"
+  },
+  {
+    "source_number": 368,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN NURUL MADAANY",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa PULAU PANGGUNG, Kecamatan Tanjung Agung"
+  },
+  {
+    "source_number": 369,
+    "institution_type": "school",
+    "name": "SMA NURUL MADAANY",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa PULAU PANGGUNG, Kecamatan Tanjung Agung"
+  },
+  {
+    "source_number": 370,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN LAA-ROIBA MUARA ENIM",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa KEPUR, Kecamatan Muara Enim"
+  },
+  {
+    "source_number": 371,
+    "institution_type": "school",
+    "name": "MA LAAROIBA",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa KEPUR, Kecamatan Muara Enim"
+  },
+  {
+    "source_number": 372,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN RAWDHOTUT TAUFIQ",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa KEPUR, Kecamatan Muara Enim"
+  },
+  {
+    "source_number": 373,
+    "institution_type": "school",
+    "name": "MA RAWDHOTUT TAUFIQ",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa KEPUR, Kecamatan Muara Enim"
+  },
+  {
+    "source_number": 374,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN DARUSSA'ADAH",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa AIR LINTANG, Kecamatan Muara Enim"
+  },
+  {
+    "source_number": 375,
+    "institution_type": "school",
+    "name": "MAS PP DARUSSA`ADAH",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa AIR LINTANG, Kecamatan Muara Enim"
+  },
+  {
+    "source_number": 376,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN THAWALIB DARUSSALAM SERASAN",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa AIR LINTANG, Kecamatan Muara Enim"
+  },
+  {
+    "source_number": 377,
+    "institution_type": "school",
+    "name": "SMA IT THAWALIB MUARA ENIM",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa AIR LINTANG, Kecamatan Muara Enim"
+  },
+  {
+    "source_number": 378,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN HIDAYATUL MUBTAIIN",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa SIGAM, Kecamatan Gelumbang"
+  },
+  {
+    "source_number": 379,
+    "institution_type": "school",
+    "name": "MA HIDAYATUL MUBTADI IN",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa SIGAM, Kecamatan Gelumbang"
+  },
+  {
+    "source_number": 380,
+    "institution_type": "pesantren",
+    "name": "PONDOK TAHFIDZ SYUHRATUL ISLAM",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa GELUMBANG, Kecamatan Gelumbang"
+  },
+  {
+    "source_number": 381,
+    "institution_type": "school",
+    "name": "MA ILMU AL QUR`AN SYURATUL ISLAM",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa GELUMBANG, Kecamatan Gelumbang"
+  },
+  {
+    "source_number": 382,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN MIFTAHUL HUDA",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa GELUMBANG, Kecamatan Gelumbang"
+  },
+  {
+    "source_number": 383,
+    "institution_type": "school",
+    "name": "MA Miftahul Huda",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa GELUMBANG, Kecamatan Gelumbang"
+  },
+  {
+    "source_number": 384,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN AL FALAH",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa PUTAK, Kecamatan Gelumbang"
+  },
+  {
+    "source_number": 385,
+    "institution_type": "school",
+    "name": "MAS Al Falah",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa PUTAK, Kecamatan Gelumbang"
+  },
+  {
+    "source_number": 386,
+    "institution_type": "pesantren",
+    "name": "PESANTREN NURUL IMAN KARTAMULIA",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa GELUMBANG, Kecamatan Gelumbang"
+  },
+  {
+    "source_number": 387,
+    "institution_type": "school",
+    "name": "MAS NURUL IMAN KARTAMULIA",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa GELUMBANG, Kecamatan Gelumbang"
+  },
+  {
+    "source_number": 388,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN ARRI'AYAH (NU)",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa LEMBAK, Kecamatan Lembak"
+  },
+  {
+    "source_number": 389,
+    "institution_type": "school",
+    "name": "MA Arriayah",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa LEMBAK, Kecamatan Lembak"
+  },
+  {
+    "source_number": 390,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN AL-MUZAKIR",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa UJAN MAS BARU, Kecamatan Ujan Mas"
+  },
+  {
+    "source_number": 391,
+    "institution_type": "school",
+    "name": "MA AL MUZAKIR UJANMAS",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa UJAN MAS BARU, Kecamatan Ujan Mas"
+  },
+  {
+    "source_number": 392,
+    "institution_type": "school",
+    "name": "MA ARRAHMAN TALANG BALAI",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa BABATAN, Kecamatan Semende Darat Laut"
+  },
+  {
+    "source_number": 393,
+    "institution_type": "school",
+    "name": "MA NURUL JANNAH ALAI",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa ALAI, Kecamatan Semende Darat Laut"
+  },
+  {
+    "source_number": 394,
+    "institution_type": "school",
+    "name": "SMAN 1 SEMENDE DARAT LAUT",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa MUARA DUA, Kecamatan Semende Darat Laut"
+  },
+  {
+    "source_number": 395,
+    "institution_type": "school",
+    "name": "SMKN 1 SEMENDE DARAT LAUT",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa MUARA DUA, Kecamatan Semende Darat Laut"
+  },
+  {
+    "source_number": 396,
+    "institution_type": "school",
+    "name": "MA AL MUZAKKAROH PEDATARAN",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa PAGAR DEWA, Kecamatan Tanjung Agung"
+  },
+  {
+    "source_number": 397,
+    "institution_type": "school",
+    "name": "MA RAUDHOTUL MUTA`ALLIMIN KASAI",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa LESUNG BATU, Kecamatan Tanjung Agung"
+  },
+  {
+    "source_number": 398,
+    "institution_type": "school",
+    "name": "SMAN 1 TANJUNG AGUNG",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa TANJUNG AGUNG, Kecamatan Tanjung Agung"
+  },
+  {
+    "source_number": 399,
+    "institution_type": "school",
+    "name": "SMKN 1 TANJUNG AGUNG",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa TANJUNG AGUNG, Kecamatan Tanjung Agung"
+  },
+  {
+    "source_number": 400,
+    "institution_type": "school",
+    "name": "SMA BUKIT ASAM TANJUNG ENIM",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa TANJUNG ENIM, Kecamatan Lawang Kidul"
+  },
+  {
+    "source_number": 401,
+    "institution_type": "school",
+    "name": "SMA MUHAMMADIYAH 2 TANJUNG ENIM",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa PASAR TANJUNG ENIM, Kecamatan Lawang Kidul"
+  },
+  {
+    "source_number": 402,
+    "institution_type": "school",
+    "name": "SMAN 1 LAWANG KIDUL",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa KEBAN AGUNG, Kecamatan Lawang Kidul"
+  },
+  {
+    "source_number": 403,
+    "institution_type": "school",
+    "name": "SMK BINA MULYA TANJUNG ENIM",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa TEGAL REJO, Kecamatan Lawang Kidul"
+  },
+  {
+    "source_number": 404,
+    "institution_type": "school",
+    "name": "SMK BUKIT ASAM TANJUNG ENIM",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa TANJUNG ENIM, Kecamatan Lawang Kidul"
+  },
+  {
+    "source_number": 405,
+    "institution_type": "school",
+    "name": "SMK CENDEKIA UNGGUL",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa LINGGA, Kecamatan Lawang Kidul"
+  },
+  {
+    "source_number": 406,
+    "institution_type": "school",
+    "name": "SMK MUTIARA TANJUNG ENIM",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa TEGAL REJO, Kecamatan Lawang Kidul"
+  },
+  {
+    "source_number": 407,
+    "institution_type": "school",
+    "name": "MA Assyariah",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa TANJUNG RAJA, Kecamatan Muara Enim"
+  },
+  {
+    "source_number": 408,
+    "institution_type": "school",
+    "name": "MAN 1 MUARA ENIM",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa PASAR II, Kecamatan Muara Enim"
+  },
+  {
+    "source_number": 409,
+    "institution_type": "school",
+    "name": "SMA MUHAMMADIYAH 3 MUARA ENIM",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa MUARA ENIM, Kecamatan Muara Enim"
+  },
+  {
+    "source_number": 410,
+    "institution_type": "school",
+    "name": "SMAIT RABBANI",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa AIR LINTANG, Kecamatan Muara Enim"
+  },
+  {
+    "source_number": 411,
+    "institution_type": "school",
+    "name": "SMAN 1 UNGGULAN MUARA ENIM",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa MUARA ENIM, Kecamatan Muara Enim"
+  },
+  {
+    "source_number": 412,
+    "institution_type": "school",
+    "name": "MA AL MUAWANAH",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa GUNUNG MEGANG LUAR, Kecamatan Gunung Megang"
+  },
+  {
+    "source_number": 413,
+    "institution_type": "school",
+    "name": "SMAN 1 GUNUNG MEGANG",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa GUNUNG MEGANG LUAR, Kecamatan Gunung Megang"
+  },
+  {
+    "source_number": 414,
+    "institution_type": "school",
+    "name": "SMK NEGERI 1 GUNUNG MEGANG",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa GUNUNG MEGANG LUAR, Kecamatan Gunung Megang"
+  },
+  {
+    "source_number": 415,
+    "institution_type": "school",
+    "name": "MA Babussalam Embacang",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa GELUMBANG, Kecamatan Gelumbang"
+  },
+  {
+    "source_number": 416,
+    "institution_type": "school",
+    "name": "SMA PGRI GELUMBANG",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa GELUMBANG, Kecamatan Gelumbang"
+  },
+  {
+    "source_number": 417,
+    "institution_type": "school",
+    "name": "SMAN 1 GELUMBANG",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa GELUMBANG, Kecamatan Gelumbang"
+  },
+  {
+    "source_number": 418,
+    "institution_type": "school",
+    "name": "SMKN 1 GELUMBANG",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa TALANG TALING, Kecamatan Gelumbang"
+  },
+  {
+    "source_number": 419,
+    "institution_type": "school",
+    "name": "MAS DARUSSALAM DANAU RATA",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa SUNGAI ROTAN, Kecamatan Sungai Rotan"
+  },
+  {
+    "source_number": 420,
+    "institution_type": "school",
+    "name": "SMA PELITA KOSUMA",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa SUKA MERINDU, Kecamatan Sungai Rotan"
+  },
+  {
+    "source_number": 421,
+    "institution_type": "school",
+    "name": "SMAN 1 SUNGAI ROTAN",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa SUKARAMI, Kecamatan Sungai Rotan"
+  },
+  {
+    "source_number": 422,
+    "institution_type": "school",
+    "name": "SMKN 1 SUNGAI ROTAN",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa SUKA DANA, Kecamatan Sungai Rotan"
+  },
+  {
+    "source_number": 423,
+    "institution_type": "school",
+    "name": "SMA PGRI ALAI",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa ALAI, Kecamatan Lembak"
+  },
+  {
+    "source_number": 424,
+    "institution_type": "school",
+    "name": "SMA PGRI SIALINGAN",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa KEMANG, Kecamatan Lembak"
+  },
+  {
+    "source_number": 425,
+    "institution_type": "school",
+    "name": "SMAN 1 LEMBAK",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa LEMBAK, Kecamatan Lembak"
+  },
+  {
+    "source_number": 426,
+    "institution_type": "school",
+    "name": "SMKN 1 BENAKAT",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa PADANG BINDU, Kecamatan Benakat"
+  },
+  {
+    "source_number": 427,
+    "institution_type": "school",
+    "name": "SMAN 1 UJAN MAS",
+    "district": "Kabupaten Muara Enim",
+    "address": "Desa UJAN MAS BARU, Kecamatan Ujan Mas"
+  },
+  {
+    "source_number": 428,
+    "institution_type": "pesantren",
+    "name": "PONPES NURUL HUDA",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa SUKARAJA, Kecamatan BUAY MADANG"
+  },
+  {
+    "source_number": 429,
+    "institution_type": "school",
+    "name": "MA NURUL HUDA",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa SUKARAJA, Kecamatan BUAY MADANG"
+  },
+  {
+    "source_number": 430,
+    "institution_type": "school",
+    "name": "SMK NURUL HUDA",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa SUKARAJA, Kecamatan BUAY MADANG"
+  },
+  {
+    "source_number": 431,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN MODERN MINHAJUL MUTTAQIN",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa HARJO MULYO, Kecamatan MADANG SUKU I"
+  },
+  {
+    "source_number": 432,
+    "institution_type": "school",
+    "name": "SMK AL MUTTAQIN",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa HARJO MULYO, Kecamatan MADANG SUKU I"
+  },
+  {
+    "source_number": 433,
+    "institution_type": "pesantren",
+    "name": "PONPES NURUL HUDA",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa TANAH MERAH, Kecamatan BELITANG"
+  },
+  {
+    "source_number": 434,
+    "institution_type": "school",
+    "name": "SMA TERPADU PONPES NURUL HUDA",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa TANAH MERAH, Kecamatan BELITANG"
+  },
+  {
+    "source_number": 435,
+    "institution_type": "pesantren",
+    "name": "PONPES ROUDLOTUT THULAB",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa PUJORAHAYU, Kecamatan BELITANG"
+  },
+  {
+    "source_number": 436,
+    "institution_type": "school",
+    "name": "SMK ROUDLOTUT THULAB",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa PUJORAHAYU, Kecamatan BELITANG"
+  },
+  {
+    "source_number": 437,
+    "institution_type": "pesantren",
+    "name": "PONPES BUSTANUL ULUM",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa SUMBER SUKO, Kecamatan BELITANG"
+  },
+  {
+    "source_number": 438,
+    "institution_type": "school",
+    "name": "MAS BUSTANUL ULUM",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa SUMBER SUKO, Kecamatan BELITANG"
+  },
+  {
+    "source_number": 439,
+    "institution_type": "pesantren",
+    "name": "PONPES AL-IKHSAN",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa KELI REJO, Kecamatan BELITANG II"
+  },
+  {
+    "source_number": 440,
+    "institution_type": "school",
+    "name": "MAS AL - IKHSAN KELIREJO",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa KELI REJO, Kecamatan BELITANG II"
+  },
+  {
+    "source_number": 441,
+    "institution_type": "pesantren",
+    "name": "PENDIDIKAN MAMBAUL ULUM (YPMU) BELITANG II",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa MARGOMULYO, Kecamatan BELITANG II"
+  },
+  {
+    "source_number": 442,
+    "institution_type": "school",
+    "name": "MAS MAMBAUL ULUM",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa MARGOMULYO, Kecamatan BELITANG II"
+  },
+  {
+    "source_number": 443,
+    "institution_type": "pesantren",
+    "name": "PONPES HIDAYATUSSALAM AL-MUNAWAROH",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa DADIREJO, Kecamatan BELITANG III"
+  },
+  {
+    "source_number": 444,
+    "institution_type": "school",
+    "name": "MAS HIDAYATUSSALAM AL-MUNAWAROH",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa DADIREJO, Kecamatan BELITANG III"
+  },
+  {
+    "source_number": 445,
+    "institution_type": "pesantren",
+    "name": "PONPES AL IKHLAS",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa PEMETUNG BASUKI, Kecamatan BUAY PEMUKA PELIUNG"
+  },
+  {
+    "source_number": 446,
+    "institution_type": "school",
+    "name": "MA AL IKHLAS PEMETUNG BASUKI",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa PEMETUNG BASUKI, Kecamatan BUAY PEMUKA PELIUNG"
+  },
+  {
+    "source_number": 447,
+    "institution_type": "pesantren",
+    "name": "PONPES SUBULUSSALAM",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa SRI WANGI, Kecamatan SEMENDAWAI SUKU III"
+  },
+  {
+    "source_number": 448,
+    "institution_type": "school",
+    "name": "SMK AL-ITTIHAD",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa SRI WANGI, Kecamatan SEMENDAWAI SUKU III"
+  },
+  {
+    "source_number": 449,
+    "institution_type": "school",
+    "name": "MAS SUBULUSSALAM",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa SRI WANGI, Kecamatan SEMENDAWAI SUKU III"
+  },
+  {
+    "source_number": 450,
+    "institution_type": "school",
+    "name": "MAS SUBULUSSALAM 2",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa SRI WANGI, Kecamatan SEMENDAWAI SUKU III"
+  },
+  {
+    "source_number": 451,
+    "institution_type": "pesantren",
+    "name": "PONPES DARUSSALAM SUMEDANG SARI",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa SUMEDANG SARI, Kecamatan BUAY MADANG TIMUR"
+  },
+  {
+    "source_number": 452,
+    "institution_type": "school",
+    "name": "MAS DARUSSALAM",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa SUMEDANG SARI, Kecamatan BUAY MADANG TIMUR"
+  },
+  {
+    "source_number": 453,
+    "institution_type": "pesantren",
+    "name": "PONPES DARUSSALAM BATUMARTA VI",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa BATUMARTA VI, Kecamatan MADANG SUKU III"
+  },
+  {
+    "source_number": 454,
+    "institution_type": "school",
+    "name": "MA DARUSSALAM BATUMARTA VI",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa BATUMARTA VI, Kecamatan MADANG SUKU III"
+  },
+  {
+    "source_number": 455,
+    "institution_type": "pesantren",
+    "name": "PONPES RAUDHATUL ISTIQOMAH",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa SURABAYA, Kecamatan MADANG SUKU III"
+  },
+  {
+    "source_number": 456,
+    "institution_type": "school",
+    "name": "SMK MAS RAUDHATUL ISTIQOMAH",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa SURABAYA, Kecamatan MADANG SUKU III"
+  },
+  {
+    "source_number": 457,
+    "institution_type": "school",
+    "name": "MAS RAUDHATUL ISTIQOMAH",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa SURABAYA, Kecamatan MADANG SUKU III"
+  },
+  {
+    "source_number": 458,
+    "institution_type": "pesantren",
+    "name": "PONPES JUNJUNGAN SAYYID HAMIM",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa TANJUNG KUKUH, Kecamatan SEMENDAWAI BARAT"
+  },
+  {
+    "source_number": 459,
+    "institution_type": "school",
+    "name": "MAS JUNJUNGAN SAYYID HAMIM",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa TANJUNG KUKUH, Kecamatan SEMENDAWAI BARAT"
+  },
+  {
+    "source_number": 460,
+    "institution_type": "pesantren",
+    "name": "PONDOK PESANTREN SALAFIYAH DARUL MUTTAQIN",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa KARANG MELATI, Kecamatan SEMENDAWAI TIMUR"
+  },
+  {
+    "source_number": 461,
+    "institution_type": "school",
+    "name": "SMA AL QUR'AN DARUL MUTTAQIN",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa KARANG MELATI, Kecamatan SEMENDAWAI TIMUR"
+  },
+  {
+    "source_number": 462,
+    "institution_type": "pesantren",
+    "name": "PONPES AL FATAH",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa KOTA MULYA, Kecamatan SEMENDAWAI TIMUR"
+  },
+  {
+    "source_number": 463,
+    "institution_type": "school",
+    "name": "MAS AL FATAH",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa KOTA MULYA, Kecamatan SEMENDAWAI TIMUR"
+  },
+  {
+    "source_number": 464,
+    "institution_type": "pesantren",
+    "name": "PONPES NURUL QOLBI",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa KOTA TANAH, Kecamatan SEMENDAWAI TIMUR"
+  },
+  {
+    "source_number": 465,
+    "institution_type": "school",
+    "name": "MAS NURUL QOLBI",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa KOTA TANAH, Kecamatan SEMENDAWAI TIMUR"
+  },
+  {
+    "source_number": 466,
+    "institution_type": "pesantren",
+    "name": "PONPES DAARUL MUMTAZ",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa KARANG MELATI, Kecamatan SEMENDAWAI TIMUR"
+  },
+  {
+    "source_number": 467,
+    "institution_type": "school",
+    "name": "SMA DAARUL MUMTAZ",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa KARANG MELATI, Kecamatan SEMENDAWAI TIMUR"
+  },
+  {
+    "source_number": 468,
+    "institution_type": "pesantren",
+    "name": "PONPES DARUL HIKMAH",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa TUMI JAYA, Kecamatan JAYAPURA"
+  },
+  {
+    "source_number": 469,
+    "institution_type": "school",
+    "name": "MA DARUL HIKMAH",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa TUMI JAYA, Kecamatan JAYAPURA"
+  },
+  {
+    "source_number": 470,
+    "institution_type": "pesantren",
+    "name": "PONPES DARUSSALAM TEGAL REJO",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa PELITA JAYA, Kecamatan BELITANG MADANG RAYA"
+  },
+  {
+    "source_number": 471,
+    "institution_type": "school",
+    "name": "SMK TERPADU DARUSSALAM TEGALREJO",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa PELITA JAYA, Kecamatan BELITANG MADANG RAYA"
+  },
+  {
+    "source_number": 472,
+    "institution_type": "school",
+    "name": "MAS DARUSSALAM TEGALREJO",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa PELITA JAYA, Kecamatan BELITANG MADANG RAYA"
+  },
+  {
+    "source_number": 473,
+    "institution_type": "pesantren",
+    "name": "PONPES NURUL HUDA TANAH MERAH",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa TANAH MERAH, Kecamatan BELITANG MADANG RAYA"
+  },
+  {
+    "source_number": 474,
+    "institution_type": "school",
+    "name": "SMA TERPADU PONDOK PESANTREN NURUL HUDA",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa TANAH MERAH, Kecamatan BELITANG MADANG RAYA"
+  },
+  {
+    "source_number": 475,
+    "institution_type": "pesantren",
+    "name": "PON PES DARUL FALAH TULUNG SARI",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa TULUNG SARI BK 14, Kecamatan BELITANG MULYA"
+  },
+  {
+    "source_number": 476,
+    "institution_type": "school",
+    "name": "SMA DARUL FALAH",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa TULUNG SARI BK 14, Kecamatan BELITANG MULYA"
+  },
+  {
+    "source_number": 477,
+    "institution_type": "pesantren",
+    "name": "PONPES AL HIKMAH PURWODADI",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa PURWODADI, Kecamatan BELITANG MULYA"
+  },
+  {
+    "source_number": 478,
+    "institution_type": "school",
+    "name": "MAS AL HIKMAH PURWODADI",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa PURWODADI, Kecamatan BELITANG MULYA"
+  },
+  {
+    "source_number": 479,
+    "institution_type": "pesantren",
+    "name": "PONPES FATHUL ULUM",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Desa SRIMULYO TAPUS, Kecamatan MADANG SUKU II"
+  },
+  {
+    "source_number": 480,
+    "institution_type": "school",
+    "name": "SMKS KESEHATAN BINA MARTA MARTAPURA",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Kelurahan Paku Sengkunyit, Kecamatan MARTAPURA"
+  },
+  {
+    "source_number": 481,
+    "institution_type": "school",
+    "name": "SMAS YIS MARTAPURA",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Kelurahan Terukis Rahayu, Kecamatan MARTAPURA"
+  },
+  {
+    "source_number": 482,
+    "institution_type": "school",
+    "name": "SMKS YIS MARTAPURA",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Kelurahan Terukis Rahayu, Kecamatan MARTAPURA"
+  },
+  {
+    "source_number": 483,
+    "institution_type": "school",
+    "name": "SMAN 2 MARTAPURA",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Kelurahan Sungai Tuha Jaya, Kecamatan MARTAPURA"
+  },
+  {
+    "source_number": 484,
+    "institution_type": "school",
+    "name": "SMAN 3 MARTAPURA",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Kota Baru, Kecamatan MARTAPURA"
+  },
+  {
+    "source_number": 485,
+    "institution_type": "school",
+    "name": "SMKS YPBI MARTAPURA",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Kota Baru, Kecamatan MARTAPURA"
+  },
+  {
+    "source_number": 486,
+    "institution_type": "school",
+    "name": "SMAN 1 MARTAPURA",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Kota Baru Barat, Kecamatan MARTAPURA"
+  },
+  {
+    "source_number": 487,
+    "institution_type": "school",
+    "name": "SMAS MUHAMMADIYAH",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Kota Baru Barat, Kecamatan MARTAPURA"
+  },
+  {
+    "source_number": 488,
+    "institution_type": "school",
+    "name": "MAS MARTAPURA",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Perjaya Barat, Kecamatan MARTAPURA"
+  },
+  {
+    "source_number": 489,
+    "institution_type": "school",
+    "name": "SMKN 1 MARTAPURA",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Kotabaru Selatan, Kecamatan MARTAPURA"
+  },
+  {
+    "source_number": 490,
+    "institution_type": "school",
+    "name": "SMKN 1 BUNGA MAYANG",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Negeri Ratu, Kecamatan BUNGA MAYANG"
+  },
+  {
+    "source_number": 491,
+    "institution_type": "school",
+    "name": "SMAN JAYAPURA",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Bunga Mayang, Kecamatan JAYA PURA"
+  },
+  {
+    "source_number": 492,
+    "institution_type": "school",
+    "name": "SMAN 1 BP PELIUNG",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Negeri Pakuan, Kecamatan BUAY PEMUKA PELIUNG"
+  },
+  {
+    "source_number": 493,
+    "institution_type": "school",
+    "name": "MAS AL IKHLAS",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Pemetung Basuki, Kecamatan BUAY PEMUKA PELIUNG"
+  },
+  {
+    "source_number": 494,
+    "institution_type": "school",
+    "name": "SMAN 1 BELITANG I",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Gumawang, Kecamatan BELITANG"
+  },
+  {
+    "source_number": 495,
+    "institution_type": "school",
+    "name": "MAN 1 OKU TIMUR",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Gumawang, Kecamatan BELITANG"
+  },
+  {
+    "source_number": 496,
+    "institution_type": "school",
+    "name": "SMKS TERPADU TAQWA BELITANG",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Gumawang, Kecamatan BELITANG"
+  },
+  {
+    "source_number": 497,
+    "institution_type": "school",
+    "name": "SMAS XAVERIUS I BELITANG",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Tegal Rejo, Kecamatan BELITANG"
+  },
+  {
+    "source_number": 498,
+    "institution_type": "school",
+    "name": "SMAS MUHAMMADIYAH BELITANG",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Pujo Rahayu, Kecamatan BELITANG"
+  },
+  {
+    "source_number": 499,
+    "institution_type": "school",
+    "name": "SMKS MUHAMMADIYAH BELITANG (TUTUP)",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Pujo Rahayu, Kecamatan BELITANG"
+  },
+  {
+    "source_number": 500,
+    "institution_type": "school",
+    "name": "SMK ROUDLOTUT TULAB",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Pujo Rahayu, Kecamatan BELITANG"
+  },
+  {
+    "source_number": 501,
+    "institution_type": "school",
+    "name": "SMKS ISTIQLAL SIDOMULYO",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Sidomulyo, Kecamatan BELITANG"
+  },
+  {
+    "source_number": 502,
+    "institution_type": "school",
+    "name": "SMKS MUHAMMADIYAH TAWANG REJO",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Tawang Rejo, Kecamatan BELITANG"
+  },
+  {
+    "source_number": 503,
+    "institution_type": "school",
+    "name": "SMAS XAVERIUS 5 BELITANG",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Serbaguna, Kecamatan BELITANG"
+  },
+  {
+    "source_number": 504,
+    "institution_type": "school",
+    "name": "SMAS YPPI BELITANG",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Sumber Suko Jaya, Kecamatan BELITANG"
+  },
+  {
+    "source_number": 505,
+    "institution_type": "school",
+    "name": "SMAN 1 BELITANG II",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Sumberjaya, Kecamatan BELITANG-II"
+  },
+  {
+    "source_number": 506,
+    "institution_type": "school",
+    "name": "SMK BHINNEKA TUNGGAL IKA",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Sumberjaya, Kecamatan BELITANG-II"
+  },
+  {
+    "source_number": 507,
+    "institution_type": "school",
+    "name": "MAS AL IKHSAN",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Sumberjaya, Kecamatan BELITANG-II"
+  },
+  {
+    "source_number": 508,
+    "institution_type": "school",
+    "name": "SMAN 1 BELITANG III",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Nusa Bakti, Kecamatan BELITANG-III"
+  },
+  {
+    "source_number": 509,
+    "institution_type": "school",
+    "name": "SMK NEGERI 1 BELITANG III",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Nusa Bakti, Kecamatan BELITANG-III"
+  },
+  {
+    "source_number": 510,
+    "institution_type": "school",
+    "name": "MAS AL MUSTHOFA",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Nusa Tunggal, Kecamatan BELITANG-III"
+  },
+  {
+    "source_number": 511,
+    "institution_type": "school",
+    "name": "SMK AL-FALLAH NUSA RAYA",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Nusa Raya, Kecamatan BELITANG-III"
+  },
+  {
+    "source_number": 512,
+    "institution_type": "school",
+    "name": "SMKS PGRI 2 BELITANG",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Karang Sari, Kecamatan BELITANG-III"
+  },
+  {
+    "source_number": 513,
+    "institution_type": "school",
+    "name": "SMKN 1 BUAY MADANG",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Kurungan Nyawa-I, Kecamatan BUAY MADANG"
+  },
+  {
+    "source_number": 514,
+    "institution_type": "school",
+    "name": "SMKS NURUL HUDA BUAY MADANG",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Sukaraja, Kecamatan BUAY MADANG"
+  },
+  {
+    "source_number": 515,
+    "institution_type": "school",
+    "name": "MAS NURUL HUDA",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Sukaraja, Kecamatan BUAY MADANG"
+  },
+  {
+    "source_number": 516,
+    "institution_type": "school",
+    "name": "SMKS MUHAMMADIYAH 3 SUKARAJA",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Sukaraja, Kecamatan BUAY MADANG"
+  },
+  {
+    "source_number": 517,
+    "institution_type": "school",
+    "name": "SMAS PANGUDI LUHUR SUKARAJA",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Sukaraja, Kecamatan BUAY MADANG"
+  },
+  {
+    "source_number": 518,
+    "institution_type": "school",
+    "name": "SMAS NU SUMBER AGUNG",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Sumber Agung, Kecamatan BUAY MADANG"
+  },
+  {
+    "source_number": 519,
+    "institution_type": "school",
+    "name": "SMK PGRI SUMBER AGUNG",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Sumber Agung, Kecamatan BUAY MADANG"
+  },
+  {
+    "source_number": 520,
+    "institution_type": "school",
+    "name": "MAS NAHDLATUL ULAMA",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Sumber Agung, Kecamatan BUAY MADANG"
+  },
+  {
+    "source_number": 521,
+    "institution_type": "school",
+    "name": "SMK HARAPAN BANGSA",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Tebat Jaya, Kecamatan BUAY MADANG"
+  },
+  {
+    "source_number": 522,
+    "institution_type": "school",
+    "name": "MA Darussalamah",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Mudasentosa, Kecamatan BUAY MADANG"
+  },
+  {
+    "source_number": 523,
+    "institution_type": "school",
+    "name": "SMA N 1 BUAY MADANG",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Cipta Muda, Kecamatan BUAY MADANG"
+  },
+  {
+    "source_number": 524,
+    "institution_type": "school",
+    "name": "SMAS MUHAMMADIYAH 2 KARANG TENGAH",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Karang Tengah, Kecamatan BUAY MADANG TIMUR"
+  },
+  {
+    "source_number": 525,
+    "institution_type": "school",
+    "name": "SMKS MARDI WACANA",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Sumber Asri, Kecamatan BUAY MADANG TIMUR"
+  },
+  {
+    "source_number": 526,
+    "institution_type": "school",
+    "name": "SMA MUHAMMADIYAH 9 RAWA BENING",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Srikaton, Kecamatan BUAY MADANG TIMUR"
+  },
+  {
+    "source_number": 527,
+    "institution_type": "school",
+    "name": "SMKS MUHAMMADIYAH 2 RAWABENING",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Srikaton, Kecamatan BUAY MADANG TIMUR"
+  },
+  {
+    "source_number": 528,
+    "institution_type": "school",
+    "name": "SMKS MUHAMMADIYAH 1 RAWABENING",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Srikaton, Kecamatan BUAY MADANG TIMUR"
+  },
+  {
+    "source_number": 529,
+    "institution_type": "school",
+    "name": "SMKS KESEHATAN LEANPURI",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Srikaton, Kecamatan BUAY MADANG TIMUR"
+  },
+  {
+    "source_number": 530,
+    "institution_type": "school",
+    "name": "SMA AL-ISTIQOMAH",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Sumber Harjo, Kecamatan BUAY MADANG TIMUR"
+  },
+  {
+    "source_number": 531,
+    "institution_type": "school",
+    "name": "MAS YPI SUMBER HARJO",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Sumber Harjo, Kecamatan BUAY MADANG TIMUR"
+  },
+  {
+    "source_number": 532,
+    "institution_type": "school",
+    "name": "SMKS NU BUAY MADANG",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Sumber Mulyo, Kecamatan BUAY MADANG TIMUR"
+  },
+  {
+    "source_number": 533,
+    "institution_type": "school",
+    "name": "MAS AL FATTAH",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Sumber Mulyo, Kecamatan BUAY MADANG TIMUR"
+  },
+  {
+    "source_number": 534,
+    "institution_type": "school",
+    "name": "SMAN 1 BUAY MADANG TIMUR",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Tambak Boyo, Kecamatan BUAY MADANG TIMUR"
+  },
+  {
+    "source_number": 535,
+    "institution_type": "school",
+    "name": "SMAN 1 MADANG SUKU I",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Rasuan, Kecamatan MADANG SUKU-I"
+  },
+  {
+    "source_number": 536,
+    "institution_type": "school",
+    "name": "SMK AL MUTTAQIN",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "HARJO MULYO JAYA, Kecamatan MADANG SUKU-I"
+  },
+  {
+    "source_number": 537,
+    "institution_type": "school",
+    "name": "MAS DARUSSALAM TEGAL REJO",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Jati Sari, Kecamatan MADANG SUKU-I"
+  },
+  {
+    "source_number": 538,
+    "institution_type": "school",
+    "name": "SMAN 1 MADANG SUKU II",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Kota Negara, Kecamatan MADANG SUKU-II"
+  },
+  {
+    "source_number": 539,
+    "institution_type": "school",
+    "name": "MA NURUL IMAN MARGOTANI",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Margotani, Kecamatan MADANG SUKU-II"
+  },
+  {
+    "source_number": 540,
+    "institution_type": "school",
+    "name": "SMK CENDIKIA OKU TIMUR",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Sri Mulyo, Kecamatan MADANG SUKU-II"
+  },
+  {
+    "source_number": 541,
+    "institution_type": "school",
+    "name": "SMAS YAIQLI JATI MULYO",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Jati Mulyo II, Kecamatan MADANG SUKU-II"
+  },
+  {
+    "source_number": 542,
+    "institution_type": "school",
+    "name": "MAS NURUL A'LA",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Kecamatan MADANG SUKU-II"
+  },
+  {
+    "source_number": 543,
+    "institution_type": "school",
+    "name": "MA S DARUSSALAM",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Batumarta VI, Kecamatan MADANG SUKU-III"
+  },
+  {
+    "source_number": 544,
+    "institution_type": "school",
+    "name": "SMK RAUDHATUL ISTIQOMAH",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Surabaya, Kecamatan MADANG SUKU-III"
+  },
+  {
+    "source_number": 545,
+    "institution_type": "school",
+    "name": "SMAN 1 MADANG SUKU III",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Karya Makmur, Kecamatan MADANG SUKU-III"
+  },
+  {
+    "source_number": 546,
+    "institution_type": "school",
+    "name": "SMK NEGERI BATUMARTA",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Karya Makmur, Kecamatan MADANG SUKU-III"
+  },
+  {
+    "source_number": 547,
+    "institution_type": "school",
+    "name": "SMK NEGERI 1 MADANG SUKU III",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Karya Makmur, Kecamatan MADANG SUKU-III"
+  },
+  {
+    "source_number": 548,
+    "institution_type": "school",
+    "name": "SMAN 1 SEMENDAWAI SUKU III",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Karang Endah, Kecamatan SEMENDAWAI SUKU-III"
+  },
+  {
+    "source_number": 549,
+    "institution_type": "school",
+    "name": "SMKS DIPONEGORO",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Karang Endah, Kecamatan SEMENDAWAI SUKU-III"
+  },
+  {
+    "source_number": 550,
+    "institution_type": "school",
+    "name": "SMKN 1 SEMENDAWAI SUKU III",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Margodadi, Kecamatan SEMENDAWAI SUKU-III"
+  },
+  {
+    "source_number": 551,
+    "institution_type": "school",
+    "name": "MA S MIFTAHUL ULUM",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Trimorejo, Kecamatan SEMENDAWAI SUKU-III"
+  },
+  {
+    "source_number": 552,
+    "institution_type": "school",
+    "name": "SMKN 2 SEMENDAWAI SUKU III",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Taman Mulyo, Kecamatan SEMENDAWAI SUKU-III"
+  },
+  {
+    "source_number": 553,
+    "institution_type": "school",
+    "name": "MA HIDAYATULLAH",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Burnai Mulya, Kecamatan SEMENDAWAI TIMUR"
+  },
+  {
+    "source_number": 554,
+    "institution_type": "school",
+    "name": "MAS AL HUDA",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Karang Melati, Kecamatan SEMENDAWAI TIMUR"
+  },
+  {
+    "source_number": 555,
+    "institution_type": "school",
+    "name": "SMA WAHIDIYAH",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Nirwana, Kecamatan SEMENDAWAI TIMUR"
+  },
+  {
+    "source_number": 556,
+    "institution_type": "school",
+    "name": "MAS HIDAYATUL MUBTADI-IN",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Nirwana, Kecamatan SEMENDAWAI TIMUR"
+  },
+  {
+    "source_number": 557,
+    "institution_type": "school",
+    "name": "SMA AL QUR AN DARUL MUTTAQIN",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Melati Jaya, Kecamatan SEMENDAWAI TIMUR"
+  },
+  {
+    "source_number": 558,
+    "institution_type": "school",
+    "name": "MA APIW (ASRAMA PERGURUAN ISLAM WANASARI)",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Wanasari, Kecamatan SEMENDAWAI TIMUR"
+  },
+  {
+    "source_number": 559,
+    "institution_type": "school",
+    "name": "MAS Al FATAH KOTA MULYA",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Kota Mulya, Kecamatan SEMENDAWAI TIMUR"
+  },
+  {
+    "source_number": 560,
+    "institution_type": "school",
+    "name": "SMK NEGERI 1 SEMENDAWAI TIMUR",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Mulya Jaya, Kecamatan SEMENDAWAI TIMUR"
+  },
+  {
+    "source_number": 561,
+    "institution_type": "school",
+    "name": "SMAN 1 SEMENDAWAI TIMUR",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Melati Agung, Kecamatan SEMENDAWAI TIMUR"
+  },
+  {
+    "source_number": 562,
+    "institution_type": "school",
+    "name": "SMAN 2 SEMENDAWAI BARAT",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Betung, Kecamatan SEMENDAWAI BARAT"
+  },
+  {
+    "source_number": 563,
+    "institution_type": "school",
+    "name": "MAS JUNJUNGAN SAYYID HAMMIM LOBUNG NPNIS",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Tanjung Kukuh, Kecamatan SEMENDAWAI BARAT"
+  },
+  {
+    "source_number": 564,
+    "institution_type": "school",
+    "name": "MAS YPI PANGERAN AJI",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Menanga Besar, Kecamatan SEMENDAWAI BARAT"
+  },
+  {
+    "source_number": 565,
+    "institution_type": "school",
+    "name": "SMAN 1 SEMENDAWAI BARAT",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Kangkung, Kecamatan SEMENDAWAI BARAT"
+  },
+  {
+    "source_number": 566,
+    "institution_type": "school",
+    "name": "SMKN 11 CEMPAKA",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Cempaka, Kecamatan CEMPAKA"
+  },
+  {
+    "source_number": 567,
+    "institution_type": "school",
+    "name": "MAS YPGS GUNUNG BATU",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Gunung Batu, Kecamatan CEMPAKA"
+  },
+  {
+    "source_number": 568,
+    "institution_type": "school",
+    "name": "SMAN 1 CEMPAKA",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Campang Tiga Ilir, Kecamatan CEMPAKA"
+  },
+  {
+    "source_number": 569,
+    "institution_type": "school",
+    "name": "SMAN 1 BELITANG JAYA",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Karsa Jaya, Kecamatan BELITANG JAYA"
+  },
+  {
+    "source_number": 570,
+    "institution_type": "school",
+    "name": "SMA DARUL FALAH",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Tulung Sari, Kecamatan BELITANG MULYA"
+  },
+  {
+    "source_number": 571,
+    "institution_type": "school",
+    "name": "SMAN 1 BELITANG MADANG RAYA",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Tugu Mulyo, Kecamatan BELITANG MADANG RAYA"
+  },
+  {
+    "source_number": 572,
+    "institution_type": "school",
+    "name": "SMKN 1 BELITANG MADANG RAYA",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Bangsa Negara, Kecamatan BELITANG MADANG RAYA"
+  },
+  {
+    "source_number": 573,
+    "institution_type": "school",
+    "name": "SMA BUDI MULIA",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Tugu Harum, Kecamatan BELITANG MADANG RAYA"
+  },
+  {
+    "source_number": 574,
+    "institution_type": "school",
+    "name": "MAS NU YOSOWINANGUN",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "YOSO WINANGUN, Kecamatan BELITANG MADANG RAYA"
+  },
+  {
+    "source_number": 575,
+    "institution_type": "school",
+    "name": "MAS AL-AMIN",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "YOSO WINANGUN, Kecamatan BELITANG MADANG RAYA"
+  },
+  {
+    "source_number": 576,
+    "institution_type": "school",
+    "name": "MAS YPI DARUL HUDA",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Lubuk Harjo, Kecamatan BELITANG MADANG RAYA"
+  },
+  {
+    "source_number": 577,
+    "institution_type": "school",
+    "name": "SMA TERPADU PONDOK NURUL HUDA",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Tanah Merah, Kecamatan BELITANG MADANG RAYA"
+  },
+  {
+    "source_number": 578,
+    "institution_type": "school",
+    "name": "SMK YPA MAHKOTA BUANA BELITANG",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Tanah Merah, Kecamatan BELITANG MADANG RAYA"
+  },
+  {
+    "source_number": 579,
+    "institution_type": "school",
+    "name": "SMKS PGRI 1 BELITANG",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Rantau Jaya, Kecamatan BELITANG MADANG RAYA"
+  },
+  {
+    "source_number": 580,
+    "institution_type": "school",
+    "name": "SMKN 1 BP BANGSA RAJA",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Anyar, Kecamatan BUAY PEMUKA BANGSA RAJA"
+  },
+  {
+    "source_number": 581,
+    "institution_type": "school",
+    "name": "MAS AL FATTAH",
+    "district": "Kabupaten Ogan Komering Ulu Timur",
+    "address": "Srikaton, Kecamatan BUAY MADANG TIMUR"
+  }
+]
