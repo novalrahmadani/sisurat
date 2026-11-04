@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response as HttpResponse;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -24,13 +25,16 @@ class InternshipController extends Controller
     public function index(Request $request, PublicFormLinks $links): Response
     {
         $filters = $this->filters($request);
-        $participants = InternshipParticipant::query()->when($filters['q'], fn (Builder $query, string $q) => $this->searchParticipants($query, $q))
+        $participants = InternshipParticipant::query()->withCount('attendances')->when($filters['q'], fn (Builder $query, string $q) => $this->searchParticipants($query, $q))
             ->orderBy('name')->paginate(12, ['*'], 'participants_page')->withQueryString();
         $records = $this->records($filters)->with('participant')->paginate(25, ['*'], 'records_page')->withQueryString();
         $today = CarbonImmutable::now('Asia/Jakarta')->toDateString();
 
         return Inertia::render('internship/Index', [
-            'participants' => $participants->through(fn (InternshipParticipant $participant): array => $this->participantData($participant)),
+            'participants' => $participants->through(fn (InternshipParticipant $participant): array => [
+                ...$this->participantData($participant),
+                'attendance_count' => (int) $participant->getAttribute('attendances_count'),
+            ]),
             'records' => $records->through(fn (InternshipAttendance $record): array => [...$record->presentation(), 'participant' => $this->participantData($record->participant)]),
             'filters' => $filters, 'today' => $today,
             'stats' => ['active' => InternshipParticipant::query()->where('is_active', true)->whereDate('start_date', '<=', $today)->whereDate('end_date', '>=', $today)->count(),
@@ -63,6 +67,21 @@ class InternshipController extends Controller
         $request->session()->put('internship_issued_access', ['name' => $participant->name, 'url' => $this->devices->recoveryUrl($participant)]);
 
         return to_route('internships.index', ['tab' => 'participants']);
+    }
+
+    public function destroy(Request $request, InternshipParticipant $participant): RedirectResponse
+    {
+        $filters = $this->filters($request);
+
+        DB::transaction(function () use ($participant): void {
+            $lockedParticipant = InternshipParticipant::query()->lockForUpdate()->findOrFail($participant->id);
+            $lockedParticipant->attendances()->delete();
+            $lockedParticipant->delete();
+        }, 5);
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Peserta magang beserta riwayat absensi dan tanda tangannya berhasil dihapus.']);
+
+        return to_route('internships.index', [...$filters, 'tab' => 'participants']);
     }
 
     public function export(Request $request): StreamedResponse

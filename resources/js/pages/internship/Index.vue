@@ -12,6 +12,7 @@ import {
     Plus,
     Printer,
     Search,
+    Trash2,
     UsersRound,
     X,
     MapPin,
@@ -23,6 +24,7 @@ import {
     index,
     store,
     update,
+    destroy as destroyParticipant,
     recoverAccess,
     exportMethod,
     print as printReport,
@@ -44,6 +46,7 @@ type Participant = {
     start_date: string;
     end_date: string;
     is_active: boolean;
+    attendance_count?: number;
 };
 type Record = {
     id: number;
@@ -77,6 +80,7 @@ const query = ref(props.filters.q);
 const month = ref(props.filters.month);
 const editorOpen = ref(false);
 const editingId = ref<number | null>(null);
+const deletingId = ref<number | null>(null);
 const copied = ref('');
 const codeInput = ref<HTMLInputElement | null>(null);
 const form = useForm({
@@ -142,6 +146,28 @@ function resetCode(participant: Participant) {
         )
     )
         router.post(recoverAccess.url(participant.id));
+}
+function removeParticipant(participant: Participant) {
+    if (
+        deletingId.value !== null ||
+        !window.confirm(
+            `Hapus peserta magang "${participant.name}"? Data peserta, ${participant.attendance_count ?? 0} catatan kehadiran, dan tanda tangannya akan dihapus permanen. Tindakan ini tidak dapat dibatalkan.`,
+        )
+    ) {
+        return;
+    }
+
+    deletingId.value = participant.id;
+    router.delete(destroyParticipant.url(participant.id), {
+        data: { q: props.filters.q, month: props.filters.month },
+        preserveScroll: true,
+        onSuccess: () => {
+            if (editingId.value === participant.id) editorOpen.value = false;
+        },
+        onFinish: () => {
+            deletingId.value = null;
+        },
+    });
 }
 async function copyCode() {
     if (!props.issuedAccess) return;
@@ -649,6 +675,19 @@ function duration(minutes: number | null) {
                         >
                             <KeyRound class="size-3.5" />Pulihkan akses
                             perangkat
+                        </button>
+                        <button
+                            type="button"
+                            class="sisurat-secondary-action !px-3 !py-2 !text-xs !text-destructive hover:!bg-destructive/10"
+                            :disabled="deletingId !== null"
+                            :aria-label="`Hapus peserta ${participant.name}`"
+                            @click="removeParticipant(participant)"
+                        >
+                            <Trash2 class="size-3.5" />{{
+                                deletingId === participant.id
+                                    ? 'Menghapus…'
+                                    : 'Hapus peserta'
+                            }}
                         </button>
                     </div>
                 </article>

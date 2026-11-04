@@ -64,6 +64,7 @@ Route::middleware(['auth'])->group(function () {
         Route::put('internships/settings', [InternshipAccessController::class, 'update'])->name('internships.access.update');
         Route::post('internships/participants', [InternshipController::class, 'store'])->name('internships.store');
         Route::put('internships/participants/{participant}', [InternshipController::class, 'update'])->name('internships.update');
+        Route::delete('internships/participants/{participant}', [InternshipController::class, 'destroy'])->name('internships.destroy');
         Route::post('internships/participants/{participant}/recovery', [InternshipController::class, 'recoverAccess'])->name('internships.recover-access');
         Route::get('internships/qr', [PublicFormQrController::class, 'internship'])->name('internships.qr');
         Route::get('internships/flyer', [PublicFormFlyerController::class, 'internship'])->name('internships.flyer');
