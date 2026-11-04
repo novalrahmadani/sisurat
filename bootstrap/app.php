@@ -34,7 +34,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->appendToPriorityList(StartSession::class, EnsureActiveAccount::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        $exceptions->dontFlash(['pin']);
+        $exceptions->dontFlash(['pin', 'pin_confirmation']);
         $exceptions->respond(function (Response $response, Throwable $exception, Request $request): Response {
             if ($response->getStatusCode() !== 419
                 || ($request->expectsJson() && ! $request->headers->has('X-Inertia'))) {

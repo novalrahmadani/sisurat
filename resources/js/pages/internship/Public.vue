@@ -16,6 +16,7 @@ import {
 } from '@lucide/vue';
 import { computed, onMounted, ref, watch } from 'vue';
 import SignaturePad from '@/components/SignaturePad.vue';
+import AlertError from '@/components/AlertError.vue';
 import InputError from '@/components/InputError.vue';
 import PublicLayout from '@/layouts/PublicLayout.vue';
 import { home } from '@/routes';
@@ -78,6 +79,8 @@ const registration = useForm({
     class_level: '',
     start_date: props.today.date,
     end_date: '',
+    pin: '',
+    pin_confirmation: '',
 });
 const checkForm = useForm<CheckData>({
     action: 'check_in',
@@ -92,6 +95,7 @@ const recoveryForm = useForm<{ access?: string }>({});
 const pinForm = useForm({ pin: '' });
 const pinIssueForm = useForm<{ access?: string }>({});
 const showPin = ref(false);
+const showRegistrationPin = ref(false);
 const copyMessage = ref('');
 const refreshingSession = ref(false);
 const sessionError = ref('');
@@ -203,6 +207,7 @@ async function registerParticipant() {
         preserveScroll: false,
         onSuccess: () => {
             registration.resetAndClearErrors();
+            showRegistrationPin.value = false;
             returningParticipant.value = true;
         },
     });
@@ -380,7 +385,7 @@ function dateLabel(date: string) {
                             v-for="(step, i) in [
                                 {
                                     title: 'Daftarkan data diri',
-                                    text: 'Lengkapi identitas dan periode magang satu kali, lalu simpan PIN pribadi yang diberikan.',
+                                    text: 'Lengkapi identitas dan periode magang satu kali, lalu buat PIN pribadi 8 angka untuk akses absensi.',
                                 },
                                 {
                                     title: 'Catat kehadiran masuk',
@@ -576,6 +581,14 @@ function dateLabel(date: string) {
                                 class="mt-6 space-y-4"
                                 @submit.prevent="enterWithPin"
                             >
+                                <AlertError
+                                    v-if="pinForm.errors.pin"
+                                    id="pin-error"
+                                    title="Periksa kembali PIN Anda"
+                                    :errors="[pinForm.errors.pin]"
+                                    class="border-red-300/70 bg-red-50 text-red-800 dark:border-red-800 dark:bg-red-950/50 dark:text-red-200"
+                                    aria-live="assertive"
+                                />
                                 <div>
                                     <label
                                         for="attendance-pin"
@@ -598,11 +611,6 @@ function dateLabel(date: string) {
                                             Boolean(pinForm.errors.pin)
                                         "
                                         aria-describedby="pin-help pin-error"
-                                    />
-                                    <InputError
-                                        id="pin-error"
-                                        class="mt-2"
-                                        :message="pinForm.errors.pin"
                                     />
                                 </div>
                                 <label
@@ -820,14 +828,126 @@ function dateLabel(date: string) {
                                         </div>
                                     </div>
                                 </fieldset>
+                                <fieldset
+                                    class="rounded-2xl border border-border p-4"
+                                >
+                                    <legend class="px-1 text-sm font-medium">
+                                        Buat PIN absensi
+                                    </legend>
+                                    <p
+                                        id="registration-pin-help"
+                                        class="mb-4 text-xs leading-6 text-muted-foreground"
+                                    >
+                                        Buat PIN pribadi 8 angka yang mudah Anda
+                                        ingat. PIN ini digunakan untuk membuka
+                                        absensi berikutnya tanpa mengisi data
+                                        diri kembali. Jangan bagikan PIN kepada
+                                        orang lain.
+                                    </p>
+                                    <div class="grid gap-4 sm:grid-cols-2">
+                                        <div>
+                                            <label
+                                                for="registration-pin"
+                                                class="mb-2 block text-sm"
+                                                >PIN pribadi<span
+                                                    class="ml-1 text-red-600"
+                                                    aria-hidden="true"
+                                                    >*</span
+                                                ></label
+                                            >
+                                            <input
+                                                id="registration-pin"
+                                                v-model="registration.pin"
+                                                :type="
+                                                    showRegistrationPin
+                                                        ? 'text'
+                                                        : 'password'
+                                                "
+                                                inputmode="numeric"
+                                                pattern="[0-9]{8}"
+                                                minlength="8"
+                                                maxlength="8"
+                                                autocomplete="new-password"
+                                                required
+                                                class="sisurat-input min-h-12 w-full font-mono tracking-widest"
+                                                placeholder="Buat 8 angka"
+                                                :aria-invalid="
+                                                    Boolean(
+                                                        registration.errors.pin,
+                                                    )
+                                                "
+                                                aria-describedby="registration-pin-help registration-pin-error"
+                                            />
+                                            <InputError
+                                                id="registration-pin-error"
+                                                class="mt-2"
+                                                :message="
+                                                    registration.errors.pin
+                                                "
+                                            />
+                                        </div>
+                                        <div>
+                                            <label
+                                                for="registration-pin-confirmation"
+                                                class="mb-2 block text-sm"
+                                                >Ulangi PIN<span
+                                                    class="ml-1 text-red-600"
+                                                    aria-hidden="true"
+                                                    >*</span
+                                                ></label
+                                            >
+                                            <input
+                                                id="registration-pin-confirmation"
+                                                v-model="
+                                                    registration.pin_confirmation
+                                                "
+                                                :type="
+                                                    showRegistrationPin
+                                                        ? 'text'
+                                                        : 'password'
+                                                "
+                                                inputmode="numeric"
+                                                pattern="[0-9]{8}"
+                                                minlength="8"
+                                                maxlength="8"
+                                                autocomplete="new-password"
+                                                required
+                                                class="sisurat-input min-h-12 w-full font-mono tracking-widest"
+                                                placeholder="Ketik PIN yang sama"
+                                                :aria-invalid="
+                                                    Boolean(
+                                                        registration.errors
+                                                            .pin_confirmation,
+                                                    )
+                                                "
+                                                aria-describedby="registration-pin-confirmation-error"
+                                            />
+                                            <InputError
+                                                id="registration-pin-confirmation-error"
+                                                class="mt-2"
+                                                :message="
+                                                    registration.errors
+                                                        .pin_confirmation
+                                                "
+                                            />
+                                        </div>
+                                    </div>
+                                    <label
+                                        class="mt-3 flex min-h-11 items-center gap-3 text-sm text-muted-foreground"
+                                        ><input
+                                            v-model="showRegistrationPin"
+                                            type="checkbox"
+                                            class="size-4 accent-primary"
+                                        />Tampilkan PIN pendaftaran</label
+                                    >
+                                </fieldset>
                                 <p
                                     class="flex gap-2 rounded-xl bg-muted/60 p-3 text-xs leading-6 text-muted-foreground"
                                 >
                                     <Info class="mt-1 size-4 shrink-0" />Gunakan
-                                    perangkat pribadi. Setelah pendaftaran,
-                                    simpan PIN 8 angka yang dibuat otomatis. PIN
-                                    digunakan jika Anda berganti HP atau data
-                                    belum dikenali pada browser.
+                                    perangkat pribadi dan ingat PIN yang Anda
+                                    buat. PIN digunakan jika Anda berganti HP
+                                    atau data belum dikenali pada browser.
                                 </p>
                                 <button
                                     type="submit"

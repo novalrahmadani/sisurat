@@ -65,8 +65,9 @@ class PublicInternshipController extends Controller
         }
         try {
             DB::transaction(function () use ($request): void {
-                $participant = InternshipParticipant::query()->create([...$request->validated(), 'is_active' => true, 'registration_source' => 'public']);
-                $pin = $this->pins->issue($participant);
+                $participant = InternshipParticipant::query()->create([...$request->safe()->except(['pin', 'pin_confirmation']), 'is_active' => true, 'registration_source' => 'public']);
+                $pin = $request->validated('pin');
+                $this->pins->assign($participant, $pin);
                 $this->devices->remember($request, $participant);
                 $request->session()->put('internship_issued_pin', ['id' => $participant->id, 'pin' => $pin]);
             }, 5);

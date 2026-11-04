@@ -6,10 +6,22 @@ use App\Models\InternshipParticipant;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 use RuntimeException;
 
 class InternshipPinAccess
 {
+    public const UNAVAILABLE_MESSAGE = 'PIN tersebut tidak dapat digunakan. Silakan pilih PIN lain.';
+
+    public function assign(InternshipParticipant $participant, string $pin): void
+    {
+        try {
+            $this->persist($participant, $pin);
+        } catch (UniqueConstraintViolationException) {
+            throw ValidationException::withMessages(['pin' => self::UNAVAILABLE_MESSAGE]);
+        }
+    }
+
     public function issue(InternshipParticipant $participant): string
     {
         for ($attempt = 0; $attempt < 10; $attempt++) {
@@ -22,12 +34,7 @@ class InternshipPinAccess
             try {
                 // A savepoint lets a concurrent PIN collision be retried without
                 // rolling back the participant registration that owns this call.
-                DB::transaction(fn () => $participant->update([
-                    'pin_lookup_hash' => $lookup,
-                    'access_code_hash' => Hash::make($pin),
-                    'recovery_token_hash' => null,
-                    'recovery_expires_at' => null,
-                ]));
+                $this->persist($participant, $pin);
 
                 return $pin;
             } catch (UniqueConstraintViolationException) {
@@ -36,6 +43,16 @@ class InternshipPinAccess
         }
 
         throw new RuntimeException('PIN belum dapat dibuat. Silakan coba kembali.');
+    }
+
+    private function persist(InternshipParticipant $participant, string $pin): void
+    {
+        DB::transaction(fn () => $participant->update([
+            'pin_lookup_hash' => $this->fingerprint($pin),
+            'access_code_hash' => Hash::make($pin),
+            'recovery_token_hash' => null,
+            'recovery_expires_at' => null,
+        ]));
     }
 
     public function fingerprint(string $pin): string

@@ -6,6 +6,7 @@ use App\Support\InternshipPinAccess;
 use Carbon\CarbonImmutable;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 use Inertia\Testing\AssertableInertia as Assert;
 
 uses(LazilyRefreshDatabase::class);
@@ -28,26 +29,86 @@ function pinDeviceSession(InternshipParticipant $participant): array
     return [InternshipDeviceAccess::SESSION => ['id' => $participant->id, 'fingerprint' => $participant->device_token_hash]];
 }
 
-test('registration automatically issues a private eight digit PIN and displays it once', function () {
-    $this->post(route('internship.register'), [
+function pinRegistrationPayload(array $changes = []): array
+{
+    return [
         'name' => 'Peserta PIN', 'participant_category' => 'smk', 'student_number' => 'NIS-123',
         'institution' => 'SMK Contoh', 'start_date' => '2026-10-05', 'end_date' => '2026-11-13',
-        'pin_lookup_hash' => 'injected', 'access_code_hash' => 'injected',
-    ])->assertSessionHasNoErrors()->assertRedirect(route('internship.show'));
+        'pin' => '24681357', 'pin_confirmation' => '24681357', ...$changes,
+    ];
+}
+
+test('registration stores the chosen private PIN including leading zeros and displays it once', function (string $pin) {
+    $this->post(route('internship.register'), pinRegistrationPayload([
+        'pin' => $pin, 'pin_confirmation' => $pin, 'pin_lookup_hash' => 'injected', 'access_code_hash' => 'injected',
+    ]))->assertSessionHasNoErrors()->assertRedirect(route('internship.show'));
     $issued = session('internship_issued_pin');
     $participant = InternshipParticipant::firstOrFail();
-    expect($issued['pin'])->toMatch('/^[0-9]{8}$/D');
+    expect($issued['pin'])->toBe($pin);
     expect($issued['id'])->toBe($participant->id);
     expect(Hash::check($issued['pin'], $participant->access_code_hash))->toBeTrue();
     expect($participant->pin_lookup_hash)->toBe(app(InternshipPinAccess::class)->fingerprint($issued['pin']));
-    expect($participant->getAttributes())->not->toHaveKey('pin');
+    expect($participant->getAttributes())->not->toHaveKey('pin')->not->toHaveKey('pin_confirmation');
     expect(json_encode($participant->toArray()))->not->toContain($issued['pin'])->not->toContain($participant->pin_lookup_hash)->not->toContain($participant->access_code_hash);
     $this->get(route('internship.show'))->assertInertia(fn (Assert $page) => $page
         ->where('participant.name', 'Peserta PIN')->where('participant.has_pin', true)
         ->where('issuedPin', $issued['pin'])->where('participant.can_attend', true)
         ->missing('participant.pin_lookup_hash')->missing('participant.access_code_hash'));
     $this->get(route('internship.show'))->assertInertia(fn (Assert $page) => $page->where('issuedPin', null));
+    $this->post(route('internship.leave'))->assertSessionHasNoErrors();
+    $this->post(route('internship.verify-pin'), ['pin' => $pin])->assertSessionHasNoErrors();
+    $this->get(route('internship.show'))->assertInertia(fn (Assert $page) => $page->where('participant.id', $participant->id));
     $this->assertGuest();
+})->with(['chosen PIN' => '24681357', 'leading zeros' => '00135790']);
+
+test('registration validates the personal PIN and its confirmation without flashing either value', function (array $changes, string $field, string $message) {
+    $this->from(route('internship.show'))->post(route('internship.register'), pinRegistrationPayload($changes))
+        ->assertSessionHasErrors([$field => $message])->assertSessionMissing('_old_input.pin')
+        ->assertSessionMissing('_old_input.pin_confirmation')->assertSessionMissing(InternshipDeviceAccess::SESSION)
+        ->assertCookieMissing(InternshipDeviceAccess::COOKIE);
+    $this->assertDatabaseCount('internship_participants', 0);
+})->with([
+    'PIN required' => [['pin' => null], 'pin', 'Buat PIN pribadi untuk akses absensi.'],
+    'short PIN' => [['pin' => '1234567', 'pin_confirmation' => '1234567'], 'pin', 'PIN harus terdiri dari 8 angka.'],
+    'long PIN' => [['pin' => '123456789', 'pin_confirmation' => '123456789'], 'pin', 'PIN harus terdiri dari 8 angka.'],
+    'letters' => [['pin' => 'abcdefgh', 'pin_confirmation' => 'abcdefgh'], 'pin', 'PIN harus terdiri dari 8 angka.'],
+    'array' => [['pin' => ['24681357']], 'pin', 'PIN harus berupa 8 angka.'],
+    'number' => [['pin' => 24681357], 'pin', 'PIN harus berupa 8 angka.'],
+    'mismatch' => [['pin_confirmation' => '24681358'], 'pin', 'Konfirmasi PIN harus sama dengan PIN yang Anda buat.'],
+    'confirmation required' => [['pin_confirmation' => null], 'pin_confirmation', 'Ketik ulang PIN Anda sebagai konfirmasi.'],
+    'malformed confirmation' => [['pin_confirmation' => ['24681357']], 'pin_confirmation', 'Konfirmasi PIN harus berupa 8 angka.'],
+]);
+
+test('a chosen PIN already used by another participant cannot register or claim that participant', function () {
+    $existing = InternshipParticipant::factory()->create(['name' => 'Pemilik PIN']);
+    app(InternshipPinAccess::class)->assign($existing, '24681357');
+    $hash = $existing->access_code_hash;
+    $this->post(route('internship.register'), pinRegistrationPayload())
+        ->assertSessionHasErrors(['pin' => 'PIN tersebut tidak dapat digunakan. Silakan pilih PIN lain.'])
+        ->assertSessionMissing(InternshipDeviceAccess::SESSION)->assertSessionMissing('internship_issued_pin')
+        ->assertCookieMissing(InternshipDeviceAccess::COOKIE);
+    expect($existing->fresh()->name)->toBe('Pemilik PIN');
+    expect($existing->fresh()->access_code_hash)->toBe($hash);
+    $this->assertDatabaseCount('internship_participants', 1);
+    $this->assertDatabaseCount('internship_attendances', 0);
+});
+
+test('the database also rejects a PIN collision that occurs after form validation', function () {
+    $first = InternshipParticipant::factory()->create();
+    $second = InternshipParticipant::factory()->create();
+    $originalHash = $second->access_code_hash;
+    $pins = app(InternshipPinAccess::class);
+    $pins->assign($first, '24681357');
+
+    try {
+        $pins->assign($second, '24681357');
+        $this->fail('A duplicate PIN should not be assigned.');
+    } catch (ValidationException $exception) {
+        expect($exception->errors())->toBe(['pin' => ['PIN tersebut tidak dapat digunakan. Silakan pilih PIN lain.']]);
+    }
+    expect($second->fresh()->pin_lookup_hash)->toBeNull();
+    expect($second->fresh()->access_code_hash)->toBe($originalHash);
+    expect(Hash::check('24681357', $first->fresh()->access_code_hash))->toBeTrue();
 });
 
 test('PIN alone identifies the correct participant despite duplicated school numbers', function () {
@@ -85,10 +146,13 @@ test('wrong inactive or revoked PIN never grants attendance access', function (s
     if ($state === 'wrong') {
         $participant->update(['access_code_hash' => Hash::make('not-the-pin')]);
     }
-    $this->post(route('internship.verify-pin'), ['pin' => $pin])
+    $this->from(route('internship.show'))->post(route('internship.verify-pin'), ['pin' => $pin])
         ->assertSessionHasErrors(['pin' => 'PIN tidak sesuai atau peserta tidak aktif. Periksa kembali PIN Anda.'])
         ->assertSessionMissing('_old_input.pin')->assertSessionMissing(InternshipDeviceAccess::SESSION);
-    $this->get(route('internship.show'))->assertInertia(fn (Assert $page) => $page->where('participant', null)->where('issuedPin', null));
+    $response = $this->withCookie(config('session.cookie'), session()->getId())->get(route('internship.show'));
+    $response->assertInertia(fn (Assert $page) => $page
+        ->where('participant', null)->where('issuedPin', null)
+        ->where('errors.pin', 'PIN tidak sesuai atau peserta tidak aktif. Periksa kembali PIN Anda.'));
 })->with(['inactive', 'revoked', 'wrong']);
 
 test('PIN attempts are limited for both repeated and changing guesses', function (bool $change) {
