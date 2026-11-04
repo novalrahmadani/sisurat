@@ -26,6 +26,7 @@ import {
     recover,
     verifyPin,
     issuePin,
+    session as internshipSession,
 } from '@/routes/internship';
 
 type Participant = {
@@ -63,6 +64,7 @@ const props = defineProps<{
     attendance: Attendance | null;
     today: { date: string; label: string; server_time: string };
     receipt: string | null;
+    sessionNotice: string | null;
     location: { configured: boolean; radius_meters: number };
     recovery: { token: string; available: boolean } | null;
     issuedPin: string | null;
@@ -91,6 +93,8 @@ const pinForm = useForm({ pin: '' });
 const pinIssueForm = useForm<{ access?: string }>({});
 const showPin = ref(false);
 const copyMessage = ref('');
+const refreshingSession = ref(false);
+const sessionError = ref('');
 const readingLocation = ref(false);
 const secureLocation = ref(false);
 const locationError = ref('');
@@ -169,7 +173,32 @@ watch(
         copyMessage.value = '';
     },
 );
-function registerParticipant() {
+async function prepareSession(): Promise<boolean> {
+    if (refreshingSession.value) return false;
+    refreshingSession.value = true;
+    sessionError.value = '';
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), 10000);
+    try {
+        const response = await fetch(internshipSession.url(), {
+            credentials: 'same-origin',
+            cache: 'no-store',
+            headers: { Accept: 'application/json' },
+            signal: controller.signal,
+        });
+        if (response.status !== 204) throw new Error('Session refresh failed');
+        return true;
+    } catch {
+        sessionError.value =
+            'Koneksi belum dapat diperbarui. Periksa internet dan coba lagi. Data formulir belum dikirim.';
+        return false;
+    } finally {
+        window.clearTimeout(timeout);
+        refreshingSession.value = false;
+    }
+}
+async function registerParticipant() {
+    if (registration.processing || !(await prepareSession())) return;
     registration.post(register.url(), {
         preserveScroll: false,
         onSuccess: () => {
@@ -178,13 +207,15 @@ function registerParticipant() {
         },
     });
 }
-function enterWithPin() {
+async function enterWithPin() {
+    if (pinForm.processing || !(await prepareSession())) return;
     pinForm.post(verifyPin.url(), {
         preserveScroll: false,
         onFinish: () => pinForm.reset('pin'),
     });
 }
-function createPin() {
+async function createPin() {
+    if (pinIssueForm.processing || refreshingSession.value) return;
     if (
         props.participant?.has_pin &&
         !window.confirm(
@@ -192,6 +223,7 @@ function createPin() {
         )
     )
         return;
+    if (!(await prepareSession())) return;
     pinIssueForm.post(issuePin.url(), {
         preserveScroll: true,
         onSuccess: () => {
@@ -209,11 +241,21 @@ async function copyPin() {
             'Silakan catat atau salin PIN yang ditampilkan secara manual.';
     }
 }
-function activateDevice() {
-    if (props.recovery?.available)
+async function activateDevice() {
+    if (
+        props.recovery?.available &&
+        !recoveryForm.processing &&
+        (await prepareSession())
+    )
         recoveryForm.post(recover.url(props.recovery.token));
 }
 async function recordAttendance() {
+    if (
+        checkForm.processing ||
+        readingLocation.value ||
+        refreshingSession.value
+    )
+        return;
     locationError.value = '';
     checkForm.clearErrors();
     if (!secureLocation.value) {
@@ -243,6 +285,7 @@ async function recordAttendance() {
         checkForm.longitude = position.coords.longitude;
         checkForm.accuracy = position.coords.accuracy;
         checkForm.position_captured_at = Math.floor(position.timestamp / 1000);
+        if (!(await prepareSession())) return;
         checkForm.post(submit.url(), { preserveScroll: true });
     } catch (error) {
         const code = (error as GeolocationPositionError).code;
@@ -256,7 +299,8 @@ async function recordAttendance() {
         readingLocation.value = false;
     }
 }
-function releaseDevice() {
+async function releaseDevice() {
+    if (recoveryForm.processing || refreshingSession.value) return;
     if (
         window.confirm(
             props.participant?.has_pin
@@ -264,6 +308,7 @@ function releaseDevice() {
                 : 'Peserta ini belum memiliki PIN. Buat dan simpan PIN terlebih dahulu agar dapat masuk kembali tanpa bantuan admin. Tetap keluar?',
         )
     ) {
+        if (!(await prepareSession())) return;
         recoveryForm.post(leave.url(), {
             onSuccess: () => {
                 returningParticipant.value = true;
@@ -394,6 +439,20 @@ function dateLabel(date: string) {
                             receipt
                         }}
                     </div>
+                    <div
+                        v-if="sessionNotice"
+                        role="status"
+                        class="mb-5 flex gap-3 rounded-2xl border border-amber-300/50 bg-amber-50 p-4 text-sm leading-6 text-amber-950 dark:bg-amber-950 dark:text-amber-100"
+                    >
+                        <Info class="mt-0.5 size-5 shrink-0" />{{
+                            sessionNotice
+                        }}
+                    </div>
+                    <InputError
+                        class="mb-4"
+                        role="alert"
+                        :message="sessionError"
+                    />
                     <InputError
                         class="mb-4"
                         :message="pinIssueForm.errors.access"
@@ -452,7 +511,9 @@ function dateLabel(date: string) {
                         <button
                             v-if="recovery.available"
                             class="sisurat-primary-action mt-6 w-full justify-center"
-                            :disabled="recoveryForm.processing"
+                            :disabled="
+                                recoveryForm.processing || refreshingSession
+                            "
                             @click="activateDevice"
                         >
                             Gunakan perangkat ini<ArrowRight class="size-4" />
@@ -554,13 +615,17 @@ function dateLabel(date: string) {
                                 >
                                 <button
                                     type="submit"
-                                    :disabled="pinForm.processing"
+                                    :disabled="
+                                        pinForm.processing || refreshingSession
+                                    "
                                     class="sisurat-primary-action min-h-12 w-full justify-center"
                                 >
                                     <KeyRound class="size-4" />{{
-                                        pinForm.processing
-                                            ? 'Memeriksa PIN…'
-                                            : 'Buka absensi'
+                                        refreshingSession
+                                            ? 'Menyiapkan akses…'
+                                            : pinForm.processing
+                                              ? 'Memeriksa PIN…'
+                                              : 'Buka absensi'
                                     }}<ArrowRight class="size-4" />
                                 </button>
                                 <p
@@ -767,12 +832,17 @@ function dateLabel(date: string) {
                                 <button
                                     type="submit"
                                     class="sisurat-primary-action min-h-12 w-full justify-center"
-                                    :disabled="registration.processing"
+                                    :disabled="
+                                        registration.processing ||
+                                        refreshingSession
+                                    "
                                 >
                                     {{
-                                        registration.processing
-                                            ? 'Menyimpan data peserta…'
-                                            : 'Daftar dan lanjutkan ke absensi'
+                                        refreshingSession
+                                            ? 'Menyiapkan formulir…'
+                                            : registration.processing
+                                              ? 'Menyimpan data peserta…'
+                                              : 'Daftar dan lanjutkan ke absensi'
                                     }}<ArrowRight class="size-4" />
                                 </button>
                             </form>
@@ -804,6 +874,9 @@ function dateLabel(date: string) {
                                 class="inline-flex items-center gap-2 rounded-xl border border-border p-3 text-xs text-muted-foreground"
                                 aria-label="Ganti peserta dan lepaskan akses perangkat"
                                 title="Ganti peserta dan lepaskan akses perangkat"
+                                :disabled="
+                                    recoveryForm.processing || refreshingSession
+                                "
                                 @click="releaseDevice"
                             >
                                 <LogOut class="size-4" />Ganti peserta
@@ -864,7 +937,9 @@ function dateLabel(date: string) {
                             <button
                                 type="button"
                                 class="sisurat-secondary-action min-h-11 shrink-0"
-                                :disabled="pinIssueForm.processing"
+                                :disabled="
+                                    pinIssueForm.processing || refreshingSession
+                                "
                                 @click="createPin"
                             >
                                 <KeyRound class="size-4" />{{
@@ -1025,6 +1100,7 @@ function dateLabel(date: string) {
                                 class="sisurat-primary-action min-h-12 w-full justify-center"
                                 :disabled="
                                     checkForm.processing ||
+                                    refreshingSession ||
                                     readingLocation ||
                                     !checkForm.signature ||
                                     !location.configured ||

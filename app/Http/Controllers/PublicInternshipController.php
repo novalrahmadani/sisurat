@@ -13,6 +13,7 @@ use Carbon\CarbonImmutable;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
@@ -26,6 +27,11 @@ class PublicInternshipController extends Controller
     public function show(Request $request): Response
     {
         return $this->renderPage($request);
+    }
+
+    public function session(): HttpResponse
+    {
+        return response()->noContent()->header('Cache-Control', 'private, no-store, max-age=0');
     }
 
     /** @param array{token: string, available: bool}|null $recovery */
@@ -46,6 +52,7 @@ class PublicInternshipController extends Controller
             'attendance' => $record?->presentation(),
             'today' => ['date' => $now->toDateString(), 'label' => $now->translatedFormat('l, d F Y'), 'server_time' => $now->toIso8601String()],
             'receipt' => $request->session()->pull('internship_receipt'),
+            'sessionNotice' => $request->session()->pull('internship_session_notice'),
             'location' => $this->locations->presentation(),
             'recovery' => $recovery,
         ])->withViewData('publicInternship', true);

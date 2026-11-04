@@ -162,3 +162,16 @@ test('recovered legacy participants create a PIN for subsequent independent acce
     $this->post(route('internship.verify-pin'), ['pin' => $pin])->assertSessionHasNoErrors();
     $this->assertDatabaseCount('internship_participants', 1);
 });
+
+test('the same PIN remains valid after browser data and the remembered device have expired', function () {
+    [$participant, $pin] = participantWithPin();
+    $this->withSession(pinDeviceSession($participant))->get(route('internship.show'))->assertOk();
+    $this->app['session']->invalidate();
+    $this->travel(200)->days();
+    $this->get(route('internship.show'))->assertInertia(fn (Assert $page) => $page->where('participant', null));
+    $this->post(route('internship.verify-pin'), ['pin' => $pin])->assertSessionHasNoErrors();
+    $this->get(route('internship.show'))->assertInertia(fn (Assert $page) => $page
+        ->where('participant.id', $participant->id)->where('participant.can_attend', false));
+    $this->assertDatabaseCount('internship_participants', 1);
+    $this->assertGuest();
+});

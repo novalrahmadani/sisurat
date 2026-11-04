@@ -38,6 +38,7 @@ Route::get('tes-baca-alquran/{token}', [PublicQuranAssessmentController::class, 
 Route::post('tes-baca-alquran/{token}', [PublicQuranAssessmentController::class, 'submit'])->where('token', '[A-Za-z0-9]{64}')->middleware('throttle:quran-submissions')->name('quran-exams.submit');
 
 Route::get('absensi-magang', [PublicInternshipController::class, 'show'])->name('internship.show');
+Route::get('absensi-magang/sesi', [PublicInternshipController::class, 'session'])->name('internship.session');
 Route::post('absensi-magang/daftar', [PublicInternshipController::class, 'register'])->middleware('throttle:internship-registration')->name('internship.register');
 Route::get('absensi-magang/akses/{token}', [PublicInternshipController::class, 'recovery'])->where('token', '[A-Za-z0-9]{64}')->middleware('throttle:internship-verification')->name('internship.recovery');
 Route::post('absensi-magang/akses/{token}', [PublicInternshipController::class, 'recover'])->where('token', '[A-Za-z0-9]{64}')->middleware('throttle:internship-verification')->name('internship.recover');
