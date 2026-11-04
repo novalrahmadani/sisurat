@@ -83,3 +83,20 @@ it('requires an interactive terminal to create an admin', function () {
 
     $this->assertDatabaseCount('users', 0);
 });
+
+it('resets the configured account password only when requested explicitly', function () {
+    $account = User::factory()->create();
+    $password = 'Hosting-Test-628!';
+    config(['admin-seeder.email' => $account->email, 'admin-seeder.password' => $password]);
+
+    $this->artisan('accounts:provision-admin', [
+        '--from-config' => true,
+        '--reset-password' => true,
+        '--no-interaction' => true,
+    ])->assertSuccessful();
+
+    $restored = $account->fresh();
+
+    expect($restored->isAdministrator())->toBeTrue();
+    expect(Hash::check($password, $restored->password))->toBeTrue();
+});

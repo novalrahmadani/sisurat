@@ -64,3 +64,38 @@ it('skips account creation during noninteractive seeding', function () {
     expect($exitCode)->toBe(0);
     $this->assertDatabaseCount('users', 0);
 });
+
+it('creates an admin from hosting configuration without prompts', function () {
+    $email = 'hosting-admin@example.com';
+    $password = 'Hosting-Test-628!';
+    config(['admin-seeder.email' => $email, 'admin-seeder.password' => $password]);
+
+    $this->artisan('db:seed', ['--class' => 'UserSeeder', '--no-interaction' => true])
+        ->doesntExpectOutput($password)
+        ->assertSuccessful();
+
+    $account = User::query()->where('email', $email)->firstOrFail();
+
+    expect($account->isAdministrator())->toBeTrue();
+    expect(Hash::check($password, $account->password))->toBeTrue();
+});
+
+it('keeps an existing admin password when the configured seeder runs again', function () {
+    $account = User::factory()->create(['role' => User::ROLE_ADMIN, 'is_active' => true])->refresh();
+    config(['admin-seeder.email' => $account->email, 'admin-seeder.password' => 'Hosting-Test-628!']);
+
+    $this->artisan('db:seed', ['--class' => 'UserSeeder', '--no-interaction' => true])
+        ->assertSuccessful();
+
+    expect($account->fresh()->getAttributes())->toBe($account->getAttributes());
+});
+
+it('rejects incomplete admin configuration without creating an account', function () {
+    config(['admin-seeder.email' => 'hosting-admin@example.com', 'admin-seeder.password' => null]);
+
+    $this->withoutMockingConsoleOutput();
+
+    expect(fn () => $this->artisan('db:seed', ['--class' => 'UserSeeder', '--no-interaction' => true]))
+        ->toThrow(RuntimeException::class, 'Isi SISURAT_ADMIN_EMAIL dan SISURAT_ADMIN_PASSWORD');
+    $this->assertDatabaseCount('users', 0);
+});

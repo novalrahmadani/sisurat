@@ -10,21 +10,23 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
-#[Signature('accounts:provision-admin {email : Email akun admin} {--reset-password : Pulihkan akses admin dan atur ulang kata sandi akun yang sudah ada}')]
-#[Description('Siapkan akun admin SISURAT dengan kata sandi yang dimasukkan di terminal')]
+#[Signature('accounts:provision-admin {email? : Email akun admin} {--reset-password : Pulihkan akses admin dan atur ulang kata sandi akun yang sudah ada} {--from-config : Baca akun admin dari konfigurasi server}')]
+#[Description('Siapkan akun admin SISURAT dari terminal atau konfigurasi server')]
 class ProvisionAdmin extends Command
 {
     use PasswordValidationRules;
 
     public function handle(): int
     {
-        if (! $this->input->isInteractive()) {
+        $fromConfig = (bool) $this->option('from-config');
+
+        if (! $fromConfig && ! $this->input->isInteractive()) {
             $this->error('Jalankan perintah di terminal interaktif agar kata sandi bisa dimasukkan secara tersembunyi.');
 
             return self::FAILURE;
         }
 
-        $email = Str::lower(trim((string) $this->argument('email')));
+        $email = Str::lower(trim((string) ($fromConfig ? config('admin-seeder.email') : $this->argument('email'))));
         $emailValidator = Validator::make(['email' => $email], [
             'email' => ['required', 'email', 'max:255'],
         ]);
@@ -50,9 +52,11 @@ class ProvisionAdmin extends Command
             return self::FAILURE;
         }
 
+        $password = $fromConfig ? config('admin-seeder.password') : $this->secret('Masukkan kata sandi baru', false);
+
         $passwordValidator = Validator::make([
-            'password' => $this->secret('Masukkan kata sandi baru', false),
-            'password_confirmation' => $this->secret('Ulangi kata sandi baru', false),
+            'password' => $password,
+            'password_confirmation' => $fromConfig ? $password : $this->secret('Ulangi kata sandi baru', false),
         ], ['password' => $this->passwordRules()]);
 
         if ($passwordValidator->fails()) {

@@ -16,7 +16,17 @@ class UserSeeder extends Seeder
             return;
         }
 
-        $email = Str::lower(trim((string) $this->command->ask('Email admin SISURAT (Enter untuk lewati)')));
+        $configuredEmail = config('admin-seeder.email');
+        $configuredPassword = config('admin-seeder.password');
+        $fromConfig = filled($configuredEmail) || filled($configuredPassword);
+
+        if ($fromConfig && (blank($configuredEmail) || blank($configuredPassword))) {
+            throw new RuntimeException('Isi SISURAT_ADMIN_EMAIL dan SISURAT_ADMIN_PASSWORD pada konfigurasi hosting.');
+        }
+
+        $email = Str::lower(trim((string) ($fromConfig
+            ? $configuredEmail
+            : $this->command->ask('Email admin SISURAT (Enter untuk lewati)'))));
 
         if ($email === '') {
             $this->command->info('Penyiapan akun admin dilewati.');
@@ -25,6 +35,12 @@ class UserSeeder extends Seeder
         }
 
         $accountExists = User::query()->where('email', $email)->exists();
+
+        if ($accountExists && $fromConfig) {
+            $this->command->info('Akun sudah ada. Gunakan accounts:provision-admin --from-config --reset-password untuk memulihkannya.');
+
+            return;
+        }
 
         if ($accountExists && ! $this->command->confirm('Akun sudah ada. Pulihkan akses admin dan atur kata sandi baru?')) {
             $this->command->info('Akun yang sudah ada tetap digunakan.');
@@ -35,6 +51,7 @@ class UserSeeder extends Seeder
         $result = $this->command->call('accounts:provision-admin', [
             'email' => $email,
             '--reset-password' => $accountExists,
+            '--from-config' => $fromConfig,
         ]);
 
         if ($result !== Command::SUCCESS) {
