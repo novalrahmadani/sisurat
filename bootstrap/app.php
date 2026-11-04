@@ -34,6 +34,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->appendToPriorityList(StartSession::class, EnsureActiveAccount::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
+        $exceptions->dontFlash(['pin']);
         $exceptions->respond(function (Response $response, Throwable $exception, Request $request): Response {
             if ($response->getStatusCode() !== 419
                 || ! $request->routeIs('login.store')

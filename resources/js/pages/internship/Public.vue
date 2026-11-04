@@ -6,6 +6,8 @@ import {
     CalendarDays,
     CheckCircle2,
     Clock3,
+    Copy,
+    KeyRound,
     Info,
     LocateFixed,
     LogOut,
@@ -17,7 +19,14 @@ import SignaturePad from '@/components/SignaturePad.vue';
 import InputError from '@/components/InputError.vue';
 import PublicLayout from '@/layouts/PublicLayout.vue';
 import { home } from '@/routes';
-import { register, submit, leave, recover } from '@/routes/internship';
+import {
+    register,
+    submit,
+    leave,
+    recover,
+    verifyPin,
+    issuePin,
+} from '@/routes/internship';
 
 type Participant = {
     id: number;
@@ -31,6 +40,7 @@ type Participant = {
     start_date: string;
     end_date: string;
     can_attend: boolean;
+    has_pin: boolean;
 };
 type Attendance = {
     checked_in_at: string;
@@ -55,6 +65,7 @@ const props = defineProps<{
     receipt: string | null;
     location: { configured: boolean; radius_meters: number };
     recovery: { token: string; available: boolean } | null;
+    issuedPin: string | null;
 }>();
 const registration = useForm({
     name: '',
@@ -76,12 +87,15 @@ const checkForm = useForm<CheckData>({
     position_captured_at: null,
 });
 const recoveryForm = useForm<{ access?: string }>({});
+const pinForm = useForm({ pin: '' });
+const pinIssueForm = useForm<{ access?: string }>({});
+const showPin = ref(false);
+const copyMessage = ref('');
 const readingLocation = ref(false);
 const secureLocation = ref(false);
 const locationError = ref('');
 const signatureKey = ref(0);
-const returningParticipant = ref(false);
-const participantHintKey = 'sisurat-internship-registered';
+const returningParticipant = ref(true);
 const action = computed(() => (props.attendance ? 'check_out' : 'check_in'));
 const complete = computed(() => Boolean(props.attendance?.checked_out_at));
 const university = computed(
@@ -141,16 +155,6 @@ const fields = computed(() => [
 ]);
 onMounted(() => {
     secureLocation.value = window.isSecureContext && 'geolocation' in navigator;
-    if (props.participant) {
-        rememberRegistration();
-        return;
-    }
-    try {
-        returningParticipant.value =
-            window.localStorage.getItem(participantHintKey) === '1';
-    } catch {
-        returningParticipant.value = false;
-    }
 });
 watch(
     [
@@ -162,7 +166,7 @@ watch(
         checkForm.resetAndClearErrors();
         signatureKey.value++;
         locationError.value = '';
-        if (props.participant) rememberRegistration();
+        copyMessage.value = '';
     },
 );
 function registerParticipant() {
@@ -170,16 +174,39 @@ function registerParticipant() {
         preserveScroll: false,
         onSuccess: () => {
             registration.resetAndClearErrors();
-            rememberRegistration();
+            returningParticipant.value = true;
         },
     });
 }
-function rememberRegistration() {
-    returningParticipant.value = true;
-    try {
-        window.localStorage.setItem(participantHintKey, '1');
-    } catch {
+function enterWithPin() {
+    pinForm.post(verifyPin.url(), {
+        preserveScroll: false,
+        onFinish: () => pinForm.reset('pin'),
+    });
+}
+function createPin() {
+    if (
+        props.participant?.has_pin &&
+        !window.confirm(
+            'Buat PIN baru? PIN sebelumnya akan berhenti berlaku. Simpan PIN baru setelah ditampilkan.',
+        )
+    )
         return;
+    pinIssueForm.post(issuePin.url(), {
+        preserveScroll: true,
+        onSuccess: () => {
+            copyMessage.value = '';
+        },
+    });
+}
+async function copyPin() {
+    if (!props.issuedPin) return;
+    try {
+        await navigator.clipboard.writeText(props.issuedPin);
+        copyMessage.value = 'PIN berhasil disalin.';
+    } catch {
+        copyMessage.value =
+            'Silakan catat atau salin PIN yang ditampilkan secara manual.';
     }
 }
 function activateDevice() {
@@ -232,17 +259,15 @@ async function recordAttendance() {
 function releaseDevice() {
     if (
         window.confirm(
-            'Lepaskan akses perangkat ini? Untuk menggunakan data peserta yang sama lagi, Anda perlu meminta tautan akses kepada admin PMB.',
+            props.participant?.has_pin
+                ? 'Keluar dari data peserta pada perangkat ini? Anda dapat masuk kembali menggunakan PIN pribadi.'
+                : 'Peserta ini belum memiliki PIN. Buat dan simpan PIN terlebih dahulu agar dapat masuk kembali tanpa bantuan admin. Tetap keluar?',
         )
     ) {
         recoveryForm.post(leave.url(), {
             onSuccess: () => {
-                returningParticipant.value = false;
-                try {
-                    window.localStorage.removeItem(participantHintKey);
-                } catch {
-                    return;
-                }
+                returningParticipant.value = true;
+                pinForm.resetAndClearErrors();
             },
         });
     }
@@ -310,7 +335,7 @@ function dateLabel(date: string) {
                             v-for="(step, i) in [
                                 {
                                     title: 'Daftarkan data diri',
-                                    text: 'Lengkapi identitas dan periode magang satu kali. Peserta tidak perlu membuat akun.',
+                                    text: 'Lengkapi identitas dan periode magang satu kali, lalu simpan PIN pribadi yang diberikan.',
                                 },
                                 {
                                     title: 'Catat kehadiran masuk',
@@ -318,7 +343,7 @@ function dateLabel(date: string) {
                                 },
                                 {
                                     title: 'Catat kehadiran pulang',
-                                    text: 'Gunakan perangkat dan browser yang sama. Lokasi diperiksa kembali saat absensi pulang.',
+                                    text: 'Buka kembali absensi. Jika data belum dikenali, cukup masukkan PIN. Lokasi diperiksa kembali saat absensi pulang.',
                                 },
                             ]"
                             :key="step.title"
@@ -352,9 +377,8 @@ function dateLabel(date: string) {
                         <h3 class="font-semibold text-white">
                             Sudah terdaftar atau berganti HP?
                         </h3>
-                        Gunakan browser saat pendaftaran. Jika akses hilang,
-                        mintalah tautan pemulihan kepada admin PMB. Data tidak
-                        perlu didaftarkan ulang.
+                        Cukup masukkan PIN pribadi 8 angka. Data peserta akan
+                        terbaca otomatis tanpa mengisi identitas kembali.
                     </div>
                 </aside>
                 <section
@@ -369,6 +393,46 @@ function dateLabel(date: string) {
                         <CheckCircle2 class="mt-0.5 size-5 shrink-0" />{{
                             receipt
                         }}
+                    </div>
+                    <InputError
+                        class="mb-4"
+                        :message="pinIssueForm.errors.access"
+                    />
+                    <div
+                        v-if="participant && issuedPin && !recovery"
+                        role="status"
+                        class="mb-6 rounded-2xl border border-primary/25 bg-primary/5 p-5"
+                    >
+                        <p
+                            class="flex items-center gap-2 text-sm font-semibold text-primary dark:text-emerald-300"
+                        >
+                            <KeyRound class="size-4" />PIN pribadi Anda
+                        </p>
+                        <p
+                            class="my-4 font-mono text-3xl font-bold tracking-[.2em] text-foreground sm:text-4xl"
+                            data-testid="issued-pin"
+                        >
+                            {{ issuedPin }}
+                        </p>
+                        <p class="text-xs leading-6 text-muted-foreground">
+                            Simpan PIN ini sekarang. PIN hanya ditampilkan saat
+                            dibuat. Gunakan untuk membuka absensi dari HP atau
+                            browser lain. Jangan bagikan kepada peserta lain.
+                        </p>
+                        <button
+                            type="button"
+                            class="sisurat-secondary-action mt-4 min-h-11"
+                            @click="copyPin"
+                        >
+                            <Copy class="size-4" />Salin PIN
+                        </button>
+                        <p
+                            v-if="copyMessage"
+                            role="status"
+                            class="mt-2 text-xs leading-6"
+                        >
+                            {{ copyMessage }}
+                        </p>
                     </div>
                     <div v-if="recovery">
                         <h2 id="form-title" class="text-xl font-semibold">
@@ -416,7 +480,7 @@ function dateLabel(date: string) {
                                 :aria-pressed="returningParticipant"
                                 @click="returningParticipant = true"
                             >
-                                Sudah terdaftar
+                                Masuk dengan PIN
                             </button>
                             <button
                                 type="button"
@@ -434,27 +498,92 @@ function dateLabel(date: string) {
                         </div>
                         <div v-if="returningParticipant">
                             <h2 id="form-title" class="text-xl font-semibold">
-                                Lanjutkan dengan data peserta yang sudah ada
+                                Masukkan PIN pribadi
                             </h2>
                             <p
                                 class="mt-3 text-sm leading-7 text-muted-foreground"
                             >
-                                Akses peserta belum dikenali pada browser ini.
-                                Buka absensi melalui perangkat dan browser yang
-                                dipakai saat mendaftar.
+                                Masukkan 8 angka PIN Anda. Sistem akan langsung
+                                membuka identitas dan absensi yang sudah
+                                terdaftar.
                             </p>
+                            <InputError
+                                class="mt-3"
+                                :message="checkForm.errors.access"
+                            />
+                            <form
+                                class="mt-6 space-y-4"
+                                @submit.prevent="enterWithPin"
+                            >
+                                <div>
+                                    <label
+                                        for="attendance-pin"
+                                        class="mb-2 block text-sm font-medium"
+                                        >PIN absensi</label
+                                    >
+                                    <input
+                                        id="attendance-pin"
+                                        v-model="pinForm.pin"
+                                        :type="showPin ? 'text' : 'password'"
+                                        inputmode="numeric"
+                                        pattern="[0-9]{8}"
+                                        minlength="8"
+                                        maxlength="8"
+                                        autocomplete="off"
+                                        required
+                                        class="sisurat-input min-h-14 w-full font-mono text-2xl tracking-[.2em]"
+                                        placeholder="8 angka"
+                                        :aria-invalid="
+                                            Boolean(pinForm.errors.pin)
+                                        "
+                                        aria-describedby="pin-help pin-error"
+                                    />
+                                    <InputError
+                                        id="pin-error"
+                                        class="mt-2"
+                                        :message="pinForm.errors.pin"
+                                    />
+                                </div>
+                                <label
+                                    class="flex min-h-11 items-center gap-3 text-sm text-muted-foreground"
+                                    ><input
+                                        v-model="showPin"
+                                        type="checkbox"
+                                        class="size-4 accent-primary"
+                                    />Tampilkan PIN</label
+                                >
+                                <button
+                                    type="submit"
+                                    :disabled="pinForm.processing"
+                                    class="sisurat-primary-action min-h-12 w-full justify-center"
+                                >
+                                    <KeyRound class="size-4" />{{
+                                        pinForm.processing
+                                            ? 'Memeriksa PIN…'
+                                            : 'Buka absensi'
+                                    }}<ArrowRight class="size-4" />
+                                </button>
+                                <p
+                                    id="pin-help"
+                                    class="text-xs leading-6 text-muted-foreground"
+                                >
+                                    Tidak memerlukan akun atau login admin.
+                                    Lokasi PMB tetap diperiksa saat Anda
+                                    menyimpan absensi.
+                                </p>
+                            </form>
                             <div
                                 class="mt-5 rounded-2xl border border-border bg-muted/50 p-4 text-sm leading-7"
                             >
                                 <p class="font-semibold">
-                                    Akses hilang atau berganti perangkat?
+                                    Lupa PIN atau peserta lama belum punya PIN?
                                 </p>
                                 <p class="mt-2 text-muted-foreground">
-                                    Minta tautan pemulihan akses kepada admin
-                                    PMB dengan menyebutkan NIM atau NIS/NISN dan
-                                    asal institusi. Buka tautannya, lalu tekan
-                                    “Gunakan perangkat ini” untuk melanjutkan
-                                    absensi dengan data yang sudah tersimpan.
+                                    Buka dari browser yang masih mengenali data
+                                    Anda, lalu pilih “Buat PIN” atau “Ganti
+                                    PIN”. Jika semua akses hilang, hubungi admin
+                                    PMB untuk pemulihan satu kali. Data tidak
+                                    perlu didaftarkan ulang.
                                 </p>
                             </div>
                             <p
@@ -630,9 +759,10 @@ function dateLabel(date: string) {
                                     class="flex gap-2 rounded-xl bg-muted/60 p-3 text-xs leading-6 text-muted-foreground"
                                 >
                                     <Info class="mt-1 size-4 shrink-0" />Gunakan
-                                    perangkat pribadi. Akses absensi akan
-                                    diingat pada browser ini tanpa kata sandi
-                                    atau kode yang perlu diketik.
+                                    perangkat pribadi. Setelah pendaftaran,
+                                    simpan PIN 8 angka yang dibuat otomatis. PIN
+                                    digunakan jika Anda berganti HP atau data
+                                    belum dikenali pada browser.
                                 </p>
                                 <button
                                     type="submit"
@@ -718,6 +848,33 @@ function dateLabel(date: string) {
                                     {{ dateLabel(participant.end_date) }}
                                 </p>
                             </div>
+                        </div>
+                        <div
+                            class="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border p-4"
+                        >
+                            <p
+                                class="min-w-0 flex-1 text-xs leading-6 text-muted-foreground"
+                            >
+                                {{
+                                    participant.has_pin
+                                        ? 'Gunakan PIN pribadi jika membuka absensi dari perangkat lain.'
+                                        : 'Buat PIN agar dapat membuka data ini dari perangkat lain tanpa bantuan admin.'
+                                }}
+                            </p>
+                            <button
+                                type="button"
+                                class="sisurat-secondary-action min-h-11 shrink-0"
+                                :disabled="pinIssueForm.processing"
+                                @click="createPin"
+                            >
+                                <KeyRound class="size-4" />{{
+                                    pinIssueForm.processing
+                                        ? 'Membuat PIN…'
+                                        : participant.has_pin
+                                          ? 'Ganti PIN'
+                                          : 'Buat PIN'
+                                }}
+                            </button>
                         </div>
                         <div class="mt-5 grid grid-cols-2 gap-3">
                             <div

@@ -37,6 +37,12 @@ class AppServiceProvider extends ServiceProvider
             Limit::perMinute(8)->by('internship-id-'.hash('sha256', $request->ip().'|'.(is_string($request->input('student_number')) ? trim($request->input('student_number')) : ''))),
         ]);
         RateLimiter::for('internship-submissions', fn (Request $request): Limit => Limit::perMinute(15)->by('internship-submit-'.$request->session()->getId()));
+        RateLimiter::for('internship-pin', fn (Request $request): array => [
+            Limit::perMinute(30)->by('internship-pin-ip-'.$request->ip()),
+            Limit::perHour(200)->by('internship-pin-hour-'.$request->ip()),
+            Limit::perMinute(6)->by('internship-pin-attempt-'.hash('sha256', $request->ip().'|'.(is_string($request->input('pin')) ? $request->input('pin') : ''))),
+        ]);
+        RateLimiter::for('internship-pin-issuance', fn (Request $request): Limit => Limit::perMinute(3)->by('internship-pin-issue-'.$request->ip()));
 
         RateLimiter::for('attendance-submissions', fn (Request $request): Limit => Limit::perMinute(15)->by(hash('sha256', $request->session()->getId().'|'.$request->route('token')))
         );

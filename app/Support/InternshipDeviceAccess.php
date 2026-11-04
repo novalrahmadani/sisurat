@@ -53,6 +53,7 @@ class InternshipDeviceAccess
         $fingerprint = hash('sha256', $token);
         $participant->update(['device_token_hash' => $fingerprint, 'device_expires_at' => now()->addDays(180)->utc()]);
         $request->session()->regenerate();
+        $request->session()->forget(['internship_access', 'internship_issued_pin']);
         $request->session()->put(self::SESSION, ['id' => (int) $participant->id, 'fingerprint' => $fingerprint]);
         Cookie::queue(Cookie::make(self::COOKIE, $participant->id.':'.$token, 60 * 24 * 180, '/absensi-magang', null, $request->isSecure(), true, false, 'lax'));
     }
@@ -61,13 +62,14 @@ class InternshipDeviceAccess
     {
         $this->participant($request)?->update(['device_token_hash' => null, 'device_expires_at' => null]);
         Cookie::queue(Cookie::forget(self::COOKIE, '/absensi-magang'));
-        $request->session()->forget([self::SESSION, 'internship_access', 'internship_receipt']);
+        $request->session()->forget([self::SESSION, 'internship_access', 'internship_receipt', 'internship_issued_pin']);
     }
 
     public function recoveryUrl(InternshipParticipant $participant): string
     {
         $token = Str::random(64);
-        $participant->update(['recovery_token_hash' => hash('sha256', $token), 'recovery_expires_at' => now()->addMinutes(30)->utc(), 'device_token_hash' => null, 'access_code_hash' => null]);
+        $participant->update(['recovery_token_hash' => hash('sha256', $token), 'recovery_expires_at' => now()->addMinutes(30)->utc(), 'device_token_hash' => null,
+            'access_code_hash' => $participant->pin_lookup_hash ? $participant->access_code_hash : null]);
 
         return $this->publicUrl('internship.recovery', ['token' => $token]);
     }

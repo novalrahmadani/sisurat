@@ -56,7 +56,7 @@ class InternshipParticipantRequest extends FormRequest
         return [
             'name.required' => 'Isi nama lengkap peserta.', 'student_number.required' => 'Isi NIS/NISN atau NIM sesuai kategori peserta.',
             'participant_category.required' => 'Pilih kategori peserta magang.', 'participant_category.in' => 'Pilih kategori SMK, SMA, atau mahasiswa.',
-            'student_number.unique' => 'Identitas ini sudah terdaftar pada institusi dan kategori tersebut. Gunakan perangkat pendaftaran sebelumnya atau hubungi admin PMB.', 'institution.required' => 'Isi nama sekolah atau perguruan tinggi asal.',
+            'student_number.unique' => 'Identitas ini sudah terdaftar pada institusi dan kategori tersebut. Masuk dengan PIN atau gunakan perangkat pendaftaran sebelumnya. Hubungi admin PMB jika perlu pemulihan.', 'institution.required' => 'Isi nama sekolah atau perguruan tinggi asal.',
             'start_date.required' => 'Pilih tanggal mulai magang.', 'end_date.required' => 'Pilih tanggal selesai magang.',
             'end_date.after_or_equal' => 'Tanggal selesai harus sama atau setelah tanggal mulai.',
         ];

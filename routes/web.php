@@ -42,6 +42,8 @@ Route::post('absensi-magang/daftar', [PublicInternshipController::class, 'regist
 Route::get('absensi-magang/akses/{token}', [PublicInternshipController::class, 'recovery'])->where('token', '[A-Za-z0-9]{64}')->middleware('throttle:internship-verification')->name('internship.recovery');
 Route::post('absensi-magang/akses/{token}', [PublicInternshipController::class, 'recover'])->where('token', '[A-Za-z0-9]{64}')->middleware('throttle:internship-verification')->name('internship.recover');
 Route::post('absensi-magang/periksa', [PublicInternshipController::class, 'verify'])->middleware('throttle:internship-verification')->name('internship.verify');
+Route::post('absensi-magang/masuk', [PublicInternshipController::class, 'verifyPin'])->middleware('throttle:internship-pin')->name('internship.verify-pin');
+Route::post('absensi-magang/pin', [PublicInternshipController::class, 'issuePin'])->middleware('throttle:internship-pin-issuance')->name('internship.issue-pin');
 Route::post('absensi-magang', [PublicInternshipController::class, 'submit'])->middleware('throttle:internship-submissions')->name('internship.submit');
 Route::post('absensi-magang/ganti-peserta', [PublicInternshipController::class, 'leave'])->name('internship.leave');
 

@@ -34,7 +34,8 @@ test('visitors register school and university categories without an account or a
     expect($participant->is_active)->toBeTrue();
     expect($participant->registration_source)->toBe('public');
     expect($participant->device_token_hash)->toHaveLength(64)->not->toBe('injected');
-    expect($participant->access_code_hash)->toBeNull();
+    expect($participant->access_code_hash)->not->toBeNull();
+    expect($participant->pin_lookup_hash)->toHaveLength(64);
     $this->assertDatabaseCount('users', 0);
     $this->assertGuest();
 })->with(['smk', 'sma', 'university']);
