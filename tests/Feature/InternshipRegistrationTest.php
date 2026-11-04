@@ -45,6 +45,48 @@ test('registration requires complete identity and valid period dates', function 
     $this->assertDatabaseCount('internship_participants', 0);
 });
 
+test('registration opens attendance immediately when only the ordinary session is available', function () {
+    $this->followingRedirects()
+        ->post(route('internship.register'), registrationData())
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('participant.name', 'Peserta Mandiri')
+            ->where('participant.can_attend', true)
+            ->where('attendance', null));
+
+    $this->get(route('internship.show'))
+        ->assertInertia(fn (Assert $page) => $page->where('participant.name', 'Peserta Mandiri'));
+    $this->assertDatabaseCount('internship_participants', 1);
+});
+
+test('session device proof cannot bypass revocation expiry or deactivation', function (string $change) {
+    $participant = registeredDeviceParticipant();
+    $this->withSession([InternshipDeviceAccess::SESSION => [
+        'id' => (int) $participant->id,
+        'fingerprint' => $participant->device_token_hash,
+    ]]);
+    $participant->update(match ($change) {
+        'replaced' => ['device_token_hash' => hash('sha256', str_repeat('b', 64))],
+        'expired' => ['device_expires_at' => now()->subMinute()],
+        'inactive' => ['is_active' => false],
+    });
+
+    $this->get(route('internship.show'))
+        ->assertSessionMissing(InternshipDeviceAccess::SESSION)
+        ->assertInertia(fn (Assert $page) => $page->where('participant', null));
+})->with(['replaced', 'expired', 'inactive']);
+
+test('releasing a session backed device also removes the session proof', function () {
+    $participant = registeredDeviceParticipant();
+    $this->withSession([InternshipDeviceAccess::SESSION => [
+        'id' => (int) $participant->id,
+        'fingerprint' => $participant->device_token_hash,
+    ]])->post(route('internship.leave'))
+        ->assertSessionMissing(InternshipDeviceAccess::SESSION)
+        ->assertRedirect(route('internship.show'));
+
+    expect($participant->fresh()->device_token_hash)->toBeNull();
+});
+
 test('invalid categories and malformed identity fields are rejected without server errors', function (array $changes, string $field) {
     $this->post(route('internship.register'), [...registrationData(), ...$changes])->assertSessionHasErrors($field);
     $this->assertDatabaseCount('internship_participants', 0);

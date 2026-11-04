@@ -80,6 +80,8 @@ const readingLocation = ref(false);
 const secureLocation = ref(false);
 const locationError = ref('');
 const signatureKey = ref(0);
+const returningParticipant = ref(false);
+const participantHintKey = 'sisurat-internship-registered';
 const action = computed(() => (props.attendance ? 'check_out' : 'check_in'));
 const complete = computed(() => Boolean(props.attendance?.checked_out_at));
 const university = computed(
@@ -139,6 +141,16 @@ const fields = computed(() => [
 ]);
 onMounted(() => {
     secureLocation.value = window.isSecureContext && 'geolocation' in navigator;
+    if (props.participant) {
+        rememberRegistration();
+        return;
+    }
+    try {
+        returningParticipant.value =
+            window.localStorage.getItem(participantHintKey) === '1';
+    } catch {
+        returningParticipant.value = false;
+    }
 });
 watch(
     [
@@ -150,13 +162,25 @@ watch(
         checkForm.resetAndClearErrors();
         signatureKey.value++;
         locationError.value = '';
+        if (props.participant) rememberRegistration();
     },
 );
 function registerParticipant() {
     registration.post(register.url(), {
-        preserveScroll: true,
-        onSuccess: () => registration.resetAndClearErrors(),
+        preserveScroll: false,
+        onSuccess: () => {
+            registration.resetAndClearErrors();
+            rememberRegistration();
+        },
     });
+}
+function rememberRegistration() {
+    returningParticipant.value = true;
+    try {
+        window.localStorage.setItem(participantHintKey, '1');
+    } catch {
+        return;
+    }
 }
 function activateDevice() {
     if (props.recovery?.available)
@@ -211,7 +235,16 @@ function releaseDevice() {
             'Lepaskan akses perangkat ini? Untuk menggunakan data peserta yang sama lagi, Anda perlu meminta tautan akses kepada admin PMB.',
         )
     ) {
-        recoveryForm.post(leave.url());
+        recoveryForm.post(leave.url(), {
+            onSuccess: () => {
+                returningParticipant.value = false;
+                try {
+                    window.localStorage.removeItem(participantHintKey);
+                } catch {
+                    return;
+                }
+            },
+        });
     }
 }
 function dateLabel(date: string) {
@@ -367,173 +400,253 @@ function dateLabel(date: string) {
                         >
                     </div>
                     <div v-else-if="!participant">
-                        <p
-                            class="text-xs font-semibold tracking-wide text-primary uppercase dark:text-emerald-300"
+                        <div
+                            class="mb-6 grid grid-cols-2 gap-2 rounded-2xl bg-muted p-1.5"
+                            role="group"
+                            aria-label="Pilihan peserta magang"
                         >
-                            Langkah awal
-                        </p>
-                        <h2 id="form-title" class="mt-2 text-xl font-semibold">
-                            Pendaftaran Peserta Magang
-                        </h2>
-                        <p class="mt-2 text-sm leading-6 text-muted-foreground">
-                            Lengkapi data sesuai identitas dan surat pengantar
-                            magang. Data akan tercatat pada administrasi PMB.
-                        </p>
-                        <InputError
-                            class="mt-3"
-                            :message="checkForm.errors.access"
-                        />
-                        <form
-                            class="mt-6 space-y-5"
-                            @submit.prevent="registerParticipant"
-                        >
-                            <div>
-                                <label
-                                    for="participant-category"
-                                    class="mb-2 block text-sm font-medium"
-                                    >Kategori peserta<span
-                                        class="ml-1 text-red-600"
-                                        aria-hidden="true"
-                                        >*</span
-                                    ></label
-                                >
-                                <select
-                                    id="participant-category"
-                                    v-model="registration.participant_category"
-                                    class="sisurat-input min-h-12 w-full"
-                                    required
-                                >
-                                    <option value="" disabled>
-                                        Pilih kategori peserta
-                                    </option>
-                                    <option value="smk">Siswa SMK</option>
-                                    <option value="sma">Siswa SMA</option>
-                                    <option value="university">
-                                        Mahasiswa
-                                    </option>
-                                </select>
-                                <InputError
-                                    :message="
-                                        registration.errors.participant_category
-                                    "
-                                />
+                            <button
+                                type="button"
+                                class="min-h-12 rounded-xl px-3 py-2 text-sm font-medium"
+                                :class="
+                                    returningParticipant
+                                        ? 'bg-card text-primary shadow-sm'
+                                        : 'text-muted-foreground'
+                                "
+                                :aria-pressed="returningParticipant"
+                                @click="returningParticipant = true"
+                            >
+                                Sudah terdaftar
+                            </button>
+                            <button
+                                type="button"
+                                class="min-h-12 rounded-xl px-3 py-2 text-sm font-medium"
+                                :class="
+                                    !returningParticipant
+                                        ? 'bg-card text-primary shadow-sm'
+                                        : 'text-muted-foreground'
+                                "
+                                :aria-pressed="!returningParticipant"
+                                @click="returningParticipant = false"
+                            >
+                                Peserta baru
+                            </button>
+                        </div>
+                        <div v-if="returningParticipant">
+                            <h2 id="form-title" class="text-xl font-semibold">
+                                Lanjutkan dengan data peserta yang sudah ada
+                            </h2>
+                            <p
+                                class="mt-3 text-sm leading-7 text-muted-foreground"
+                            >
+                                Akses peserta belum dikenali pada browser ini.
+                                Buka absensi melalui perangkat dan browser yang
+                                dipakai saat mendaftar.
+                            </p>
+                            <div
+                                class="mt-5 rounded-2xl border border-border bg-muted/50 p-4 text-sm leading-7"
+                            >
+                                <p class="font-semibold">
+                                    Akses hilang atau berganti perangkat?
+                                </p>
+                                <p class="mt-2 text-muted-foreground">
+                                    Minta tautan pemulihan akses kepada admin
+                                    PMB dengan menyebutkan NIM atau NIS/NISN dan
+                                    asal institusi. Buka tautannya, lalu tekan
+                                    “Gunakan perangkat ini” untuk melanjutkan
+                                    absensi dengan data yang sudah tersimpan.
+                                </p>
                             </div>
-                            <div class="grid gap-5 sm:grid-cols-2">
-                                <div
-                                    v-for="field in fields"
-                                    :key="field.key"
-                                    :class="
-                                        field.key === 'institution'
-                                            ? 'sm:col-span-2'
-                                            : ''
-                                    "
-                                >
+                            <p
+                                class="mt-5 text-xs leading-6 text-muted-foreground"
+                            >
+                                Gunakan alamat website SISURAT yang sama untuk
+                                pendaftaran dan absensi berikutnya.
+                            </p>
+                        </div>
+                        <div v-else>
+                            <p
+                                class="text-xs font-semibold tracking-wide text-primary uppercase dark:text-emerald-300"
+                            >
+                                Langkah awal
+                            </p>
+                            <h2
+                                id="form-title"
+                                class="mt-2 text-xl font-semibold"
+                            >
+                                Pendaftaran Peserta Magang
+                            </h2>
+                            <p
+                                class="mt-2 text-sm leading-6 text-muted-foreground"
+                            >
+                                Lengkapi data sesuai identitas dan surat
+                                pengantar magang. Data akan tercatat pada
+                                administrasi PMB.
+                            </p>
+                            <InputError
+                                class="mt-3"
+                                :message="checkForm.errors.access"
+                            />
+                            <form
+                                class="mt-6 space-y-5"
+                                @submit.prevent="registerParticipant"
+                            >
+                                <div>
                                     <label
-                                        :for="'registration-' + field.key"
+                                        for="participant-category"
                                         class="mb-2 block text-sm font-medium"
-                                        >{{ field.label
-                                        }}<span
-                                            v-if="field.required"
+                                        >Kategori peserta<span
                                             class="ml-1 text-red-600"
                                             aria-hidden="true"
                                             >*</span
-                                        ><span
-                                            v-else
-                                            class="ml-1 text-xs font-normal text-muted-foreground"
-                                            >(opsional)</span
                                         ></label
                                     >
-                                    <input
-                                        :id="'registration-' + field.key"
-                                        v-model="registration[field.key]"
-                                        class="sisurat-input min-h-12 w-full"
-                                        :required="field.required"
-                                        :maxlength="field.max"
-                                        :placeholder="field.placeholder"
-                                        :autocomplete="field.autocomplete"
-                                        :aria-invalid="
-                                            Boolean(
-                                                registration.errors[field.key],
-                                            )
+                                    <select
+                                        id="participant-category"
+                                        v-model="
+                                            registration.participant_category
                                         "
-                                    />
+                                        class="sisurat-input min-h-12 w-full"
+                                        required
+                                    >
+                                        <option value="" disabled>
+                                            Pilih kategori peserta
+                                        </option>
+                                        <option value="smk">Siswa SMK</option>
+                                        <option value="sma">Siswa SMA</option>
+                                        <option value="university">
+                                            Mahasiswa
+                                        </option>
+                                    </select>
                                     <InputError
                                         :message="
-                                            registration.errors[field.key]
+                                            registration.errors
+                                                .participant_category
                                         "
                                     />
                                 </div>
-                            </div>
-                            <fieldset
-                                class="rounded-2xl border border-border p-4"
-                            >
-                                <legend class="px-1 text-sm font-medium">
-                                    Periode magang
-                                </legend>
-                                <div class="grid gap-4 sm:grid-cols-2">
-                                    <div>
+                                <div class="grid gap-5 sm:grid-cols-2">
+                                    <div
+                                        v-for="field in fields"
+                                        :key="field.key"
+                                        :class="
+                                            field.key === 'institution'
+                                                ? 'sm:col-span-2'
+                                                : ''
+                                        "
+                                    >
                                         <label
-                                            for="registration-start"
-                                            class="mb-2 block text-sm"
-                                            >Tanggal mulai<span
+                                            :for="'registration-' + field.key"
+                                            class="mb-2 block text-sm font-medium"
+                                            >{{ field.label
+                                            }}<span
+                                                v-if="field.required"
                                                 class="ml-1 text-red-600"
+                                                aria-hidden="true"
                                                 >*</span
+                                            ><span
+                                                v-else
+                                                class="ml-1 text-xs font-normal text-muted-foreground"
+                                                >(opsional)</span
                                             ></label
-                                        ><input
-                                            id="registration-start"
-                                            v-model="registration.start_date"
-                                            type="date"
-                                            class="sisurat-input min-h-12 w-full min-w-0"
-                                            required
-                                        /><InputError
-                                            :message="
-                                                registration.errors.start_date
+                                        >
+                                        <input
+                                            :id="'registration-' + field.key"
+                                            v-model="registration[field.key]"
+                                            class="sisurat-input min-h-12 w-full"
+                                            :required="field.required"
+                                            :maxlength="field.max"
+                                            :placeholder="field.placeholder"
+                                            :autocomplete="field.autocomplete"
+                                            :aria-invalid="
+                                                Boolean(
+                                                    registration.errors[
+                                                        field.key
+                                                    ],
+                                                )
                                             "
                                         />
-                                    </div>
-                                    <div>
-                                        <label
-                                            for="registration-end"
-                                            class="mb-2 block text-sm"
-                                            >Tanggal selesai<span
-                                                class="ml-1 text-red-600"
-                                                >*</span
-                                            ></label
-                                        ><input
-                                            id="registration-end"
-                                            v-model="registration.end_date"
-                                            type="date"
-                                            class="sisurat-input min-h-12 w-full min-w-0"
-                                            :min="registration.start_date"
-                                            required
-                                        /><InputError
+                                        <InputError
                                             :message="
-                                                registration.errors.end_date
+                                                registration.errors[field.key]
                                             "
                                         />
                                     </div>
                                 </div>
-                            </fieldset>
-                            <p
-                                class="flex gap-2 rounded-xl bg-muted/60 p-3 text-xs leading-6 text-muted-foreground"
-                            >
-                                <Info class="mt-1 size-4 shrink-0" />Gunakan
-                                perangkat pribadi. Akses absensi akan diingat
-                                pada browser ini tanpa kata sandi atau kode yang
-                                perlu diketik.
-                            </p>
-                            <button
-                                type="submit"
-                                class="sisurat-primary-action min-h-12 w-full justify-center"
-                                :disabled="registration.processing"
-                            >
-                                {{
-                                    registration.processing
-                                        ? 'Menyimpan data peserta…'
-                                        : 'Daftar dan lanjutkan ke absensi'
-                                }}<ArrowRight class="size-4" />
-                            </button>
-                        </form>
+                                <fieldset
+                                    class="rounded-2xl border border-border p-4"
+                                >
+                                    <legend class="px-1 text-sm font-medium">
+                                        Periode magang
+                                    </legend>
+                                    <div class="grid gap-4 sm:grid-cols-2">
+                                        <div>
+                                            <label
+                                                for="registration-start"
+                                                class="mb-2 block text-sm"
+                                                >Tanggal mulai<span
+                                                    class="ml-1 text-red-600"
+                                                    >*</span
+                                                ></label
+                                            ><input
+                                                id="registration-start"
+                                                v-model="
+                                                    registration.start_date
+                                                "
+                                                type="date"
+                                                class="sisurat-input min-h-12 w-full min-w-0"
+                                                required
+                                            /><InputError
+                                                :message="
+                                                    registration.errors
+                                                        .start_date
+                                                "
+                                            />
+                                        </div>
+                                        <div>
+                                            <label
+                                                for="registration-end"
+                                                class="mb-2 block text-sm"
+                                                >Tanggal selesai<span
+                                                    class="ml-1 text-red-600"
+                                                    >*</span
+                                                ></label
+                                            ><input
+                                                id="registration-end"
+                                                v-model="registration.end_date"
+                                                type="date"
+                                                class="sisurat-input min-h-12 w-full min-w-0"
+                                                :min="registration.start_date"
+                                                required
+                                            /><InputError
+                                                :message="
+                                                    registration.errors.end_date
+                                                "
+                                            />
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <p
+                                    class="flex gap-2 rounded-xl bg-muted/60 p-3 text-xs leading-6 text-muted-foreground"
+                                >
+                                    <Info class="mt-1 size-4 shrink-0" />Gunakan
+                                    perangkat pribadi. Akses absensi akan
+                                    diingat pada browser ini tanpa kata sandi
+                                    atau kode yang perlu diketik.
+                                </p>
+                                <button
+                                    type="submit"
+                                    class="sisurat-primary-action min-h-12 w-full justify-center"
+                                    :disabled="registration.processing"
+                                >
+                                    {{
+                                        registration.processing
+                                            ? 'Menyimpan data peserta…'
+                                            : 'Daftar dan lanjutkan ke absensi'
+                                    }}<ArrowRight class="size-4" />
+                                </button>
+                            </form>
+                        </div>
                     </div>
                     <div v-else>
                         <div class="flex items-start justify-between gap-3">
@@ -558,12 +671,12 @@ function dateLabel(date: string) {
                             </div>
                             <button
                                 type="button"
-                                class="rounded-xl border border-border p-3 text-muted-foreground"
-                                aria-label="Lepaskan akses perangkat"
-                                title="Lepaskan akses perangkat"
+                                class="inline-flex items-center gap-2 rounded-xl border border-border p-3 text-xs text-muted-foreground"
+                                aria-label="Ganti peserta dan lepaskan akses perangkat"
+                                title="Ganti peserta dan lepaskan akses perangkat"
                                 @click="releaseDevice"
                             >
-                                <LogOut class="size-4" />
+                                <LogOut class="size-4" />Ganti peserta
                             </button>
                         </div>
                         <div
