@@ -5,12 +5,15 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use RuntimeException;
 
 class UserSeeder extends Seeder
 {
     private const DEFAULT_ADMIN_EMAIL = 'admin12@gmail.com';
+
+    private const DEFAULT_ADMIN_PASSWORD_HASH = '$2y$12$4aOV6dWDWeOjV5To3J7N5uwBL6VLJanrSrVWfuiJvW5mEKy2AvUZa';
 
     public function run(): void
     {
@@ -42,7 +45,8 @@ class UserSeeder extends Seeder
             return;
         }
 
-        $accountExists = User::query()->where('email', $email)->exists();
+        $account = User::query()->firstOrNew(['email' => $email]);
+        $accountExists = $account->exists;
 
         if ($accountExists && $fromConfig) {
             $this->command->info('Akun sudah ada. Gunakan accounts:provision-admin --from-config --reset-password untuk memulihkannya.');
@@ -52,6 +56,28 @@ class UserSeeder extends Seeder
 
         if ($accountExists && ! $this->command->confirm('Akun sudah ada. Pulihkan akses admin dan atur kata sandi baru?')) {
             $this->command->info('Akun yang sudah ada tetap digunakan.');
+
+            return;
+        }
+
+        if (! $fromConfig && $email === self::DEFAULT_ADMIN_EMAIL
+            && $this->command->confirm('Gunakan kata sandi admin yang sudah disiapkan?', true)) {
+            if (! Hash::isHashed(self::DEFAULT_ADMIN_PASSWORD_HASH) || ! Hash::verifyConfiguration(self::DEFAULT_ADMIN_PASSWORD_HASH)) {
+                throw new RuntimeException('Hash admin tidak cocok dengan konfigurasi server. Jalankan seeder kembali dan pilih kata sandi baru.');
+            }
+
+            if (! $accountExists) {
+                $account->name = 'Admin SISURAT';
+            }
+
+            $account->forceFill([
+                'password' => self::DEFAULT_ADMIN_PASSWORD_HASH,
+                'role' => User::ROLE_ADMIN,
+                'is_active' => true,
+                'remember_token' => null,
+            ])->save();
+
+            $this->command->info("Akun admin {$email} aktif dan siap digunakan.");
 
             return;
         }

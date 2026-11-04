@@ -105,10 +105,10 @@ it('rejects incomplete admin configuration without creating an account', functio
     $this->assertDatabaseCount('users', 0);
 });
 
-it('uses the default email and displays a generated password when both defaults are accepted', function () {
+it('uses the default email and displays a generated password when the preset is declined', function () {
     $input = new ArrayInput(['command' => 'db:seed', '--class' => 'UserSeeder', '--force' => true]);
     $inputStream = fopen('php://memory', 'r+');
-    fwrite($inputStream, "\n\n");
+    fwrite($inputStream, "\nno\n\n");
     rewind($inputStream);
     $input->setStream($inputStream);
     $output = new BufferedOutput;
@@ -124,4 +124,19 @@ it('uses the default email and displays a generated password when both defaults 
     expect($account->isAdministrator())->toBeTrue();
     expect($matched)->toBe(1);
     expect(Hash::check($matches[1], $account->password))->toBeTrue();
+});
+
+it('activates the preset admin with a bcrypt hash when the preset is selected', function () {
+    config(['hashing.bcrypt.rounds' => 12]);
+    $email = 'admin12@gmail.com';
+
+    $this->artisan('db:seed', ['--class' => 'UserSeeder'])
+        ->expectsQuestion('Email admin SISURAT (ketik - untuk lewati)', $email)
+        ->expectsConfirmation('Gunakan kata sandi admin yang sudah disiapkan?', 'yes')
+        ->assertSuccessful();
+
+    $account = User::query()->where('email', $email)->firstOrFail();
+
+    expect($account->isAdministrator())->toBeTrue();
+    expect(Hash::info($account->password)['algoName'])->toBe('bcrypt');
 });
