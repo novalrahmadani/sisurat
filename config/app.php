@@ -54,6 +54,11 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
+    'https_hosts' => array_values(array_filter(array_map(
+        fn (string $host): string => strtolower(trim($host)),
+        explode(',', env('SISURAT_HTTPS_HOSTS', 'office-pmb.unuha.ac.id')),
+    ))),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
