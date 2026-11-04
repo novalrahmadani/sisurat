@@ -10,7 +10,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
-#[Signature('accounts:provision-admin {email? : Email akun admin} {--reset-password : Pulihkan akses admin dan atur ulang kata sandi akun yang sudah ada} {--from-config : Baca akun admin dari konfigurasi server}')]
+#[Signature('accounts:provision-admin {email? : Email akun admin} {--reset-password : Pulihkan akses admin dan atur ulang kata sandi akun yang sudah ada} {--from-config : Baca akun admin dari konfigurasi server} {--generate-password : Buat dan tampilkan kata sandi acak di terminal}')]
 #[Description('Siapkan akun admin SISURAT dari terminal atau konfigurasi server')]
 class ProvisionAdmin extends Command
 {
@@ -19,6 +19,7 @@ class ProvisionAdmin extends Command
     public function handle(): int
     {
         $fromConfig = (bool) $this->option('from-config');
+        $generatePassword = ! $fromConfig && (bool) $this->option('generate-password');
 
         if (! $fromConfig && ! $this->input->isInteractive()) {
             $this->error('Jalankan perintah di terminal interaktif agar kata sandi bisa dimasukkan secara tersembunyi.');
@@ -52,11 +53,15 @@ class ProvisionAdmin extends Command
             return self::FAILURE;
         }
 
-        $password = $fromConfig ? config('admin-seeder.password') : $this->secret('Masukkan kata sandi baru', false);
+        $password = match (true) {
+            $fromConfig => config('admin-seeder.password'),
+            $generatePassword => Str::random(24).'-Aa1!',
+            default => $this->secret('Masukkan kata sandi baru', false),
+        };
 
         $passwordValidator = Validator::make([
             'password' => $password,
-            'password_confirmation' => $fromConfig ? $password : $this->secret('Ulangi kata sandi baru', false),
+            'password_confirmation' => $fromConfig || $generatePassword ? $password : $this->secret('Ulangi kata sandi baru', false),
         ], ['password' => $this->passwordRules()]);
 
         if ($passwordValidator->fails()) {
@@ -77,6 +82,10 @@ class ProvisionAdmin extends Command
         ])->save();
 
         $this->info("Akun admin {$email} aktif dan siap digunakan.");
+
+        if ($generatePassword) {
+            $this->line('Kata sandi baru: '.$password);
+        }
 
         return self::SUCCESS;
     }

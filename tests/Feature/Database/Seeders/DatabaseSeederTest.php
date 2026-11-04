@@ -1,8 +1,11 @@
 <?php
 
 use App\Models\User;
+use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Support\Facades\Hash;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\BufferedOutput;
 
 uses(LazilyRefreshDatabase::class);
 
@@ -13,7 +16,8 @@ it('fills missing roles and creates the requested admin when seeding the databas
     $password = 'SisuRat-Test-763!';
 
     $this->artisan('db:seed')
-        ->expectsQuestion('Email admin SISURAT (Enter untuk lewati)', $email)
+        ->expectsQuestion('Email admin SISURAT (ketik - untuk lewati)', $email)
+        ->expectsConfirmation('Buat kata sandi otomatis?', 'no')
         ->expectsQuestion('Masukkan kata sandi baru', $password)
         ->expectsQuestion('Ulangi kata sandi baru', $password)
         ->assertSuccessful();
@@ -31,7 +35,7 @@ it('keeps the existing account when the seeder reset is declined', function () {
     $account = User::factory()->create()->refresh();
 
     $this->artisan('db:seed', ['--class' => 'UserSeeder'])
-        ->expectsQuestion('Email admin SISURAT (Enter untuk lewati)', $account->email)
+        ->expectsQuestion('Email admin SISURAT (ketik - untuk lewati)', $account->email)
         ->expectsConfirmation('Akun sudah ada. Pulihkan akses admin dan atur kata sandi baru?', 'no')
         ->assertSuccessful();
 
@@ -43,8 +47,9 @@ it('restores an existing admin account when the seeder reset is accepted', funct
     $password = 'Pemulihan-Admin-487!';
 
     $this->artisan('db:seed', ['--class' => 'UserSeeder'])
-        ->expectsQuestion('Email admin SISURAT (Enter untuk lewati)', $account->email)
+        ->expectsQuestion('Email admin SISURAT (ketik - untuk lewati)', $account->email)
         ->expectsConfirmation('Akun sudah ada. Pulihkan akses admin dan atur kata sandi baru?', 'yes')
+        ->expectsConfirmation('Buat kata sandi otomatis?', 'no')
         ->expectsQuestion('Masukkan kata sandi baru', $password)
         ->expectsQuestion('Ulangi kata sandi baru', $password)
         ->assertSuccessful();
@@ -98,4 +103,25 @@ it('rejects incomplete admin configuration without creating an account', functio
     expect(fn () => $this->artisan('db:seed', ['--class' => 'UserSeeder', '--no-interaction' => true]))
         ->toThrow(RuntimeException::class, 'Isi SISURAT_ADMIN_EMAIL dan SISURAT_ADMIN_PASSWORD');
     $this->assertDatabaseCount('users', 0);
+});
+
+it('uses the default email and displays a generated password when both defaults are accepted', function () {
+    $input = new ArrayInput(['command' => 'db:seed', '--class' => 'UserSeeder', '--force' => true]);
+    $inputStream = fopen('php://memory', 'r+');
+    fwrite($inputStream, "\n\n");
+    rewind($inputStream);
+    $input->setStream($inputStream);
+    $output = new BufferedOutput;
+
+    $exitCode = app(Kernel::class)->handle($input, $output);
+    fclose($inputStream);
+
+    expect($exitCode)->toBe(0);
+
+    $account = User::query()->where('email', 'admin12@gmail.com')->firstOrFail();
+    $matched = preg_match('/^Kata sandi baru: (\S+)\r?$/m', $output->fetch(), $matches);
+
+    expect($account->isAdministrator())->toBeTrue();
+    expect($matched)->toBe(1);
+    expect(Hash::check($matches[1], $account->password))->toBeTrue();
 });
