@@ -16,7 +16,8 @@ void createInertiaApp({
                 name === 'quran-exams/Join' ||
                 name === 'internship/Public' ||
                 name === 'attendance/Join' ||
-                name === 'interviews/Join':
+                name === 'interviews/Join' ||
+                name === 'pmb-prospects/Join':
                 return null;
             case name.startsWith('auth/'):
                 return AuthLayout;
@@ -45,3 +46,4 @@ initializeTheme();
 
 // This will listen for flash toast data from the server...
 initializeFlashToast();
+

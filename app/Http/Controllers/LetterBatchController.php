@@ -439,6 +439,7 @@ class LetterBatchController extends Controller
 
         return Inertia::render('letters/Batch', [
             'batch' => $batch,
+            'letterheadUrl' => '/images/universitas-nurul-huda-letterhead.png?v='.hash_file('sha256', public_path('images/universitas-nurul-huda-letterhead.png')),
             'signatureOwnerName' => $signatory->name,
             'pmbSignatory' => $signatory->presentation(),
         ]);
@@ -766,3 +767,4 @@ class LetterBatchController extends Controller
         ][$month];
     }
 }
+

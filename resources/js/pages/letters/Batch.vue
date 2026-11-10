@@ -99,6 +99,7 @@ type DeletionTarget = {
 
 const props = defineProps<{
     batch: Batch;
+    letterheadUrl: string;
     signatureOwnerName?: string;
     pmbSignatory: {
         id: number;
@@ -621,11 +622,7 @@ function assignmentRows(letter: Letter) {
                 </div>
                 <img
                     class="letterhead"
-                    :src="
-                        isReferencePkkmb
-                            ? '/images/pkkmb-letterhead.png'
-                            : '/images/universitas-nurul-huda-letterhead.png'
-                    "
+                    :src="letterheadUrl"
                     alt="Kop surat Universitas Nurul Huda"
                 />
 
@@ -911,10 +908,10 @@ function assignmentRows(letter: Letter) {
                         <table class="assignee-table">
                             <thead>
                                 <tr>
-                                    <th>No</th>
-                                    <th>Nama</th>
-                                    <th>Dinas</th>
-                                    <th>Kabupaten</th>
+                                    <th scope="col">No</th>
+                                    <th scope="col">Nama</th>
+                                    <th scope="col">Dinas</th>
+                                    <th scope="col">Kabupaten</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -1496,24 +1493,43 @@ function assignmentRows(letter: Letter) {
     width: 100%;
     margin: 8px 0 18px;
     border-collapse: collapse;
+    table-layout: fixed;
+    font-size: 10pt;
+    line-height: 1.2;
 }
 
 .assignee-table th,
 .assignee-table td {
-    padding: 5px 7px;
+    padding: 3px 5px;
     border: 1px solid #222;
-    text-align: left;
+    vertical-align: middle;
+    overflow-wrap: anywhere;
+}
+
+.assignee-table th {
+    text-align: center;
 }
 
 .assignee-table th:first-child,
 .assignee-table td:first-child {
-    width: 36px;
+    width: 8%;
     text-align: center;
+}
+
+.assignee-table th:nth-child(2) {
+    width: 47%;
+}
+
+.assignee-table th:nth-child(3) {
+    width: 15%;
+}
+
+.assignee-table th:nth-child(4) {
+    width: 30%;
 }
 
 .assignee-table th {
     background: #dedede;
-    text-align: center;
     print-color-adjust: exact;
     -webkit-print-color-adjust: exact;
 }
@@ -1683,3 +1699,4 @@ function assignmentRows(letter: Letter) {
     }
 }
 </style>
+

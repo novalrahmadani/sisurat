@@ -12,7 +12,13 @@ class PublicFormLinks
     public function url(string $name, array $parameters = []): string
     {
         $base = config('internship.public_url');
-        if (is_string($base) && filter_var($base, FILTER_VALIDATE_URL) !== false && parse_url($base, PHP_URL_SCHEME) === 'https') {
+        $host = is_string($base) ? parse_url($base, PHP_URL_HOST) : null;
+        $isCloudflareQuickTunnel = is_string($host) && str_ends_with(strtolower($host), '.trycloudflare.com');
+
+        if (is_string($base)
+            && filter_var($base, FILTER_VALIDATE_URL) !== false
+            && parse_url($base, PHP_URL_SCHEME) === 'https'
+            && ! $isCloudflareQuickTunnel) {
             return rtrim($base, '/').route($name, $parameters, false);
         }
 
@@ -38,3 +44,4 @@ class PublicFormLinks
         return (new Writer(new GDLibRenderer(768, 4)))->writeString($this->url($name, $parameters));
     }
 }
+
