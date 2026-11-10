@@ -32,6 +32,14 @@ class AppServiceProvider extends ServiceProvider
 
         Gate::define('manage-internships', fn (User $user): bool => $user->isAdministrator());
         RateLimiter::for('internship-registration', fn (Request $request): array => [Limit::perMinute(10)->by('internship-register-'.$request->ip()), Limit::perHour(30)->by('internship-register-hour-'.$request->ip())]);
+        RateLimiter::for('internship-pin', fn (Request $request): array => [
+            Limit::perMinute(8)->by('internship-pin-'.$request->ip()),
+            Limit::perHour(30)->by('internship-pin-hour-'.$request->ip()),
+        ]);
+        RateLimiter::for('internship-pin-issuance', fn (Request $request): array => [
+            Limit::perMinute(5)->by('internship-pin-issue-ip-'.$request->ip()),
+            Limit::perMinute(5)->by('internship-pin-issue-session-'.hash('sha256', $request->session()->getId())),
+        ]);
         RateLimiter::for('internship-verification', fn (Request $request): array => [
             Limit::perMinute(90)->by('internship-ip-'.$request->ip()),
             Limit::perMinute(8)->by('internship-id-'.hash('sha256', $request->ip().'|'.(is_string($request->input('student_number')) ? trim($request->input('student_number')) : ''))),
