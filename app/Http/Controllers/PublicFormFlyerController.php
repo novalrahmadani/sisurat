@@ -47,6 +47,14 @@ class PublicFormFlyerController extends Controller
             'ABSENSI MAGANG ONLINE', 'Untuk peserta magang SMK, SMA, dan mahasiswa.', 'flyer-absensi-magang.png');
     }
 
+    public function pmbProspects(Request $request): Response
+    {
+        abort_unless($request->user()?->isAdministrator(), 403);
+
+        return $this->flyer($request, 'pmb-prospects.join', [], 'Pendaftaran Calon Mahasiswa Baru',
+            'FORMULIR DATA CALON MAHASISWA', 'Pindai QR dan lengkapi data diri serta asal sekolah.', 'flyer-calon-mahasiswa.png');
+    }
+
     /** @param array<string, int|string> $parameters */
     private function flyer(Request $request, string $route, array $parameters, string $title, string $category, string $instruction, string $filename): Response
     {
@@ -61,3 +69,4 @@ class PublicFormFlyerController extends Controller
         ]);
     }
 }
+

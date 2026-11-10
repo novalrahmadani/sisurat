@@ -13,15 +13,18 @@ use App\Http\Controllers\InternshipController;
 use App\Http\Controllers\InterviewFormController;
 use App\Http\Controllers\InterviewReportController;
 use App\Http\Controllers\LetterBatchController;
+use App\Http\Controllers\LetterheadController;
 use App\Http\Controllers\LetterTemplateController;
 use App\Http\Controllers\MasterDataController;
 use App\Http\Controllers\OutgoingLetterController;
+use App\Http\Controllers\PmbProspectController;
 use App\Http\Controllers\PmbSignatoryController;
 use App\Http\Controllers\PublicAttendanceController;
 use App\Http\Controllers\PublicFormFlyerController;
 use App\Http\Controllers\PublicFormQrController;
 use App\Http\Controllers\PublicInternshipController;
 use App\Http\Controllers\PublicInterviewController;
+use App\Http\Controllers\PublicPmbProspectController;
 use App\Http\Controllers\PublicQuranAssessmentController;
 use App\Http\Controllers\QuranAssessmentController;
 use App\Http\Controllers\QuranExamController;
@@ -38,13 +41,10 @@ Route::get('tes-baca-alquran/{token}', [PublicQuranAssessmentController::class, 
 Route::post('tes-baca-alquran/{token}', [PublicQuranAssessmentController::class, 'submit'])->where('token', '[A-Za-z0-9]{64}')->middleware('throttle:quran-submissions')->name('quran-exams.submit');
 
 Route::get('absensi-magang', [PublicInternshipController::class, 'show'])->name('internship.show');
-Route::get('absensi-magang/sesi', [PublicInternshipController::class, 'session'])->name('internship.session');
 Route::post('absensi-magang/daftar', [PublicInternshipController::class, 'register'])->middleware('throttle:internship-registration')->name('internship.register');
 Route::get('absensi-magang/akses/{token}', [PublicInternshipController::class, 'recovery'])->where('token', '[A-Za-z0-9]{64}')->middleware('throttle:internship-verification')->name('internship.recovery');
 Route::post('absensi-magang/akses/{token}', [PublicInternshipController::class, 'recover'])->where('token', '[A-Za-z0-9]{64}')->middleware('throttle:internship-verification')->name('internship.recover');
 Route::post('absensi-magang/periksa', [PublicInternshipController::class, 'verify'])->middleware('throttle:internship-verification')->name('internship.verify');
-Route::post('absensi-magang/masuk', [PublicInternshipController::class, 'verifyPin'])->middleware('throttle:internship-pin')->name('internship.verify-pin');
-Route::post('absensi-magang/pin', [PublicInternshipController::class, 'issuePin'])->middleware('throttle:internship-pin-issuance')->name('internship.issue-pin');
 Route::post('absensi-magang', [PublicInternshipController::class, 'submit'])->middleware('throttle:internship-submissions')->name('internship.submit');
 Route::post('absensi-magang/ganti-peserta', [PublicInternshipController::class, 'leave'])->name('internship.leave');
 
@@ -58,6 +58,10 @@ Route::get('wawancara/{token}', [PublicInterviewController::class, 'join'])
 Route::post('wawancara/{token}', [PublicInterviewController::class, 'submit'])
     ->where('token', '[A-Za-z0-9]{64}')->middleware('throttle:interview-submissions')->name('interviews.submit');
 
+Route::get('pendaftaran-calon-mahasiswa', [PublicPmbProspectController::class, 'join'])->name('pmb-prospects.join');
+Route::post('pendaftaran-calon-mahasiswa', [PublicPmbProspectController::class, 'submit'])
+    ->middleware('throttle:pmb-prospect-submissions')->name('pmb-prospects.submit');
+
 Route::middleware(['auth'])->group(function () {
     Route::get('dashboard', DashboardController::class)->name('dashboard');
 
@@ -67,7 +71,6 @@ Route::middleware(['auth'])->group(function () {
         Route::put('internships/settings', [InternshipAccessController::class, 'update'])->name('internships.access.update');
         Route::post('internships/participants', [InternshipController::class, 'store'])->name('internships.store');
         Route::put('internships/participants/{participant}', [InternshipController::class, 'update'])->name('internships.update');
-        Route::delete('internships/participants/{participant}', [InternshipController::class, 'destroy'])->name('internships.destroy');
         Route::post('internships/participants/{participant}/recovery', [InternshipController::class, 'recoverAccess'])->name('internships.recover-access');
         Route::get('internships/qr', [PublicFormQrController::class, 'internship'])->name('internships.qr');
         Route::get('internships/flyer', [PublicFormFlyerController::class, 'internship'])->name('internships.flyer');
@@ -87,6 +90,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('interviews/{interview}/submissions/{submission}/print', [InterviewFormController::class, 'printSubmission'])->name('interviews.submissions.print');
     Route::delete('interviews/{interview}/submissions/{submission}', [InterviewFormController::class, 'destroySubmission'])->name('interviews.submissions.destroy');
     Route::resource('interviews', InterviewFormController::class)->parameters(['interviews' => 'interview']);
+
+    Route::get('pmb-prospects/qr', [PublicFormQrController::class, 'pmbProspects'])->name('pmb-prospects.qr');
+    Route::get('pmb-prospects/flyer', [PublicFormFlyerController::class, 'pmbProspects'])->name('pmb-prospects.flyer');
+    Route::get('pmb-prospects/pdf', [PmbProspectController::class, 'pdf'])->name('pmb-prospects.pdf');
+    Route::patch('pmb-prospects/settings', [PmbProspectController::class, 'updateSettings'])->name('pmb-prospects.settings.update');
+    Route::get('pmb-prospects', [PmbProspectController::class, 'index'])->name('pmb-prospects.index');
 
     Route::get('quran-exams/{quran_exam}/qr', [PublicFormQrController::class, 'quran'])->name('quran-exams.qr');
     Route::get('quran-exams/{quran_exam}/flyer', [PublicFormFlyerController::class, 'quran'])->name('quran-exams.flyer');
@@ -134,6 +143,8 @@ Route::middleware(['auth'])->group(function () {
         ->parameters(['letter-templates' => 'letter_template'])->names('master-data.letter-templates');
     Route::get('master-data/pmb-signatory', [PmbSignatoryController::class, 'edit'])->name('master-data.pmb-signatory.edit');
     Route::post('master-data/pmb-signatory', [PmbSignatoryController::class, 'update'])->name('master-data.pmb-signatory.update');
+    Route::get('master-data/letterhead', [LetterheadController::class, 'edit'])->name('master-data.letterhead.edit');
+    Route::post('master-data/letterhead', [LetterheadController::class, 'update'])->name('master-data.letterhead.update');
     Route::get('master-data/pmb-signatory/media/{signatory}/{kind}', [PmbSignatoryController::class, 'media'])->whereIn('kind', ['signature', 'stamp'])->name('master-data.pmb-signatory.media');
 
     Route::get('outgoing-letters', [OutgoingLetterController::class, 'index'])->name('outgoing-letters.index');
@@ -174,3 +185,4 @@ Route::middleware(['auth'])->group(function () {
 });
 
 require __DIR__.'/settings.php';
+

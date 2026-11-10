@@ -19,6 +19,7 @@ import { index as staffIndex } from '@/routes/master-data/staff-members';
 import { index as studyProgramsIndex } from '@/routes/master-data/study-programs';
 import { index as facultiesIndex } from '@/routes/master-data/faculties';
 import { index as letterTemplatesIndex } from '@/routes/master-data/letter-templates';
+import { edit as letterheadEdit } from '@/routes/master-data/letterhead';
 
 const props = defineProps<{
     counts: {
@@ -108,6 +109,19 @@ const categories = computed(() => [
               },
           ]
         : []),
+    ...(page.props.can?.manage_pmb_signatory
+        ? [
+              {
+                  title: 'Kop Surat',
+                  count: 1,
+                  icon: FileText,
+                  route: letterheadEdit(),
+                  description:
+                      'Ganti gambar kop surat yang digunakan pada surat dan dokumen cetak.',
+                  action: 'Kelola kop surat',
+              },
+          ]
+        : []),
 ]);
 </script>
 
@@ -178,3 +192,4 @@ const categories = computed(() => [
         </section>
     </main>
 </template>
+

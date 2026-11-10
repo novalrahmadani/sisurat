@@ -41,4 +41,12 @@ class PublicFormQrController extends Controller
 
         return $this->links->qrCode('internship.show', [], 'qr-absensi-magang.png', $request->boolean('download'));
     }
+
+    public function pmbProspects(Request $request): Response
+    {
+        abort_unless($request->user()?->isAdministrator(), 403);
+
+        return $this->links->qrCode('pmb-prospects.join', [], 'qr-calon-mahasiswa.png', $request->boolean('download'));
+    }
 }
+

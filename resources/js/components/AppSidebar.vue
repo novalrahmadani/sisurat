@@ -35,12 +35,14 @@ import {
 import { dashboard, guide } from '@/routes';
 import { create as createLetter, index as letterIndex } from '@/routes/letters';
 import { index as masterData, schools, pesantren } from '@/routes/master-data';
+import { index as pmbProspects } from '@/routes/pmb-prospects';
 import { index as districts } from '@/routes/master-data/districts';
 import { index as staffMembers } from '@/routes/master-data/staff-members';
 import { index as studyPrograms } from '@/routes/master-data/study-programs';
 import { index as faculties } from '@/routes/master-data/faculties';
 import { index as letterTemplates } from '@/routes/master-data/letter-templates';
 import { edit as pmbSignatory } from '@/routes/master-data/pmb-signatory';
+import { edit as letterhead } from '@/routes/master-data/letterhead';
 import { edit as profile } from '@/routes/profile';
 import { edit as appearance } from '@/routes/appearance';
 import { edit as security } from '@/routes/security';
@@ -120,6 +122,16 @@ const mainNavItems = computed<NavItem[]>(() => [
         icon: MessageSquareText,
         isActive: page.component.startsWith('interviews/'),
     },
+    ...(page.props.can?.manage_pmb_signatory
+        ? [
+              {
+                  title: 'Data Calon Mahasiswa',
+                  href: pmbProspects(),
+                  icon: GraduationCap,
+                  isActive: page.component.startsWith('pmb-prospects/'),
+              },
+          ]
+        : []),
     ...(page.props.can?.manage_internships
         ? [
               {
@@ -158,6 +170,11 @@ const mainNavItems = computed<NavItem[]>(() => [
             { title: 'Isi Surat', href: letterTemplates(), icon: FileText },
             ...(page.props.can?.manage_pmb_signatory
                 ? [
+                      {
+                          title: 'Kop Surat',
+                          href: letterhead(),
+                          icon: FileText,
+                      },
                       {
                           title: 'Penandatangan PMB',
                           href: pmbSignatory(),
@@ -236,3 +253,4 @@ const settingsNavItems = computed<NavItem[]>(() => [
     </Sidebar>
     <slot />
 </template>
+
