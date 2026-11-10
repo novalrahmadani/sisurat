@@ -26,6 +26,7 @@ import {
     update,
     destroy as destroyParticipant,
     recoverAccess,
+    resetPin as resetParticipantPin,
     exportMethod,
     print as printReport,
     signature,
@@ -73,6 +74,7 @@ const props = defineProps<{
     today: string;
     stats: { active: number; present: number; pending: number };
     issuedAccess: { name: string; url: string } | null;
+    issuedPin: { name: string; pin: string } | null;
     location: { configured: boolean; radius_meters: number };
     publicAttendanceUrl: string;
 }>();
@@ -83,6 +85,9 @@ const editingId = ref<number | null>(null);
 const deletingId = ref<number | null>(null);
 const copied = ref('');
 const codeInput = ref<HTMLInputElement | null>(null);
+const pinInput = ref<HTMLInputElement | null>(null);
+const issuingPinId = ref<number | null>(null);
+const copiedPin = ref('');
 const form = useForm({
     name: '',
     participant_category: '',
@@ -147,6 +152,24 @@ function resetCode(participant: Participant) {
     )
         router.post(recoverAccess.url(participant.id));
 }
+function changePin(participant: Participant) {
+    if (
+        issuingPinId.value !== null ||
+        !window.confirm(
+            `Buat PIN baru untuk ${participant.name}? PIN lama dan akses perangkat yang tersimpan akan dinonaktifkan. PIN baru hanya ditampilkan sekali.`,
+        )
+    ) {
+        return;
+    }
+
+    issuingPinId.value = participant.id;
+    router.post(resetParticipantPin.url(participant.id), {
+        preserveScroll: true,
+        onFinish: () => {
+            issuingPinId.value = null;
+        },
+    });
+}
 function removeParticipant(participant: Participant) {
     if (
         deletingId.value !== null ||
@@ -177,6 +200,17 @@ async function copyCode() {
     } catch {
         codeInput.value?.select();
         copied.value = 'Tautan sudah dipilih. Gunakan Salin atau Ctrl+C.';
+    }
+}
+async function copyIssuedPin() {
+    if (!props.issuedPin) return;
+
+    try {
+        await navigator.clipboard.writeText(props.issuedPin.pin);
+        copiedPin.value = 'PIN berhasil disalin.';
+    } catch {
+        pinInput.value?.select();
+        copiedPin.value = 'PIN sudah dipilih. Salin secara manual.';
     }
 }
 function dateLabel(value: string) {
@@ -299,6 +333,34 @@ function duration(minutes: number | null) {
                 </button>
             </div>
             <p v-if="copied" class="mt-2 text-xs">{{ copied }}</p>
+        </div>
+        <div
+            v-if="issuedPin"
+            role="status"
+            class="rounded-2xl border border-emerald-300/70 bg-emerald-50 p-5 text-emerald-950 dark:bg-emerald-950 dark:text-emerald-100"
+        >
+            <h2 class="flex items-center gap-2 font-semibold">
+                <KeyRound class="size-5" />PIN baru untuk {{ issuedPin.name }}
+            </h2>
+            <p class="mt-2 text-sm leading-6">
+                Berikan PIN ini secara pribadi kepada peserta. PIN hanya ditampilkan sekali.
+            </p>
+            <div class="mt-3 flex flex-wrap gap-2">
+                <input
+                    ref="pinInput"
+                    :value="issuedPin.pin"
+                    readonly
+                    aria-label="PIN absensi peserta"
+                    class="sisurat-input min-w-0 flex-1 bg-white text-lg font-semibold tracking-[0.25em] text-emerald-950"
+                /><button
+                    type="button"
+                    class="sisurat-primary-action"
+                    @click="copyIssuedPin"
+                >
+                    <Copy class="size-4" />Salin PIN
+                </button>
+            </div>
+            <p v-if="copiedPin" class="mt-2 text-xs">{{ copiedPin }}</p>
         </div>
         <div
             class="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border bg-card p-5"
@@ -668,6 +730,15 @@ function duration(minutes: number | null) {
                             @click="edit(participant)"
                         >
                             <Pencil class="size-3.5" />Ubah data</button
+                        ><button
+                            type="button"
+                            class="sisurat-secondary-action !px-3 !py-2 !text-xs"
+                            :disabled="issuingPinId !== null"
+                            @click="changePin(participant)"
+                        >
+                            <KeyRound class="size-3.5" />{{
+                                issuingPinId === participant.id ? 'Membuat PIN…' : 'Ganti PIN'
+                            }}</button
                         ><button
                             type="button"
                             class="sisurat-secondary-action !px-3 !py-2 !text-xs"

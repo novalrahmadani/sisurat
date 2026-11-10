@@ -7,6 +7,7 @@ use App\Models\InternshipAttendance;
 use App\Models\InternshipParticipant;
 use App\Support\InternshipDeviceAccess;
 use App\Support\InternshipLocationAccess;
+use App\Support\InternshipPinAccess;
 use App\Support\PublicFormLinks;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Builder;
@@ -41,6 +42,7 @@ class InternshipController extends Controller
                 'present' => InternshipAttendance::query()->whereDate('attendance_date', $today)->count(),
                 'pending' => InternshipAttendance::query()->whereDate('attendance_date', $today)->whereNull('checked_out_at')->count()],
             'issuedAccess' => $request->session()->pull('internship_issued_access'),
+            'issuedPin' => $request->session()->pull('internship_admin_issued_pin'),
             'location' => $this->locations->presentation(),
             'publicAttendanceUrl' => $links->url('internship.show'),
         ]);
@@ -65,6 +67,21 @@ class InternshipController extends Controller
     public function recoverAccess(Request $request, InternshipParticipant $participant): RedirectResponse
     {
         $request->session()->put('internship_issued_access', ['name' => $participant->name, 'url' => $this->devices->recoveryUrl($participant)]);
+
+        return to_route('internships.index', ['tab' => 'participants']);
+    }
+
+    public function resetPin(Request $request, InternshipParticipant $participant, InternshipPinAccess $pins): RedirectResponse
+    {
+        $pin = DB::transaction(function () use ($participant, $pins): string {
+            $lockedParticipant = InternshipParticipant::query()->lockForUpdate()->findOrFail($participant->id);
+            $pin = $pins->issue($lockedParticipant);
+            $lockedParticipant->update(['device_token_hash' => null, 'device_expires_at' => null]);
+
+            return $pin;
+        }, 5);
+        $request->session()->put('internship_admin_issued_pin', ['name' => $participant->name, 'pin' => $pin]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'PIN absensi peserta berhasil diganti.']);
 
         return to_route('internships.index', ['tab' => 'participants']);
     }

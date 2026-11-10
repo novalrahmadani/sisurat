@@ -41,6 +41,9 @@ Route::get('tes-baca-alquran/{token}', [PublicQuranAssessmentController::class, 
 Route::post('tes-baca-alquran/{token}', [PublicQuranAssessmentController::class, 'submit'])->where('token', '[A-Za-z0-9]{64}')->middleware('throttle:quran-submissions')->name('quran-exams.submit');
 
 Route::get('absensi-magang', [PublicInternshipController::class, 'show'])->name('internship.show');
+Route::get('absensi-magang/sesi', [PublicInternshipController::class, 'session'])->name('internship.session');
+Route::post('absensi-magang/masuk', [PublicInternshipController::class, 'verifyPin'])->middleware('throttle:internship-pin')->name('internship.verify-pin');
+Route::post('absensi-magang/pin', [PublicInternshipController::class, 'issuePin'])->middleware('throttle:internship-pin-issuance')->name('internship.issue-pin');
 Route::post('absensi-magang/daftar', [PublicInternshipController::class, 'register'])->middleware('throttle:internship-registration')->name('internship.register');
 Route::get('absensi-magang/akses/{token}', [PublicInternshipController::class, 'recovery'])->where('token', '[A-Za-z0-9]{64}')->middleware('throttle:internship-verification')->name('internship.recovery');
 Route::post('absensi-magang/akses/{token}', [PublicInternshipController::class, 'recover'])->where('token', '[A-Za-z0-9]{64}')->middleware('throttle:internship-verification')->name('internship.recover');
@@ -72,6 +75,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('internships/participants', [InternshipController::class, 'store'])->name('internships.store');
         Route::put('internships/participants/{participant}', [InternshipController::class, 'update'])->name('internships.update');
         Route::post('internships/participants/{participant}/recovery', [InternshipController::class, 'recoverAccess'])->name('internships.recover-access');
+        Route::post('internships/participants/{participant}/pin', [InternshipController::class, 'resetPin'])->name('internships.reset-pin');
         Route::get('internships/qr', [PublicFormQrController::class, 'internship'])->name('internships.qr');
         Route::get('internships/flyer', [PublicFormFlyerController::class, 'internship'])->name('internships.flyer');
         Route::get('internships/export', [InternshipController::class, 'export'])->name('internships.export');
