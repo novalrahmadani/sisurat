@@ -75,7 +75,6 @@ Route::middleware(['auth'])->group(function () {
         Route::post('internships/participants', [InternshipController::class, 'store'])->name('internships.store');
         Route::put('internships/participants/{participant}', [InternshipController::class, 'update'])->name('internships.update');
         Route::post('internships/participants/{participant}/recovery', [InternshipController::class, 'recoverAccess'])->name('internships.recover-access');
-        Route::post('internships/participants/{participant}/pin', [InternshipController::class, 'resetPin'])->name('internships.reset-pin');
         Route::get('internships/qr', [PublicFormQrController::class, 'internship'])->name('internships.qr');
         Route::get('internships/flyer', [PublicFormFlyerController::class, 'internship'])->name('internships.flyer');
         Route::get('internships/export', [InternshipController::class, 'export'])->name('internships.export');
@@ -177,6 +176,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('letters/batches/{batch}', [LetterBatchController::class, 'show'])->name('letters.batch');
     Route::delete('letters/batches/{batch}', [LetterBatchController::class, 'destroy'])->name('letters.batches.destroy');
     Route::delete('letters/batches/{batch}/letters/{letter}', [LetterBatchController::class, 'destroyLetter'])->name('letters.batches.letters.destroy');
+    Route::put('letters/batches/{batch}/letters/{letter}', [LetterBatchController::class, 'updateLetter'])->name('letters.batches.letters.update');
     Route::get('letters/create', [LetterBatchController::class, 'choose'])->name('letters.create');
     Route::resource('letters', LetterBatchController::class)->only(['index', 'store']);
     Route::resource('institutions', InstitutionController::class)->except(['index', 'show']);
@@ -189,4 +189,3 @@ Route::middleware(['auth'])->group(function () {
 });
 
 require __DIR__.'/settings.php';
-

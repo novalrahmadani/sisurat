@@ -13,4 +13,3 @@ class PmbProspectSetting extends Model
         return ['is_open' => 'boolean'];
     }
 }
-

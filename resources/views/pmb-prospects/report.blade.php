@@ -5,26 +5,27 @@
     <style>
         @page { size: A4 landscape; margin: 10mm 9mm 12mm; }
         * { box-sizing: border-box; }
-        body { color: #18241c; font-family: DejaVu Sans, sans-serif; font-size: 8pt; }
+        body { color: #18241c; font-family: Cambria, "DejaVu Serif", serif; font-size: 9pt; line-height: 1.32; }
         .letterhead-wrap { width: 100%; margin: 0 0 4mm; text-align: center; }
         .letterhead { display: inline-block; width: 220mm; max-width: 100%; height: auto; vertical-align: top; }
-        h1 { margin: 0; text-align: center; font-size: 15pt; }
-        .subtitle { margin: 2mm 0 5mm; text-align: center; color: #506057; font-size: 8pt; }
+        h1 { margin: 0; color: #174f37; text-align: center; font-size: 16pt; font-weight: 700; }
+        .subtitle { margin: 2mm 0 5mm; text-align: center; color: #506057; font-size: 9pt; }
         table { width: 100%; border-collapse: collapse; table-layout: fixed; }
         thead { display: table-header-group; }
         tr { page-break-inside: avoid; }
-        th, td { border: .3mm solid #aab8af; padding: 2mm 1.5mm; vertical-align: top; overflow-wrap: anywhere; }
-        th { background: #e8f1ec; color: #174f37; font-size: 7pt; text-align: left; }
-        .number { width: 7mm; text-align: center; }
-        .name { width: 36mm; }
+        th, td { border: .25mm solid #aab8af; padding: 2.1mm 1.6mm; vertical-align: top; overflow-wrap: anywhere; }
+        th { background: #e8f1ec; color: #174f37; font-size: 8pt; line-height: 1.25; text-align: center; vertical-align: middle; }
+        tbody tr:nth-child(even) td { background: #f8fbf9; }
+        .number { width: 8mm; text-align: center; }
         .program { width: 32mm; }
-        .school { width: 39mm; }
+        .name { width: 36mm; }
+        .school { width: 38mm; }
         .district { width: 31mm; }
-        .address { width: 58mm; }
-        .affiliate { width: 38mm; }
-        .date { width: 22mm; }
-        .empty { padding: 8mm; text-align: center; color: #506057; }
-        .footer { margin-top: 4mm; text-align: right; color: #506057; font-size: 7pt; }
+        .address { width: 52mm; }
+        .affiliate { width: 45mm; }
+        .date { width: 37mm; text-align: center; white-space: nowrap; }
+        .empty { padding: 9mm; text-align: center; color: #506057; }
+        .footer { margin-top: 4.5mm; text-align: right; color: #506057; font-size: 8.5pt; }
     </style>
 </head>
 <body>
@@ -68,4 +69,3 @@
     <p class="footer">Sekretariat PMB · Universitas Nurul Huda</p>
 </body>
 </html>
-

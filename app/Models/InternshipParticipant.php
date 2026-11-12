@@ -25,7 +25,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property CarbonImmutable $end_date
  * @property bool $is_active
  * @property string|null $access_code_hash
- * @property string|null $pin_lookup_hash
  */
 class InternshipParticipant extends Model
 {
@@ -34,9 +33,9 @@ class InternshipParticipant extends Model
 
     public const CATEGORIES = ['smk' => 'Siswa SMK', 'sma' => 'Siswa SMA', 'university' => 'Mahasiswa'];
 
-    protected $fillable = ['name', 'student_number', 'institution', 'study_program', 'participant_category', 'class_level', 'registration_source', 'start_date', 'end_date', 'is_active', 'access_code_hash', 'pin_lookup_hash', 'device_token_hash', 'device_expires_at', 'recovery_token_hash', 'recovery_expires_at'];
+    protected $fillable = ['name', 'student_number', 'institution', 'study_program', 'participant_category', 'class_level', 'registration_source', 'start_date', 'end_date', 'is_active', 'access_code_hash', 'device_token_hash', 'device_expires_at', 'recovery_token_hash', 'recovery_expires_at'];
 
-    protected $hidden = ['access_code_hash', 'pin_lookup_hash', 'device_token_hash', 'device_expires_at', 'recovery_token_hash', 'recovery_expires_at'];
+    protected $hidden = ['access_code_hash', 'device_token_hash', 'device_expires_at', 'recovery_token_hash', 'recovery_expires_at'];
 
     protected function casts(): array
     {

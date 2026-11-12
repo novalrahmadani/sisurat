@@ -44,4 +44,3 @@ class PublicFormLinks
         return (new Writer(new GDLibRenderer(768, 4)))->writeString($this->url($name, $parameters));
     }
 }
-

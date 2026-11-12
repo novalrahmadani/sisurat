@@ -23,8 +23,8 @@ return new class extends Migration
             $table->timestamps();
         });
         $legacyId = DB::table('pmb_signatories')->insertGetId([
-            'name' => 'Wardianto, M.Kom', 'title' => 'Ketua Pusat PMB', 'number' => null,
-            'signature_path' => null, 'stamp_path' => null,
+            'name' => 'Wardianto, M.Kom', 'title' => 'Ketua Pusat PMB', 'number' => 'NIP.Y 19951010202310.1.580',
+            'signature_path' => 'images/pmb-signature.png', 'stamp_path' => 'images/pmb-stamp.png',
             'created_at' => now(), 'updated_at' => now(),
         ]);
         foreach (['letter_batches', 'attendance_events'] as $name) {

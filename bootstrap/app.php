@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Middleware\EnsureActiveAccount;
-use App\Http\Middleware\EnsureHostedHttps;
 use App\Http\Middleware\HandleAppearance;
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\UseBuiltAssetsForNetworkRequests;
@@ -20,11 +19,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->trustProxies(headers: Request::HEADER_X_FORWARDED_PROTO);
         if (getenv('SISURAT_HTTPS_TUNNEL') === '1') {
             $middleware->trustProxies(at: ['127.0.0.1', '::1'], headers: Request::HEADER_X_FORWARDED_FOR | Request::HEADER_X_FORWARDED_PROTO);
         }
-        $middleware->append(EnsureHostedHttps::class);
         $middleware->encryptCookies(except: ['appearance', 'sidebar_state']);
 
         $middleware->web(prepend: [UseBuiltAssetsForNetworkRequests::class], append: [
@@ -37,26 +34,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->appendToPriorityList(StartSession::class, EnsureActiveAccount::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        $exceptions->dontFlash(['pin', 'pin_confirmation']);
         $exceptions->respond(function (Response $response, Throwable $exception, Request $request): Response {
             if ($response->getStatusCode() !== 419
+                || ! $request->routeIs('login.store')
                 || ($request->expectsJson() && ! $request->headers->has('X-Inertia'))) {
-                return $response;
-            }
-
-            if ($request->isMethod('POST') && $request->routeIs('internship.*')) {
-                $notice = $request->routeIs('internship.verify-pin')
-                    ? 'Sesi formulir telah diperbarui. Masukkan PIN Anda kembali. PIN tetap berlaku.'
-                    : 'Sesi formulir telah diperbarui. Silakan periksa dan kirim ulang formulir. Pengiriman sebelumnya belum diproses.';
-
-                $redirect = $request->routeIs('internship.recover')
-                    ? to_route('internship.recovery', ['token' => $request->route('token')], status: 303)
-                    : to_route('internship.show', status: 303);
-
-                return $redirect->with('internship_session_notice', $notice);
-            }
-
-            if (! $request->routeIs('login.store')) {
                 return $response;
             }
 

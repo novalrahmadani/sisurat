@@ -12,7 +12,6 @@ import {
     Plus,
     Printer,
     Search,
-    Trash2,
     UsersRound,
     X,
     MapPin,
@@ -24,9 +23,7 @@ import {
     index,
     store,
     update,
-    destroy as destroyParticipant,
     recoverAccess,
-    resetPin as resetParticipantPin,
     exportMethod,
     print as printReport,
     signature,
@@ -47,7 +44,6 @@ type Participant = {
     start_date: string;
     end_date: string;
     is_active: boolean;
-    attendance_count?: number;
 };
 type Record = {
     id: number;
@@ -74,7 +70,6 @@ const props = defineProps<{
     today: string;
     stats: { active: number; present: number; pending: number };
     issuedAccess: { name: string; url: string } | null;
-    issuedPin: { name: string; pin: string } | null;
     location: { configured: boolean; radius_meters: number };
     publicAttendanceUrl: string;
 }>();
@@ -82,12 +77,8 @@ const query = ref(props.filters.q);
 const month = ref(props.filters.month);
 const editorOpen = ref(false);
 const editingId = ref<number | null>(null);
-const deletingId = ref<number | null>(null);
 const copied = ref('');
 const codeInput = ref<HTMLInputElement | null>(null);
-const pinInput = ref<HTMLInputElement | null>(null);
-const issuingPinId = ref<number | null>(null);
-const copiedPin = ref('');
 const form = useForm({
     name: '',
     participant_category: '',
@@ -97,6 +88,8 @@ const form = useForm({
     study_program: '',
     start_date: props.today,
     end_date: props.today,
+    pin: '',
+    pin_confirmation: '',
     is_active: true,
 });
 const pagination = computed(() =>
@@ -126,6 +119,8 @@ function edit(participant?: Participant) {
             study_program: participant.study_program ?? '',
             start_date: participant.start_date,
             end_date: participant.end_date,
+            pin: '',
+            pin_confirmation: '',
             is_active: participant.is_active,
         });
     editorOpen.value = true;
@@ -152,46 +147,6 @@ function resetCode(participant: Participant) {
     )
         router.post(recoverAccess.url(participant.id));
 }
-function changePin(participant: Participant) {
-    if (
-        issuingPinId.value !== null ||
-        !window.confirm(
-            `Buat PIN baru untuk ${participant.name}? PIN lama dan akses perangkat yang tersimpan akan dinonaktifkan. PIN baru hanya ditampilkan sekali.`,
-        )
-    ) {
-        return;
-    }
-
-    issuingPinId.value = participant.id;
-    router.post(resetParticipantPin.url(participant.id), {
-        preserveScroll: true,
-        onFinish: () => {
-            issuingPinId.value = null;
-        },
-    });
-}
-function removeParticipant(participant: Participant) {
-    if (
-        deletingId.value !== null ||
-        !window.confirm(
-            `Hapus peserta magang "${participant.name}"? Data peserta, ${participant.attendance_count ?? 0} catatan kehadiran, dan tanda tangannya akan dihapus permanen. Tindakan ini tidak dapat dibatalkan.`,
-        )
-    ) {
-        return;
-    }
-
-    deletingId.value = participant.id;
-    router.delete(destroyParticipant.url(participant.id), {
-        data: { q: props.filters.q, month: props.filters.month },
-        preserveScroll: true,
-        onSuccess: () => {
-            if (editingId.value === participant.id) editorOpen.value = false;
-        },
-        onFinish: () => {
-            deletingId.value = null;
-        },
-    });
-}
 async function copyCode() {
     if (!props.issuedAccess) return;
     try {
@@ -200,17 +155,6 @@ async function copyCode() {
     } catch {
         codeInput.value?.select();
         copied.value = 'Tautan sudah dipilih. Gunakan Salin atau Ctrl+C.';
-    }
-}
-async function copyIssuedPin() {
-    if (!props.issuedPin) return;
-
-    try {
-        await navigator.clipboard.writeText(props.issuedPin.pin);
-        copiedPin.value = 'PIN berhasil disalin.';
-    } catch {
-        pinInput.value?.select();
-        copiedPin.value = 'PIN sudah dipilih. Salin secara manual.';
     }
 }
 function dateLabel(value: string) {
@@ -333,34 +277,6 @@ function duration(minutes: number | null) {
                 </button>
             </div>
             <p v-if="copied" class="mt-2 text-xs">{{ copied }}</p>
-        </div>
-        <div
-            v-if="issuedPin"
-            role="status"
-            class="rounded-2xl border border-emerald-300/70 bg-emerald-50 p-5 text-emerald-950 dark:bg-emerald-950 dark:text-emerald-100"
-        >
-            <h2 class="flex items-center gap-2 font-semibold">
-                <KeyRound class="size-5" />PIN baru untuk {{ issuedPin.name }}
-            </h2>
-            <p class="mt-2 text-sm leading-6">
-                Berikan PIN ini secara pribadi kepada peserta. PIN hanya ditampilkan sekali.
-            </p>
-            <div class="mt-3 flex flex-wrap gap-2">
-                <input
-                    ref="pinInput"
-                    :value="issuedPin.pin"
-                    readonly
-                    aria-label="PIN absensi peserta"
-                    class="sisurat-input min-w-0 flex-1 bg-white text-lg font-semibold tracking-[0.25em] text-emerald-950"
-                /><button
-                    type="button"
-                    class="sisurat-primary-action"
-                    @click="copyIssuedPin"
-                >
-                    <Copy class="size-4" />Salin PIN
-                </button>
-            </div>
-            <p v-if="copiedPin" class="mt-2 text-xs">{{ copiedPin }}</p>
         </div>
         <div
             class="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border bg-card p-5"
@@ -622,6 +538,19 @@ function duration(minutes: number | null) {
                         /><InputError :message="form.errors.end_date" />
                     </div>
                 </div>
+                <div class="grid gap-5 sm:grid-cols-2">
+                    <div>
+                        <label for="intern-pin" class="mb-2 block text-sm font-medium">{{ editingId ? 'PIN baru (opsional)' : 'PIN absensi (opsional)' }}</label>
+                        <input id="intern-pin" v-model="form.pin" class="sisurat-input w-full" type="password" inputmode="numeric" pattern="[0-9]{6}" minlength="6" maxlength="6" autocomplete="new-password" />
+                        <InputError :message="form.errors.pin" />
+                        <p class="mt-1 text-[11px] leading-5 text-muted-foreground">Isi 6 angka untuk menetapkan atau mengganti PIN. Kosongkan jika tidak diubah.</p>
+                    </div>
+                    <div>
+                        <label for="intern-pin-confirmation" class="mb-2 block text-sm font-medium">Ulangi PIN</label>
+                        <input id="intern-pin-confirmation" v-model="form.pin_confirmation" class="sisurat-input w-full" type="password" inputmode="numeric" pattern="[0-9]{6}" minlength="6" maxlength="6" autocomplete="new-password" />
+                        <InputError :message="form.errors.pin_confirmation" />
+                    </div>
+                </div>
                 <label class="flex items-center gap-3 text-sm"
                     ><input
                         v-model="form.is_active"
@@ -733,32 +662,10 @@ function duration(minutes: number | null) {
                         ><button
                             type="button"
                             class="sisurat-secondary-action !px-3 !py-2 !text-xs"
-                            :disabled="issuingPinId !== null"
-                            @click="changePin(participant)"
-                        >
-                            <KeyRound class="size-3.5" />{{
-                                issuingPinId === participant.id ? 'Membuat PIN…' : 'Ganti PIN'
-                            }}</button
-                        ><button
-                            type="button"
-                            class="sisurat-secondary-action !px-3 !py-2 !text-xs"
                             @click="resetCode(participant)"
                         >
                             <KeyRound class="size-3.5" />Pulihkan akses
                             perangkat
-                        </button>
-                        <button
-                            type="button"
-                            class="sisurat-secondary-action !px-3 !py-2 !text-xs !text-destructive hover:!bg-destructive/10"
-                            :disabled="deletingId !== null"
-                            :aria-label="`Hapus peserta ${participant.name}`"
-                            @click="removeParticipant(participant)"
-                        >
-                            <Trash2 class="size-3.5" />{{
-                                deletingId === participant.id
-                                    ? 'Menghapus…'
-                                    : 'Hapus peserta'
-                            }}
                         </button>
                     </div>
                 </article>

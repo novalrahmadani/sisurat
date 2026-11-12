@@ -192,4 +192,3 @@ const categories = computed(() => [
         </section>
     </main>
 </template>
-

@@ -434,6 +434,7 @@ class LetterBatchController extends Controller
     {
         $batch->load(['letters.assignees']);
         $batch->setAttribute('can_delete', Gate::allows('delete', $batch));
+        $batch->setAttribute('can_edit', Gate::allows('update', $batch));
 
         $signatory = $batch->pmbSignatory ?? PmbSignatory::legacy();
 
@@ -518,6 +519,153 @@ class LetterBatchController extends Controller
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Surat dihapus dari arsip. Nomor surat tetap dicadangkan.']);
 
         return $isEmpty ? $this->archiveRedirect($filters) : to_route('letters.batch', ['batch' => $batch->id]);
+    }
+
+    public function updateLetter(Request $request, LetterBatch $batch, Letter $letter): RedirectResponse
+    {
+        Gate::authorize('update', $batch);
+        abort_unless((int) $letter->letter_batch_id === (int) $batch->id, 404);
+
+        $rules = match ($batch->type) {
+            'permission' => [
+                'recipient_salutation' => ['nullable', 'string', 'max:150'],
+                'recipient_position' => ['required', 'string', 'max:150'],
+                'recipient_name' => ['nullable', 'string', 'max:150'],
+                'institution_name' => ['required', 'string', 'max:255'],
+                'recipient_district' => ['nullable', 'string', 'max:150'],
+                'recipient_address' => ['nullable', 'string', 'max:500'],
+            ],
+            'assignment' => [
+                'recipient_district' => ['required', 'string', 'max:150'],
+                'activity_destination' => ['required', 'string', 'max:255'],
+                'assignees' => ['required', 'array', 'min:1', 'max:30'],
+                'assignees.*.name' => ['required', 'string', 'max:150'],
+                'assignees.*.office' => ['required', 'string', 'max:150'],
+            ],
+            'pkkmb' => [
+                'participant_name' => ['required', 'string', 'max:150'],
+                'participant_nim' => ['required', 'string', 'max:50'],
+                'participant_study_program' => ['required', 'string', 'max:150'],
+                'participant_faculty' => ['required', 'string', 'max:150'],
+                'participant_result' => ['required', Rule::in(['passed', 'not_passed'])],
+                'participation_status' => ['required', Rule::in(['attended', 'completed'])],
+            ],
+            'general' => [
+                'recipient_salutation' => ['nullable', 'string', 'max:150'],
+                'recipient_position' => ['nullable', 'string', 'max:150'],
+                'recipient_name' => ['nullable', 'required_without:institution_name', 'string', 'max:150'],
+                'institution_name' => ['nullable', 'required_without:recipient_name', 'string', 'max:255'],
+                'recipient_address' => ['nullable', 'string', 'max:500'],
+            ],
+            default => abort(404),
+        };
+
+        $rules += [
+            'letter_date' => ['required', 'date'],
+            'signatory_title' => ['required', 'string', 'max:150'],
+            'signatory_name' => ['required', 'string', 'max:150'],
+            'signatory_number' => ['nullable', 'string', 'max:100'],
+            'include_signature' => ['required', 'boolean'],
+            'include_stamp' => ['required', 'boolean'],
+            'event_start' => [$batch->type === 'assignment' || $batch->type === 'pkkmb' ? 'required' : 'nullable', 'date'],
+            'event_end' => [$batch->type === 'assignment' || $batch->type === 'pkkmb' ? 'required' : 'nullable', 'date', 'after_or_equal:event_start'],
+            'event_location' => ['nullable', 'string', 'max:255'],
+            'academic_year' => ['nullable', 'string', 'max:30'],
+            'pkkmb_theme' => ['nullable', 'string', 'max:1000'],
+            'subject' => ['nullable', 'string', 'max:255'],
+            'attachment' => ['nullable', 'string', 'max:120'],
+            'body' => ['nullable', 'string', 'max:20000', 'not_regex:/<[^>]*>/'],
+            'template_fields' => ['required', 'array:title,subject,attachment,basis,opening_greeting,introduction,description,closing,closing_greeting'],
+        ];
+
+        foreach (['title', 'subject', 'attachment', 'basis', 'opening_greeting', 'introduction', 'description', 'closing', 'closing_greeting'] as $field) {
+            $rules['template_fields.'.$field] = ['nullable', 'string', 'max:20000'];
+        }
+
+        if ($batch->type === 'general') {
+            $rules += [
+                'general_options' => ['required', 'array:category,letter_title,opening_greeting,closing_greeting,closing_body,event_date,event_time,event_location,event_agenda'],
+                'general_options.category' => ['nullable', 'string', 'max:50'],
+                'general_options.letter_title' => ['nullable', 'string', 'max:255'],
+                'general_options.opening_greeting' => ['nullable', 'string', 'max:255'],
+                'general_options.closing_greeting' => ['nullable', 'string', 'max:255'],
+                'general_options.closing_body' => ['nullable', 'string', 'max:20000', 'not_regex:/<[^>]*>/'],
+                'general_options.event_date' => ['nullable', 'date'],
+                'general_options.event_time' => ['nullable', 'string', 'max:120'],
+                'general_options.event_location' => ['nullable', 'string', 'max:500'],
+                'general_options.event_agenda' => ['nullable', 'string', 'max:1000'],
+            ];
+        }
+
+        $data = $request->validate($rules);
+
+        DB::transaction(function () use ($batch, $letter, $data): void {
+            $lockedBatch = LetterBatch::query()->lockForUpdate()->findOrFail($batch->id);
+            Gate::authorize('update', $lockedBatch);
+            $lockedLetter = $lockedBatch->letters()->whereKey($letter->id)->lockForUpdate()->firstOrFail();
+
+            $attributes = array_diff_key($data, [
+                'assignees' => true,
+                'letter_date' => true,
+                'signatory_title' => true,
+                'signatory_name' => true,
+                'signatory_number' => true,
+                'include_signature' => true,
+                'include_stamp' => true,
+                'event_start' => true,
+                'event_end' => true,
+                'event_location' => true,
+                'academic_year' => true,
+                'pkkmb_theme' => true,
+                'subject' => true,
+                'attachment' => true,
+                'body' => true,
+                'general_options' => true,
+                'template_fields' => true,
+            ]);
+            foreach ($attributes as $key => $value) {
+                $attributes[$key] = is_string($value) ? trim($value) : $value;
+            }
+            $lockedLetter->fill($attributes)->save();
+
+            $lockedLetter->content_overrides = [
+                'letter_date' => $data['letter_date'],
+                'signatory_title' => trim($data['signatory_title']),
+                'signatory_name' => trim($data['signatory_name']),
+                'signatory_number' => filled($data['signatory_number'] ?? null) ? trim($data['signatory_number']) : null,
+                'include_signature' => $data['include_signature'],
+                'include_stamp' => $data['include_stamp'],
+                'event_start' => $data['event_start'] ?? null,
+                'event_end' => $data['event_end'] ?? null,
+                'event_location' => filled($data['event_location'] ?? null) ? trim($data['event_location']) : null,
+                'academic_year' => filled($data['academic_year'] ?? null) ? trim($data['academic_year']) : null,
+                'pkkmb_theme' => filled($data['pkkmb_theme'] ?? null) ? trim($data['pkkmb_theme']) : null,
+                'subject' => filled($data['subject'] ?? null) ? trim($data['subject']) : null,
+                'attachment' => filled($data['attachment'] ?? null) ? trim($data['attachment']) : null,
+                'body' => str_replace(["\r\n", "\r"], "\n", trim($data['body'] ?? '')),
+                'general_options' => $lockedBatch->type === 'general' ? $data['general_options'] : null,
+                'template_fields' => collect($data['template_fields'])
+                    ->map(fn (?string $value): string => trim($value ?? ''))
+                    ->all(),
+            ];
+            $lockedLetter->save();
+
+            if ($lockedBatch->type === 'assignment') {
+                $lockedLetter->assignees()->delete();
+                foreach (array_values($data['assignees']) as $index => $assignee) {
+                    $lockedLetter->assignees()->create([
+                        'name' => trim($assignee['name']),
+                        'office' => trim($assignee['office']),
+                        'district' => trim($data['recipient_district']),
+                        'sort_order' => $index,
+                    ]);
+                }
+            }
+        }, 5);
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Perubahan surat berhasil disimpan. Nomor surat tetap.']);
+
+        return to_route('letters.batch', ['batch' => $batch->id]);
     }
 
     /**
@@ -767,4 +915,3 @@ class LetterBatchController extends Controller
         ][$month];
     }
 }
-

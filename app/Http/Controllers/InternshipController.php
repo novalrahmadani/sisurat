@@ -7,14 +7,13 @@ use App\Models\InternshipAttendance;
 use App\Models\InternshipParticipant;
 use App\Support\InternshipDeviceAccess;
 use App\Support\InternshipLocationAccess;
-use App\Support\InternshipPinAccess;
 use App\Support\PublicFormLinks;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response as HttpResponse;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 use Inertia\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -26,23 +25,19 @@ class InternshipController extends Controller
     public function index(Request $request, PublicFormLinks $links): Response
     {
         $filters = $this->filters($request);
-        $participants = InternshipParticipant::query()->withCount('attendances')->when($filters['q'], fn (Builder $query, string $q) => $this->searchParticipants($query, $q))
+        $participants = InternshipParticipant::query()->when($filters['q'], fn (Builder $query, string $q) => $this->searchParticipants($query, $q))
             ->orderBy('name')->paginate(12, ['*'], 'participants_page')->withQueryString();
         $records = $this->records($filters)->with('participant')->paginate(25, ['*'], 'records_page')->withQueryString();
         $today = CarbonImmutable::now('Asia/Jakarta')->toDateString();
 
         return Inertia::render('internship/Index', [
-            'participants' => $participants->through(fn (InternshipParticipant $participant): array => [
-                ...$this->participantData($participant),
-                'attendance_count' => (int) $participant->getAttribute('attendances_count'),
-            ]),
+            'participants' => $participants->through(fn (InternshipParticipant $participant): array => $this->participantData($participant)),
             'records' => $records->through(fn (InternshipAttendance $record): array => [...$record->presentation(), 'participant' => $this->participantData($record->participant)]),
             'filters' => $filters, 'today' => $today,
             'stats' => ['active' => InternshipParticipant::query()->where('is_active', true)->whereDate('start_date', '<=', $today)->whereDate('end_date', '>=', $today)->count(),
                 'present' => InternshipAttendance::query()->whereDate('attendance_date', $today)->count(),
                 'pending' => InternshipAttendance::query()->whereDate('attendance_date', $today)->whereNull('checked_out_at')->count()],
             'issuedAccess' => $request->session()->pull('internship_issued_access'),
-            'issuedPin' => $request->session()->pull('internship_admin_issued_pin'),
             'location' => $this->locations->presentation(),
             'publicAttendanceUrl' => $links->url('internship.show'),
         ]);
@@ -50,15 +45,34 @@ class InternshipController extends Controller
 
     public function store(InternshipParticipantRequest $request): RedirectResponse
     {
-        $participant = InternshipParticipant::query()->create([...$request->validated(), 'registration_source' => 'admin']);
-        $request->session()->put('internship_issued_access', ['name' => $participant->name, 'url' => $this->devices->recoveryUrl($participant)]);
+        $data = $request->validated();
+        $pin = $data['pin'] ?? null;
+        unset($data['pin']);
+        $participant = InternshipParticipant::query()->create([...$data, 'access_code_hash' => null, 'registration_source' => 'admin']);
+        $url = $this->devices->recoveryUrl($participant);
+        if (is_string($pin) && $pin !== '') {
+            $participant->update(['access_code_hash' => Hash::make($pin)]);
+        }
+        $request->session()->put('internship_issued_access', ['name' => $participant->name, 'url' => $url]);
 
         return to_route('internships.index', ['tab' => 'participants']);
     }
 
     public function update(InternshipParticipantRequest $request, InternshipParticipant $participant): RedirectResponse
     {
-        $participant->update($request->validated());
+        $data = $request->validated();
+        $pin = $data['pin'] ?? null;
+        unset($data['pin']);
+        $participant->update($data);
+        if (is_string($pin) && $pin !== '') {
+            $participant->update([
+                'access_code_hash' => Hash::make($pin),
+                'device_token_hash' => null,
+                'device_expires_at' => null,
+                'recovery_token_hash' => null,
+                'recovery_expires_at' => null,
+            ]);
+        }
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Data peserta magang diperbarui.']);
 
         return to_route('internships.index', ['tab' => 'participants']);
@@ -69,36 +83,6 @@ class InternshipController extends Controller
         $request->session()->put('internship_issued_access', ['name' => $participant->name, 'url' => $this->devices->recoveryUrl($participant)]);
 
         return to_route('internships.index', ['tab' => 'participants']);
-    }
-
-    public function resetPin(Request $request, InternshipParticipant $participant, InternshipPinAccess $pins): RedirectResponse
-    {
-        $pin = DB::transaction(function () use ($participant, $pins): string {
-            $lockedParticipant = InternshipParticipant::query()->lockForUpdate()->findOrFail($participant->id);
-            $pin = $pins->issue($lockedParticipant);
-            $lockedParticipant->update(['device_token_hash' => null, 'device_expires_at' => null]);
-
-            return $pin;
-        }, 5);
-        $request->session()->put('internship_admin_issued_pin', ['name' => $participant->name, 'pin' => $pin]);
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'PIN absensi peserta berhasil diganti.']);
-
-        return to_route('internships.index', ['tab' => 'participants']);
-    }
-
-    public function destroy(Request $request, InternshipParticipant $participant): RedirectResponse
-    {
-        $filters = $this->filters($request);
-
-        DB::transaction(function () use ($participant): void {
-            $lockedParticipant = InternshipParticipant::query()->lockForUpdate()->findOrFail($participant->id);
-            $lockedParticipant->attendances()->delete();
-            $lockedParticipant->delete();
-        }, 5);
-
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Peserta magang beserta riwayat absensi dan tanda tangannya berhasil dihapus.']);
-
-        return to_route('internships.index', [...$filters, 'tab' => 'participants']);
     }
 
     public function export(Request $request): StreamedResponse

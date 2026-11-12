@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { Head, Link } from '@inertiajs/vue3';
-import { ArrowLeft, Copy, Printer, Trash2 } from '@lucide/vue';
+import { Head, Link, useForm } from '@inertiajs/vue3';
+import { ArrowLeft, Copy, Pencil, Plus, Printer, Trash2, X } from '@lucide/vue';
 import { computed, ref, shallowRef } from 'vue';
 import { Button } from '@/components/ui/button';
 import {
@@ -26,6 +26,7 @@ import { general, index as lettersIndex, pkkmb } from '@/routes/letters';
 import assignment from '@/routes/letters/assignment';
 import { destroy as destroyBatch } from '@/routes/letters/batches';
 import { destroy as destroyLetter } from '@/routes/letters/batches/letters';
+import { update as updateLetter } from '@/routes/letters/batches/letters';
 import permission from '@/routes/letters/permission';
 
 type Assignee = {
@@ -33,6 +34,50 @@ type Assignee = {
     name: string;
     office: string;
     district: string;
+};
+
+type GeneralLetterOptions = {
+    version?: number;
+    category?: string;
+    letter_title?: string | null;
+    opening_greeting?: string | null;
+    closing_greeting?: string | null;
+    closing_body?: string | null;
+    event_date?: string | null;
+    event_time?: string | null;
+    event_location?: string | null;
+    event_agenda?: string | null;
+};
+
+type GeneralLetterEditOptions = {
+    category: string;
+    letter_title: string;
+    opening_greeting: string;
+    closing_greeting: string;
+    closing_body: string;
+    event_date: string;
+    event_time: string;
+    event_location: string;
+    event_agenda: string;
+};
+
+type LetterContentOverrides = {
+    letter_date?: string;
+    signatory_title?: string;
+    signatory_name?: string;
+    signatory_number?: string | null;
+    include_signature?: boolean;
+    include_stamp?: boolean;
+    event_start?: string | null;
+    event_end?: string | null;
+    event_location?: string | null;
+    academic_year?: string | null;
+    pkkmb_theme?: string | null;
+    subject?: string | null;
+    attachment?: string | null;
+    body?: string | null;
+    general_options?: GeneralLetterOptions | null;
+    template_fields?: LetterTemplateFields;
 };
 
 type Letter = {
@@ -52,29 +97,20 @@ type Letter = {
     participant_faculty?: string | null;
     participant_result?: 'passed' | 'not_passed' | null;
     participation_status: ParticipationStatus | null;
+    content_overrides?: LetterContentOverrides | null;
     assignees: Assignee[];
 };
 
 type Batch = {
     id: number;
     can_delete: boolean;
+    can_edit: boolean;
     is_trial?: boolean;
     type: LetterType;
     subject?: string | null;
     attachment?: string | null;
     body?: string | null;
-    general_options?: {
-        version?: number;
-        category?: string;
-        letter_title?: string | null;
-        opening_greeting?: string | null;
-        closing_greeting?: string | null;
-        closing_body?: string | null;
-        event_date?: string | null;
-        event_time?: string | null;
-        event_location?: string | null;
-        event_agenda?: string | null;
-    } | null;
+    general_options?: GeneralLetterOptions | null;
     letter_date: string;
     event_start: string | null;
     event_end: string | null;
@@ -96,6 +132,39 @@ type DeletionTarget = {
     recipient?: string;
     count?: number;
 };
+type LetterEditAssignee = { name: string; office: string };
+type LetterEditForm = {
+    recipient_salutation: string;
+    recipient_position: string;
+    recipient_name: string;
+    institution_name: string;
+    recipient_district: string;
+    recipient_address: string;
+    activity_destination: string;
+    participant_name: string;
+    participant_nim: string;
+    participant_study_program: string;
+    participant_faculty: string;
+    participant_result: 'passed' | 'not_passed' | '';
+    participation_status: 'attended' | 'completed' | '';
+    letter_date: string;
+    signatory_title: string;
+    signatory_name: string;
+    signatory_number: string;
+    include_signature: boolean;
+    include_stamp: boolean;
+    event_start: string;
+    event_end: string;
+    event_location: string;
+    academic_year: string;
+    pkkmb_theme: string;
+    subject: string;
+    attachment: string;
+    body: string;
+    general_options: GeneralLetterEditOptions;
+    template_fields: Required<LetterTemplateFields>;
+    assignees: LetterEditAssignee[];
+};
 
 const props = defineProps<{
     batch: Batch;
@@ -108,6 +177,60 @@ const props = defineProps<{
     };
 }>();
 const deleteTrigger = shallowRef<HTMLElement | null>(null);
+const editingLetter = ref<Letter | null>(null);
+const editOpen = ref(false);
+const editForm = useForm<LetterEditForm>({
+    recipient_salutation: '',
+    recipient_position: '',
+    recipient_name: '',
+    institution_name: '',
+    recipient_district: '',
+    recipient_address: '',
+    activity_destination: '',
+    participant_name: '',
+    participant_nim: '',
+    participant_study_program: '',
+    participant_faculty: '',
+    participant_result: '',
+    participation_status: '',
+    letter_date: '',
+    signatory_title: '',
+    signatory_name: '',
+    signatory_number: '',
+    include_signature: false,
+    include_stamp: false,
+    event_start: '',
+    event_end: '',
+    event_location: '',
+    academic_year: '',
+    pkkmb_theme: '',
+    subject: '',
+    attachment: '',
+    body: '',
+    general_options: {
+        category: '',
+        letter_title: '',
+        opening_greeting: '',
+        closing_greeting: '',
+        closing_body: '',
+        event_date: '',
+        event_time: '',
+        event_location: '',
+        event_agenda: '',
+    },
+    template_fields: {
+        title: '',
+        subject: '',
+        attachment: '',
+        basis: '',
+        opening_greeting: '',
+        introduction: '',
+        description: '',
+        closing: '',
+        closing_greeting: '',
+    },
+    assignees: [],
+});
 const deleteNeighborId = ref<number | null>(null);
 const {
     deleteForm,
@@ -145,6 +268,94 @@ function letterRecipient(letter: Letter): string {
         letter.recipient_position ||
         'Penerima surat'
     );
+}
+
+function openLetterEditor(letter: Letter): void {
+    editingLetter.value = letter;
+    const overrides = letter.content_overrides ?? {};
+    const generalOptions = overrides.general_options ?? props.batch.general_options ?? {};
+    const fields = letterTemplate(letter) ?? {};
+    editForm.defaults({
+        recipient_salutation: letter.recipient_salutation ?? '',
+        recipient_position: letter.recipient_position ?? '',
+        recipient_name: letter.recipient_name ?? '',
+        institution_name: letter.institution_name ?? '',
+        recipient_district: letter.recipient_district ?? '',
+        recipient_address: letter.recipient_address ?? '',
+        activity_destination: letter.activity_destination ?? '',
+        participant_name: letter.participant_name ?? '',
+        participant_nim: letter.participant_nim ?? '',
+        participant_study_program: letter.participant_study_program ?? '',
+        participant_faculty: letter.participant_faculty ?? '',
+        participant_result: letter.participant_result ?? '',
+        participation_status: letter.participation_status ?? '',
+        letter_date: (overrides.letter_date ?? props.batch.letter_date).slice(0, 10),
+        signatory_title: overrides.signatory_title ?? props.batch.signatory_title,
+        signatory_name: overrides.signatory_name ?? props.batch.signatory_name,
+        signatory_number: overrides.signatory_number ?? props.batch.signatory_number ?? '',
+        include_signature: overrides.include_signature ?? Boolean(props.batch.include_signature ?? isPmbSigner(letter)),
+        include_stamp: overrides.include_stamp ?? Boolean(props.batch.include_stamp ?? isPmbSigner(letter)),
+        event_start: (overrides.event_start ?? props.batch.event_start ?? '').slice(0, 10),
+        event_end: (overrides.event_end ?? props.batch.event_end ?? '').slice(0, 10),
+        event_location: overrides.event_location ?? props.batch.event_location ?? '',
+        academic_year: overrides.academic_year ?? props.batch.academic_year ?? '',
+        pkkmb_theme: overrides.pkkmb_theme ?? props.batch.pkkmb_options?.theme ?? '',
+        subject: overrides.subject ?? props.batch.subject ?? '',
+        attachment: overrides.attachment ?? props.batch.attachment ?? '',
+        body: overrides.body ?? props.batch.body ?? '',
+        general_options: {
+            category: generalOptions.category ?? '',
+            letter_title: generalOptions.letter_title ?? '',
+            opening_greeting: generalOptions.opening_greeting ?? '',
+            closing_greeting: generalOptions.closing_greeting ?? '',
+            closing_body: generalOptions.closing_body ?? '',
+            event_date: (generalOptions.event_date ?? '').slice(0, 10),
+            event_time: generalOptions.event_time ?? '',
+            event_location: generalOptions.event_location ?? '',
+            event_agenda: generalOptions.event_agenda ?? '',
+        },
+        template_fields: {
+            title: fields.title ?? '',
+            subject: fields.subject ?? '',
+            attachment: fields.attachment ?? '',
+            basis: fields.basis ?? '',
+            opening_greeting: fields.opening_greeting ?? '',
+            introduction: fields.introduction ?? '',
+            description: fields.description ?? '',
+            closing: fields.closing ?? '',
+            closing_greeting: fields.closing_greeting ?? '',
+        },
+        assignees: letter.assignees.map(({ name, office }) => ({ name, office })),
+    });
+    editForm.reset();
+    editForm.clearErrors();
+    editOpen.value = true;
+}
+
+function saveLetterEdits(): void {
+    if (!editingLetter.value || editForm.processing) return;
+
+    editForm.put(
+        updateLetter.url({
+            batch: props.batch.id,
+            letter: editingLetter.value.id,
+        }),
+        {
+            preserveScroll: true,
+            onSuccess: () => {
+                editOpen.value = false;
+                editingLetter.value = null;
+            },
+        },
+    );
+}
+
+function addEditAssignee(): void {
+    editForm.assignees.push({ name: '', office: '' });
+}
+
+function assigneeEditError(index: number, field: 'name' | 'office'): string | undefined {
+    return editForm.errors[`assignees.${index}.${field}`];
 }
 
 function requestBatchDeletion(event: Event): void {
@@ -231,27 +442,79 @@ const isReferencePkkmb = computed(
         props.batch.type === 'pkkmb' &&
         props.batch.pkkmb_options?.version === 1,
 );
-const isPmbSigner = computed(() => {
+function documentDate(letter: Letter): string {
+    return letter.content_overrides?.letter_date ?? props.batch.letter_date;
+}
+
+function signatoryTitle(letter: Letter): string {
+    return letter.content_overrides?.signatory_title ?? props.batch.signatory_title;
+}
+
+function signatoryName(letter: Letter): string {
+    return letter.content_overrides?.signatory_name ?? props.batch.signatory_name;
+}
+
+function signatoryNumber(letter: Letter): string | null {
+    return letter.content_overrides?.signatory_number ?? props.batch.signatory_number;
+}
+
+function eventStart(letter: Letter): string | null {
+    return letter.content_overrides?.event_start ?? props.batch.event_start;
+}
+
+function eventEnd(letter: Letter): string | null {
+    return letter.content_overrides?.event_end ?? props.batch.event_end;
+}
+
+function eventLocation(letter: Letter): string | null {
+    return letter.content_overrides?.event_location ?? props.batch.event_location;
+}
+
+function academicYear(letter: Letter): string | null {
+    return letter.content_overrides?.academic_year ?? props.batch.academic_year;
+}
+
+function pkkmbTheme(letter: Letter): string {
+    return letter.content_overrides?.pkkmb_theme ?? props.batch.pkkmb_options?.theme ?? '';
+}
+
+function subject(letter: Letter): string | null {
+    return letter.content_overrides?.subject ?? props.batch.subject ?? null;
+}
+
+function attachment(letter: Letter): string | null {
+    return letter.content_overrides?.attachment ?? props.batch.attachment ?? null;
+}
+
+function body(letter: Letter): string | null {
+    return letter.content_overrides?.body ?? props.batch.body ?? null;
+}
+
+function isPmbSigner(letter: Letter): boolean {
     const normalized = (value: string) =>
         value.toLowerCase().replace(/[^a-z0-9]/g, '');
     return (
         !!props.signatureOwnerName &&
-        normalized(props.batch.signatory_name) ===
+        normalized(signatoryName(letter)) ===
             normalized(props.signatureOwnerName)
     );
-});
-const includeSignature = computed(
-    () =>
-        (props.batch.include_signature ?? isPmbSigner.value) &&
-        isPmbSigner.value &&
-        !!props.pmbSignatory.signature_url,
-);
-const includeStamp = computed(
-    () =>
-        (props.batch.include_stamp ?? isPmbSigner.value) &&
-        isPmbSigner.value &&
-        !!props.pmbSignatory.stamp_url,
-);
+}
+
+function includeSignature(letter: Letter): boolean {
+    return (
+        (letter.content_overrides?.include_signature ?? props.batch.include_signature ?? isPmbSigner(letter)) &&
+        isPmbSigner(letter) &&
+        !!props.pmbSignatory.signature_url
+    );
+}
+
+function includeStamp(letter: Letter): boolean {
+    return (
+        (letter.content_overrides?.include_stamp ?? props.batch.include_stamp ?? isPmbSigner(letter)) &&
+        isPmbSigner(letter) &&
+        !!props.pmbSignatory.stamp_url
+    );
+}
 const preparingPrint = ref(false);
 const printError = ref('');
 function bodyParagraphs(value: string | null | undefined): string[] {
@@ -285,8 +548,50 @@ const generalEventRows = computed(() => {
     ].filter((row) => row.value);
 });
 
+function generalOptions(letter: Letter): GeneralLetterOptions | null {
+    return letter.content_overrides?.general_options ?? props.batch.general_options ?? null;
+}
+
+function generalParagraphsFor(letter: Letter): string[] {
+    return bodyParagraphs(body(letter));
+}
+
+function generalClosingParagraphsFor(letter: Letter): string[] {
+    return bodyParagraphs(generalOptions(letter)?.closing_body);
+}
+
+function generalOpeningFor(letter: Letter): string {
+    const details = generalOptions(letter);
+    return details
+        ? details.opening_greeting || ''
+        : 'Assalamu’alaikum Warahmatullahi Wabarakatuh';
+}
+
+function generalClosingFor(letter: Letter): string {
+    const details = generalOptions(letter);
+    return details
+        ? details.closing_greeting || ''
+        : 'Wassalamu’alaikum Warahmatullahi Wabarakatuh';
+}
+
+function generalEventRowsFor(letter: Letter): Array<{ label: string; value: string }> {
+    const details = generalOptions(letter);
+    return [
+        { label: 'Tanggal', value: formatDate(details?.event_date || null) },
+        { label: 'Waktu', value: details?.event_time ?? '' },
+        { label: 'Tempat', value: details?.event_location ?? '' },
+        { label: 'Agenda', value: details?.event_agenda ?? '' },
+    ].filter((row) => row.value.length > 0);
+}
+
 async function printLetters() {
-    if (preparingPrint.value || deleteForm.processing || deleteOpen.value)
+    if (
+        preparingPrint.value ||
+        deleteForm.processing ||
+        editForm.processing ||
+        deleteOpen.value ||
+        editOpen.value
+    )
         return;
     preparingPrint.value = true;
     printError.value = '';
@@ -373,32 +678,76 @@ function pkkmbPeriod(start: string | null, end: string | null): string {
     return assignmentPeriod(start, end);
 }
 
-const isPmbTitle = computed(() =>
-    /^ketua\s+(?:pusat\s+)?(?:pmb|penerimaan\s+mahasiswa\s+baru)$/i.test(
-        props.batch.signatory_title.trim(),
-    ),
-);
-const assignmentAuthorTitle = computed(() =>
-    isPmbTitle.value
-        ? 'Ketua Pusat Penerimaan Mahasiswa Baru'
-        : props.batch.signatory_title,
-);
-const pkkmbAuthorTitle = computed(() =>
-    isPmbTitle.value
-        ? 'Ketua Pusat Penerimaan Mahasiswa Baru dan Pembinaan Mahasiswa'
-        : props.batch.signatory_title,
-);
-const assignmentReportTitle = computed(() =>
-    isPmbTitle.value ? 'Ketua PMB' : props.batch.signatory_title,
-);
+function isPmbTitle(letter: Letter): boolean {
+    return /^ketua\s+(?:pusat\s+)?(?:pmb|penerimaan\s+mahasiswa\s+baru)$/i.test(
+        signatoryTitle(letter).trim(),
+    );
+}
+
+function assignmentAuthorTitle(letter: Letter): string {
+    return signatoryTitle(letter);
+}
+
+function pkkmbAuthorTitle(letter: Letter): string {
+    return signatoryTitle(letter);
+}
+
+function assignmentReportTitle(letter: Letter): string {
+    return signatoryTitle(letter);
+}
+
+function defaultTemplate(key: LetterTemplateKey): LetterTemplateFields {
+    if (key === 'permission-school' || key === 'permission-pesantren') {
+        return {
+            subject: 'Permohonan Izin Sosialisasi dan Promosi',
+            attachment: '-',
+            opening_greeting: 'Assalamu’alaikum Warahmatullahi Wabarakatuh',
+            introduction: 'Salam silaturahim kami sampaikan, semoga kita semua tetap dalam lindungan dan ridho Allah subhanahu wa ta’ala.',
+            description:
+                key === 'permission-pesantren'
+                    ? 'Dalam rangka persiapan Penerimaan Mahasiswa Baru (PMB) Universitas Nurul Huda, kami bermaksud bersilaturahmi serta mengadakan sosialisasi dan promosi kampus kami. Oleh karena itu, kami memohon kepada Pimpinan Pondok Pesantren berkenan memberikan izin kepada kami untuk melaksanakan acara Sosialisasi dan Promosi Universitas Nurul Huda.'
+                    : 'Dalam rangka persiapan Penerimaan Mahasiswa Baru (PMB) Universitas Nurul Huda, kami bermaksud mengadakan sosialisasi dan promosi kampus kami. Oleh karena itu, kami memohon kepada Bapak/Ibu Kepala Sekolah berkenan memberikan izin kepada kami untuk melaksanakan acara Sosialisasi dan Promosi Universitas Nurul Huda.',
+            closing: 'Demikian surat permohonan ini kami sampaikan. Atas perhatian dan kerja samanya, kami ucapkan terima kasih.',
+            closing_greeting: 'Wassalamu’alaikum Warahmatullahi Wabarakatuh',
+        };
+    }
+
+    if (key === 'assignment-school' || key === 'assignment-pesantren') {
+        return {
+            title: 'Surat Tugas',
+            basis: 'Pembukaan Penerimaan Mahasiswa Baru\nSosialisasi Kampus ke Masyarakat',
+            introduction: 'Maka, {{jabatan_penandatangan}} memberikan tugas kepada:',
+            description:
+                key === 'assignment-pesantren'
+                    ? 'Untuk melaksanakan kegiatan sosialisasi dan promosi kampus Universitas Nurul Huda ke {{nama_instansi}} yang dilaksanakan pada {{periode_kegiatan}}.'
+                    : 'Untuk melaksanakan kegiatan sosialisasi dan promosi kampus Universitas Nurul Huda ke sekolah-sekolah tingkat SMA, SMK, dan MA yang dilaksanakan pada {{periode_kegiatan}}.',
+            closing: 'Demikian surat tugas ini dibuat agar dilaksanakan dengan penuh tanggung jawab dan melaporkan hasil kegiatan kepada {{jabatan_pelaporan}}.',
+        };
+    }
+
+    if (isReferencePkkmb.value) {
+        return {
+            title: 'SURAT KETERANGAN',
+            introduction: '{{jabatan_penandatangan}} dengan ini menerangkan bahwa:',
+            description: 'Benar mahasiswa tersebut di atas telah mengikuti kegiatan Pengenalan Kehidupan Kampus Bagi Mahasiswa Baru (PKKMB) dengan tema “{{tema_pkkmb}}” pada tanggal {{periode_kegiatan}} dan telah dinyatakan “{{hasil_pkkmb}}”.',
+            closing: 'Demikian surat keterangan ini dibuat dengan sebenar-benarnya.',
+        };
+    }
+
+    return {
+        title: 'SURAT KETERANGAN PKKMB',
+        basis: 'Yang bertanda tangan di bawah ini:',
+        introduction: 'Menerangkan bahwa:',
+        description: 'Telah mengikuti kegiatan Pengenalan Kehidupan Kampus bagi Mahasiswa Baru (PKKMB) Universitas Nurul Huda tahun akademik {{tahun_akademik}} yang diselenggarakan di {{tempat_kegiatan}} pada {{periode_kegiatan}}.',
+        closing: 'Demikian surat keterangan ini dibuat untuk dapat dipergunakan sebagaimana mestinya.',
+    };
+}
 
 function letterTemplate(letter: Letter): LetterTemplateFields | null {
     const snapshot = props.batch.content_templates;
-    if (snapshot?.version !== 1) return null;
     let key: LetterTemplateKey;
 
     if (props.batch.type === 'pkkmb') {
-        if (!isReferencePkkmb.value) return null;
         key = 'pkkmb';
     } else if (
         (props.batch.type === 'permission' ||
@@ -411,7 +760,11 @@ function letterTemplate(letter: Letter): LetterTemplateFields | null {
         return null;
     }
 
-    return snapshot.templates[key] ?? null;
+    return {
+        ...defaultTemplate(key),
+        ...(snapshot?.version === 1 ? snapshot.templates[key] : {}),
+        ...(letter.content_overrides?.template_fields ?? {}),
+    };
 }
 
 function templateTokens(letter: Letter): LetterTemplateTokens {
@@ -419,14 +772,14 @@ function templateTokens(letter: Letter): LetterTemplateTokens {
     const isPesantren = letter.institution_type === 'pesantren';
     return {
         nomor_surat: letter.letter_number,
-        tanggal_surat: formatDate(props.batch.letter_date),
-        nama_penandatangan: props.batch.signatory_name,
+        tanggal_surat: formatDate(documentDate(letter)),
+        nama_penandatangan: signatoryName(letter),
         jabatan_penandatangan:
             type === 'assignment'
-                ? assignmentAuthorTitle.value
+                ? assignmentAuthorTitle(letter)
                 : type === 'pkkmb'
-                  ? pkkmbAuthorTitle.value
-                  : props.batch.signatory_title,
+                  ? pkkmbAuthorTitle(letter)
+                  : signatoryTitle(letter),
         nama_instansi:
             type === 'assignment'
                 ? letter.activity_destination ||
@@ -440,13 +793,15 @@ function templateTokens(letter: Letter): LetterTemplateTokens {
         kabupaten: districtCategoryLabel(letter.recipient_district || ''),
         periode_kegiatan:
             type === 'pkkmb'
-                ? pkkmbPeriod(props.batch.event_start, props.batch.event_end)
+                ? pkkmbPeriod(eventStart(letter), eventEnd(letter))
                 : assignmentPeriod(
-                      props.batch.event_start,
-                      props.batch.event_end,
+                      eventStart(letter),
+                      eventEnd(letter),
                   ),
-        jabatan_pelaporan: assignmentReportTitle.value,
-        tema_pkkmb: props.batch.pkkmb_options?.theme || '',
+        jabatan_pelaporan: assignmentReportTitle(letter),
+        tema_pkkmb: pkkmbTheme(letter),
+        tahun_akademik: academicYear(letter) ?? '',
+        tempat_kegiatan: eventLocation(letter) ?? '',
         nama_mahasiswa: letter.participant_name || '',
         nim: letter.participant_nim || '',
         program_studi: letter.participant_study_program || '',
@@ -540,7 +895,7 @@ function assignmentRows(letter: Letter) {
                     serupa</Link
                 >
                 <Button
-                    v-if="batch.can_delete"
+                    v-if="batch.can_delete || batch.can_edit"
                     type="button"
                     variant="outline"
                     class="sisurat-secondary-action text-destructive hover:bg-destructive/10"
@@ -609,6 +964,19 @@ function assignmentRows(letter: Letter) {
                         </p>
                     </div>
                     <button
+                        v-if="batch.can_edit"
+                        :id="`edit-letter-${letter.id}`"
+                        type="button"
+                        class="sisurat-secondary-action min-h-9! px-3! text-xs!"
+                        :disabled="editForm.processing || preparingPrint"
+                        :aria-label="`Edit surat ${letter.letter_number} untuk ${letterRecipient(letter)}`"
+                        @click="openLetterEditor(letter)"
+                    >
+                        <Pencil class="size-3.5" aria-hidden="true" />Edit
+                        surat
+                    </button>
+                    <button
+                        v-if="batch.can_delete"
                         :id="`delete-letter-${letter.id}`"
                         type="button"
                         class="sisurat-secondary-action min-h-9! px-3! text-xs! text-destructive hover:bg-destructive/10"
@@ -657,7 +1025,7 @@ function assignmentRows(letter: Letter) {
                     </div>
 
                     <div class="recipient">
-                        <p>Kepada Yth.</p>
+                        <p>{{ letter.recipient_salutation || 'Kepada Yth.' }}</p>
                         <p>
                             {{ recipientPosition(letter) }}
                             {{ letter.institution_name }}
@@ -759,10 +1127,10 @@ function assignmentRows(letter: Letter) {
 
                 <template v-else-if="batch.type === 'general'">
                     <h1
-                        v-if="batch.general_options?.letter_title"
+                        v-if="generalOptions(letter)?.letter_title"
                         class="general-title"
                     >
-                        {{ batch.general_options.letter_title }}
+                        {{ generalOptions(letter)?.letter_title }}
                     </h1>
                     <div class="letter-meta">
                         <p>
@@ -771,18 +1139,18 @@ function assignmentRows(letter: Letter) {
                         </p>
                         <p>
                             <span>Lampiran</span><span>:</span>
-                            <span>{{ batch.attachment || '-' }}</span>
+                            <span>{{ attachment(letter) || '-' }}</span>
                         </p>
                         <p>
                             <span>Perihal</span><span>:</span>
-                            <span>{{ batch.subject }}</span>
+                            <span>{{ subject(letter) }}</span>
                         </p>
                     </div>
                     <div class="recipient">
                         <p v-if="letter.recipient_salutation ?? 'Kepada Yth.'">
                             {{ letter.recipient_salutation ?? 'Kepada Yth.' }}
                         </p>
-                        <template v-if="batch.general_options">
+                        <template v-if="generalOptions(letter)">
                             <p
                                 v-if="
                                     letter.recipient_position ||
@@ -808,27 +1176,27 @@ function assignmentRows(letter: Letter) {
                         <p class="recipient-place-prefix">di</p>
                         <p class="general-address">
                             {{
-                                batch.general_options
+                                generalOptions(letter)
                                     ? letter.recipient_address || 'Tempat'
                                     : 'Tempat'
                             }}
                         </p>
                     </div>
-                    <p v-if="generalOpening" class="salutation">
-                        {{ generalOpening }}
+                    <p v-if="generalOpeningFor(letter)" class="salutation">
+                        {{ generalOpeningFor(letter) }}
                     </p>
                     <p
-                        v-for="(paragraph, paragraphIndex) in generalParagraphs"
+                        v-for="(paragraph, paragraphIndex) in generalParagraphsFor(letter)"
                         :key="paragraphIndex"
                         class="body-paragraph general-paragraph"
                     >
                         {{ paragraph }}
                     </p>
                     <dl
-                        v-if="generalEventRows.length"
+                        v-if="generalEventRowsFor(letter).length"
                         class="identity-list general-event"
                     >
-                        <div v-for="row in generalEventRows" :key="row.label">
+                        <div v-for="row in generalEventRowsFor(letter)" :key="row.label">
                             <dt>{{ row.label }}</dt>
                             <dd>{{ row.value }}</dd>
                         </div>
@@ -836,14 +1204,14 @@ function assignmentRows(letter: Letter) {
                     <p
                         v-for="(
                             paragraph, paragraphIndex
-                        ) in generalClosingParagraphs"
+                        ) in generalClosingParagraphsFor(letter)"
                         :key="`closing-${paragraphIndex}`"
                         class="body-paragraph general-paragraph"
                     >
                         {{ paragraph }}
                     </p>
-                    <p v-if="generalClosing" class="closing">
-                        {{ generalClosing }}
+                    <p v-if="generalClosingFor(letter)" class="closing">
+                        {{ generalClosingFor(letter) }}
                     </p>
                 </template>
 
@@ -902,7 +1270,7 @@ function assignmentRows(letter: Letter) {
                             </p>
                         </template>
                         <p v-else class="assignment-intro">
-                            Maka, {{ assignmentAuthorTitle }} memberikan tugas
+                            Maka, {{ assignmentAuthorTitle(letter) }} memberikan tugas
                             kepada:
                         </p>
                         <table class="assignee-table">
@@ -971,8 +1339,8 @@ function assignmentRows(letter: Letter) {
                                 yang dilaksanakan pada
                                 {{
                                     assignmentPeriod(
-                                        batch.event_start,
-                                        batch.event_end,
+                                        eventStart(letter),
+                                        eventEnd(letter),
                                     )
                                 }}.
                             </p>
@@ -980,7 +1348,7 @@ function assignmentRows(letter: Letter) {
                                 Demikian surat tugas ini dibuat agar
                                 dilaksanakan dengan penuh tanggung jawab dan
                                 melaporkan hasil kegiatan kepada
-                                {{ assignmentReportTitle }}.
+                                {{ assignmentReportTitle(letter) }}.
                             </p>
                         </template>
                     </div>
@@ -1016,7 +1384,7 @@ function assignmentRows(letter: Letter) {
                             </p>
                         </template>
                         <p v-else class="body-paragraph">
-                            {{ pkkmbAuthorTitle }} dengan ini menerangkan bahwa:
+                            {{ pkkmbAuthorTitle(letter) }} dengan ini menerangkan bahwa:
                         </p>
                         <dl class="identity-list pkkmb-reference-identity">
                             <div>
@@ -1065,12 +1433,12 @@ function assignmentRows(letter: Letter) {
                                 Benar mahasiswa tersebut di atas telah mengikuti
                                 kegiatan Pengenalan Kehidupan Kampus Bagi
                                 Mahasiswa Baru (PKKMB) dengan tema “{{
-                                    batch.pkkmb_options?.theme
+                                    pkkmbTheme(letter)
                                 }}” pada tanggal
                                 {{
                                     pkkmbPeriod(
-                                        batch.event_start,
-                                        batch.event_end,
+                                        eventStart(letter),
+                                        eventEnd(letter),
                                     )
                                 }}
                                 dan telah dinyatakan “<strong>{{
@@ -1090,25 +1458,25 @@ function assignmentRows(letter: Letter) {
 
                 <template v-else-if="batch.type === 'pkkmb'">
                     <div class="assignment-title">
-                        <h1>SURAT KETERANGAN PKKMB</h1>
+                        <h1><LetterTemplateText :text="letterTemplate(letter)?.title" :tokens="templateTokens(letter)" /></h1>
                         <p class="certificate-number">
                             <span>Nomor</span><span>:</span>
                             <span>{{ letter.letter_number }}</span>
                         </p>
                     </div>
                     <div class="certificate-body">
-                        <p>Yang bertanda tangan di bawah ini:</p>
+                        <p><LetterTemplateText :text="letterTemplate(letter)?.basis" :tokens="templateTokens(letter)" /></p>
                         <dl class="identity-list">
                             <div>
                                 <dt>Nama</dt>
-                                <dd>{{ batch.signatory_name }}</dd>
+                                <dd>{{ signatoryName(letter) }}</dd>
                             </div>
                             <div>
                                 <dt>Jabatan</dt>
-                                <dd>{{ batch.signatory_title }}</dd>
+                                <dd>{{ signatoryTitle(letter) }}</dd>
                             </div>
                         </dl>
-                        <p>Menerangkan bahwa:</p>
+                        <p><LetterTemplateText :text="letterTemplate(letter)?.introduction" :tokens="templateTokens(letter)" /></p>
                         <dl class="identity-list">
                             <div>
                                 <dt>Nama mahasiswa</dt>
@@ -1124,44 +1492,20 @@ function assignmentRows(letter: Letter) {
                             </div>
                             <div>
                                 <dt>Tahun akademik</dt>
-                                <dd>{{ batch.academic_year }}</dd>
+                                <dd>{{ academicYear(letter) }}</dd>
                             </div>
                         </dl>
-                        <p class="body-paragraph">
-                            <template
-                                v-if="
-                                    letter.participation_status === 'completed'
-                                "
-                                >Telah menyelesaikan seluruh rangkaian</template
-                            >
-                            <template
-                                v-else-if="
-                                    letter.participation_status === 'registered'
-                                "
-                                >Terdaftar untuk mengikuti</template
-                            >
-                            <template v-else>Telah mengikuti</template>
-                            kegiatan Pengenalan Kehidupan Kampus bagi Mahasiswa
-                            Baru (PKKMB) Universitas Nurul Huda tahun akademik
-                            {{ batch.academic_year }} yang diselenggarakan di
-                            {{ batch.event_location }} pada
-                            {{
-                                eventPeriod(batch.event_start, batch.event_end)
-                            }}.
-                        </p>
-                        <p class="body-paragraph">
-                            Demikian surat keterangan ini dibuat untuk dapat
-                            dipergunakan sebagaimana mestinya.
-                        </p>
+                        <p v-for="(paragraph, index) in templateParagraphs(letterTemplate(letter)?.description)" :key="`description-${index}`" class="body-paragraph"><LetterTemplateText :text="paragraph" :tokens="templateTokens(letter)" /></p>
+                        <p v-for="(paragraph, index) in templateParagraphs(letterTemplate(letter)?.closing)" :key="`closing-${index}`" class="body-paragraph"><LetterTemplateText :text="paragraph" :tokens="templateTokens(letter)" /></p>
                     </div>
                 </template>
 
                 <div
                     class="signature"
-                    :class="{ 'signature-with-stamp': includeStamp }"
+                    :class="{ 'signature-with-stamp': includeStamp(letter) }"
                 >
                     <img
-                        v-if="includeStamp"
+                        v-if="includeStamp(letter)"
                         class="pmb-stamp"
                         :src="pmbSignatory.stamp_url!"
                         alt="Cap PMB Universitas Nurul Huda"
@@ -1171,32 +1515,330 @@ function assignmentRows(letter: Letter) {
                             OKU Timur,
                             {{
                                 formatDate(
-                                    batch.letter_date,
+                                    documentDate(letter),
                                     isReferencePkkmb ? '2-digit' : 'numeric',
                                 )
                             }}
                         </p>
-                        <p>{{ batch.signatory_title }},</p>
+                        <p>{{ signatoryTitle(letter) }},</p>
                         <div
-                            v-if="includeSignature || includeStamp"
+                            v-if="includeSignature(letter) || includeStamp(letter)"
                             class="signature-artwork"
                         >
                             <img
-                                v-if="includeSignature"
+                                v-if="includeSignature(letter)"
                                 class="pmb-signature"
                                 :src="pmbSignatory.signature_url!"
                                 alt="Tanda tangan penandatangan PMB"
                             />
                         </div>
                         <div v-else class="signature-space"></div>
-                        <p class="signatory-name">{{ batch.signatory_name }}</p>
-                        <p v-if="batch.signatory_number">
-                            {{ batch.signatory_number }}
+                        <p class="signatory-name">{{ signatoryName(letter) }}</p>
+                        <p v-if="signatoryNumber(letter)">
+                            {{ signatoryNumber(letter) }}
                         </p>
                     </div>
                 </div>
             </article>
         </section>
+        <Dialog
+            :open="editOpen"
+            @update:open="(open) => !editForm.processing && (editOpen = open)"
+        >
+            <DialogContent
+                :show-close-button="!editForm.processing"
+                class="max-h-[90dvh] max-w-2xl overflow-y-auto rounded-2xl print:hidden"
+                @interact-outside="
+                    editForm.processing && $event.preventDefault()
+                "
+                @escape-key-down="
+                    editForm.processing && $event.preventDefault()
+                "
+            >
+                <DialogHeader>
+                    <DialogTitle>Edit surat</DialogTitle>
+                    <DialogDescription>
+                        Koreksi data khusus surat ini. Nomor dan urutan surat
+                        tidak dapat diubah.
+                    </DialogDescription>
+                </DialogHeader>
+                <form class="grid gap-5" @submit.prevent="saveLetterEdits">
+                    <div
+                        class="rounded-xl border border-border bg-muted/40 p-4"
+                    >
+                        <p class="text-xs text-muted-foreground">Nomor surat (tetap)</p>
+                        <p class="mt-1 font-semibold break-words">
+                            {{ editingLetter?.letter_number }}
+                        </p>
+                    </div>
+                    <p
+                        v-if="Object.keys(editForm.errors).length"
+                        role="alert"
+                        class="rounded-xl border border-destructive/30 bg-destructive/5 p-3 text-sm text-destructive"
+                    >
+                        Periksa kembali data yang ditandai sebelum menyimpan.
+                    </p>
+
+                    <template v-if="batch.type === 'permission'">
+                        <div class="grid gap-4 sm:grid-cols-2">
+                            <label class="grid gap-2 text-sm font-medium sm:col-span-2">
+                                Sapaan penerima
+                                <input v-model="editForm.recipient_salutation" class="sisurat-input" maxlength="150" />
+                                <span v-if="editForm.errors.recipient_salutation" class="text-xs font-normal text-destructive">{{ editForm.errors.recipient_salutation }}</span>
+                            </label>
+                            <label class="grid gap-2 text-sm font-medium">
+                                Jabatan penerima
+                                <input
+                                    v-model="editForm.recipient_position"
+                                    class="sisurat-input"
+                                    maxlength="150"
+                                    required
+                                />
+                                <span v-if="editForm.errors.recipient_position" class="text-xs font-normal text-destructive">{{ editForm.errors.recipient_position }}</span>
+                            </label>
+                            <label class="grid gap-2 text-sm font-medium">
+                                Nama penerima (opsional)
+                                <input
+                                    v-model="editForm.recipient_name"
+                                    class="sisurat-input"
+                                    maxlength="150"
+                                />
+                                <span v-if="editForm.errors.recipient_name" class="text-xs font-normal text-destructive">{{ editForm.errors.recipient_name }}</span>
+                            </label>
+                            <label class="grid gap-2 text-sm font-medium sm:col-span-2">
+                                Nama sekolah / pondok
+                                <input
+                                    v-model="editForm.institution_name"
+                                    class="sisurat-input"
+                                    maxlength="255"
+                                    required
+                                />
+                                <span v-if="editForm.errors.institution_name" class="text-xs font-normal text-destructive">{{ editForm.errors.institution_name }}</span>
+                            </label>
+                            <label class="grid gap-2 text-sm font-medium">
+                                Kabupaten/kota
+                                <input
+                                    v-model="editForm.recipient_district"
+                                    class="sisurat-input"
+                                    maxlength="150"
+                                />
+                                <span v-if="editForm.errors.recipient_district" class="text-xs font-normal text-destructive">{{ editForm.errors.recipient_district }}</span>
+                            </label>
+                            <label class="grid gap-2 text-sm font-medium">
+                                Alamat
+                                <input
+                                    v-model="editForm.recipient_address"
+                                    class="sisurat-input"
+                                    maxlength="500"
+                                />
+                                <span v-if="editForm.errors.recipient_address" class="text-xs font-normal text-destructive">{{ editForm.errors.recipient_address }}</span>
+                            </label>
+                        </div>
+                    </template>
+
+                    <template v-else-if="batch.type === 'assignment'">
+                        <div class="grid gap-4 sm:grid-cols-2">
+                            <label class="grid gap-2 text-sm font-medium">
+                                Kabupaten/kota
+                                <input
+                                    v-model="editForm.recipient_district"
+                                    class="sisurat-input"
+                                    maxlength="150"
+                                    required
+                                />
+                                <span v-if="editForm.errors.recipient_district" class="text-xs font-normal text-destructive">{{ editForm.errors.recipient_district }}</span>
+                            </label>
+                            <label class="grid gap-2 text-sm font-medium">
+                                Tujuan kegiatan
+                                <input
+                                    v-model="editForm.activity_destination"
+                                    class="sisurat-input"
+                                    maxlength="255"
+                                    required
+                                />
+                                <span v-if="editForm.errors.activity_destination" class="text-xs font-normal text-destructive">{{ editForm.errors.activity_destination }}</span>
+                            </label>
+                        </div>
+                        <div class="grid gap-3">
+                            <div class="flex items-center justify-between gap-3">
+                                <h3 class="text-sm font-semibold">Petugas yang ditugaskan</h3>
+                                <Button type="button" variant="outline" size="sm" @click="addEditAssignee">
+                                    <Plus class="size-4" aria-hidden="true" />Tambah petugas
+                                </Button>
+                            </div>
+                            <div
+                                v-for="(assignee, index) in editForm.assignees"
+                                :key="index"
+                                class="grid gap-3 rounded-xl border border-border p-3 sm:grid-cols-[1fr_1fr_auto]"
+                            >
+                                <label class="grid gap-2 text-xs font-medium">
+                                    Nama
+                                    <input v-model="assignee.name" class="sisurat-input" maxlength="150" required />
+                                    <span v-if="assigneeEditError(index, 'name')" class="font-normal text-destructive">{{ assigneeEditError(index, 'name') }}</span>
+                                </label>
+                                <label class="grid gap-2 text-xs font-medium">
+                                    Dinas/jabatan
+                                    <input v-model="assignee.office" class="sisurat-input" maxlength="150" required />
+                                    <span v-if="assigneeEditError(index, 'office')" class="font-normal text-destructive">{{ assigneeEditError(index, 'office') }}</span>
+                                </label>
+                                <Button type="button" variant="ghost" size="icon" class="self-end text-destructive" :disabled="editForm.assignees.length <= 1" :aria-label="`Hapus petugas ke-${index + 1}`" @click="editForm.assignees.splice(index, 1)">
+                                    <X class="size-4" aria-hidden="true" />
+                                </Button>
+                            </div>
+                            <p v-if="editForm.errors.assignees" class="text-xs text-destructive">{{ editForm.errors.assignees }}</p>
+                        </div>
+                    </template>
+
+                    <template v-else-if="batch.type === 'pkkmb'">
+                        <div class="grid gap-4 sm:grid-cols-2">
+                            <label class="grid gap-2 text-sm font-medium sm:col-span-2">
+                                Nama mahasiswa
+                                <input v-model="editForm.participant_name" class="sisurat-input" maxlength="150" required />
+                                <span v-if="editForm.errors.participant_name" class="text-xs font-normal text-destructive">{{ editForm.errors.participant_name }}</span>
+                            </label>
+                            <label class="grid gap-2 text-sm font-medium">
+                                NIM
+                                <input v-model="editForm.participant_nim" class="sisurat-input" maxlength="50" required />
+                                <span v-if="editForm.errors.participant_nim" class="text-xs font-normal text-destructive">{{ editForm.errors.participant_nim }}</span>
+                            </label>
+                            <label class="grid gap-2 text-sm font-medium">
+                                Program studi
+                                <input v-model="editForm.participant_study_program" class="sisurat-input" maxlength="150" required />
+                                <span v-if="editForm.errors.participant_study_program" class="text-xs font-normal text-destructive">{{ editForm.errors.participant_study_program }}</span>
+                            </label>
+                            <label class="grid gap-2 text-sm font-medium">
+                                Fakultas
+                                <input v-model="editForm.participant_faculty" class="sisurat-input" maxlength="150" required />
+                                <span v-if="editForm.errors.participant_faculty" class="text-xs font-normal text-destructive">{{ editForm.errors.participant_faculty }}</span>
+                            </label>
+                            <label class="grid gap-2 text-sm font-medium">
+                                Hasil PKKMB
+                                <select v-model="editForm.participant_result" class="sisurat-input" required>
+                                    <option value="passed">Lulus</option>
+                                    <option value="not_passed">Tidak lulus</option>
+                                </select>
+                                <span v-if="editForm.errors.participant_result" class="text-xs font-normal text-destructive">{{ editForm.errors.participant_result }}</span>
+                            </label>
+                            <label class="grid gap-2 text-sm font-medium">
+                                Status keikutsertaan
+                                <select v-model="editForm.participation_status" class="sisurat-input" required>
+                                    <option value="attended">Mengikuti</option>
+                                    <option value="completed">Menyelesaikan</option>
+                                </select>
+                                <span v-if="editForm.errors.participation_status" class="text-xs font-normal text-destructive">{{ editForm.errors.participation_status }}</span>
+                            </label>
+                        </div>
+                    </template>
+
+                    <template v-else>
+                        <div class="grid gap-4 sm:grid-cols-2">
+                            <label class="grid gap-2 text-sm font-medium sm:col-span-2">
+                                Sapaan penerima
+                                <input v-model="editForm.recipient_salutation" class="sisurat-input" maxlength="150" />
+                                <span v-if="editForm.errors.recipient_salutation" class="text-xs font-normal text-destructive">{{ editForm.errors.recipient_salutation }}</span>
+                            </label>
+                            <label class="grid gap-2 text-sm font-medium">
+                                Jabatan penerima
+                                <input v-model="editForm.recipient_position" class="sisurat-input" maxlength="150" />
+                                <span v-if="editForm.errors.recipient_position" class="text-xs font-normal text-destructive">{{ editForm.errors.recipient_position }}</span>
+                            </label>
+                            <label class="grid gap-2 text-sm font-medium">
+                                Nama penerima
+                                <input v-model="editForm.recipient_name" class="sisurat-input" maxlength="150" />
+                                <span v-if="editForm.errors.recipient_name" class="text-xs font-normal text-destructive">{{ editForm.errors.recipient_name }}</span>
+                            </label>
+                            <label class="grid gap-2 text-sm font-medium sm:col-span-2">
+                                Instansi/tujuan
+                                <input v-model="editForm.institution_name" class="sisurat-input" maxlength="255" />
+                                <span v-if="editForm.errors.institution_name" class="text-xs font-normal text-destructive">{{ editForm.errors.institution_name }}</span>
+                            </label>
+                            <label class="grid gap-2 text-sm font-medium sm:col-span-2">
+                                Alamat atau keterangan tempat
+                                <input v-model="editForm.recipient_address" class="sisurat-input" maxlength="500" />
+                                <span v-if="editForm.errors.recipient_address" class="text-xs font-normal text-destructive">{{ editForm.errors.recipient_address }}</span>
+                            </label>
+                        </div>
+                    </template>
+
+                    <section class="grid gap-4 rounded-xl border border-border p-4">
+                        <h3 class="text-sm font-semibold">Tanggal dan penandatangan</h3>
+                        <div class="grid gap-4 sm:grid-cols-2">
+                            <label class="grid gap-2 text-sm font-medium">
+                                Tanggal surat
+                                <input v-model="editForm.letter_date" type="date" class="sisurat-input" required />
+                                <span v-if="editForm.errors.letter_date" class="text-xs font-normal text-destructive">{{ editForm.errors.letter_date }}</span>
+                            </label>
+                            <label class="grid gap-2 text-sm font-medium">
+                                Jabatan penandatangan
+                                <input v-model="editForm.signatory_title" class="sisurat-input" maxlength="150" required />
+                                <span v-if="editForm.errors.signatory_title" class="text-xs font-normal text-destructive">{{ editForm.errors.signatory_title }}</span>
+                            </label>
+                            <label class="grid gap-2 text-sm font-medium">
+                                Nama penandatangan
+                                <input v-model="editForm.signatory_name" class="sisurat-input" maxlength="150" required />
+                                <span v-if="editForm.errors.signatory_name" class="text-xs font-normal text-destructive">{{ editForm.errors.signatory_name }}</span>
+                            </label>
+                            <label class="grid gap-2 text-sm font-medium">
+                                NIP/NIPY (opsional)
+                                <input v-model="editForm.signatory_number" class="sisurat-input" maxlength="100" />
+                                <span v-if="editForm.errors.signatory_number" class="text-xs font-normal text-destructive">{{ editForm.errors.signatory_number }}</span>
+                            </label>
+                        </div>
+                        <div class="flex flex-wrap gap-5 text-sm">
+                            <label class="flex items-center gap-2"><input v-model="editForm.include_signature" type="checkbox" /> Tampilkan tanda tangan digital</label>
+                            <label class="flex items-center gap-2"><input v-model="editForm.include_stamp" type="checkbox" /> Tampilkan cap</label>
+                        </div>
+                    </section>
+
+                    <section v-if="batch.type === 'assignment' || batch.type === 'pkkmb'" class="grid gap-4 rounded-xl border border-border p-4">
+                        <h3 class="text-sm font-semibold">Informasi kegiatan</h3>
+                        <div class="grid gap-4 sm:grid-cols-2">
+                            <label class="grid gap-2 text-sm font-medium">Tanggal mulai<input v-model="editForm.event_start" type="date" class="sisurat-input" required /><span v-if="editForm.errors.event_start" class="text-xs font-normal text-destructive">{{ editForm.errors.event_start }}</span></label>
+                            <label class="grid gap-2 text-sm font-medium">Tanggal selesai<input v-model="editForm.event_end" type="date" class="sisurat-input" required /><span v-if="editForm.errors.event_end" class="text-xs font-normal text-destructive">{{ editForm.errors.event_end }}</span></label>
+                            <label class="grid gap-2 text-sm font-medium">Tempat kegiatan<input v-model="editForm.event_location" class="sisurat-input" maxlength="255" /><span v-if="editForm.errors.event_location" class="text-xs font-normal text-destructive">{{ editForm.errors.event_location }}</span></label>
+                            <label v-if="batch.type === 'pkkmb'" class="grid gap-2 text-sm font-medium">Tahun akademik<input v-model="editForm.academic_year" class="sisurat-input" maxlength="30" /><span v-if="editForm.errors.academic_year" class="text-xs font-normal text-destructive">{{ editForm.errors.academic_year }}</span></label>
+                            <label v-if="batch.type === 'pkkmb'" class="grid gap-2 text-sm font-medium sm:col-span-2">Tema PKKMB<textarea v-model="editForm.pkkmb_theme" class="sisurat-input min-h-20" maxlength="1000" /><span v-if="editForm.errors.pkkmb_theme" class="text-xs font-normal text-destructive">{{ editForm.errors.pkkmb_theme }}</span></label>
+                        </div>
+                    </section>
+
+                    <section v-if="batch.type === 'permission' || batch.type === 'assignment' || batch.type === 'pkkmb'" class="grid gap-4 rounded-xl border border-border p-4">
+                        <h3 class="text-sm font-semibold">Isi dan format surat</h3>
+                        <div class="grid gap-4">
+                            <label v-for="field in (['title', 'subject', 'attachment', 'basis', 'opening_greeting', 'introduction', 'description', 'closing', 'closing_greeting'] as const)" :key="field" class="grid gap-2 text-sm font-medium">
+                                {{ ({ title: 'Judul surat', subject: 'Perihal', attachment: 'Lampiran', basis: 'Dasar', opening_greeting: 'Salam pembuka', introduction: 'Pengantar', description: 'Isi utama', closing: 'Penutup', closing_greeting: 'Salam penutup' } as const)[field] }}
+                                <textarea v-model="editForm.template_fields[field]" class="sisurat-input min-h-20" maxlength="20000" />
+                                <span v-if="editForm.errors[`template_fields.${field}`]" class="text-xs font-normal text-destructive">{{ editForm.errors[`template_fields.${field}`] }}</span>
+                            </label>
+                        </div>
+                    </section>
+
+                    <section v-if="batch.type === 'general'" class="grid gap-4 rounded-xl border border-border p-4">
+                        <h3 class="text-sm font-semibold">Isi surat dan detail acara</h3>
+                        <div class="grid gap-4 sm:grid-cols-2">
+                            <label class="grid gap-2 text-sm font-medium">Judul surat<input v-model="editForm.general_options.letter_title" class="sisurat-input" maxlength="255" /></label>
+                            <label class="grid gap-2 text-sm font-medium">Perihal<input v-model="editForm.subject" class="sisurat-input" maxlength="255" /><span v-if="editForm.errors.subject" class="text-xs font-normal text-destructive">{{ editForm.errors.subject }}</span></label>
+                            <label class="grid gap-2 text-sm font-medium">Lampiran<input v-model="editForm.attachment" class="sisurat-input" maxlength="120" /><span v-if="editForm.errors.attachment" class="text-xs font-normal text-destructive">{{ editForm.errors.attachment }}</span></label>
+                            <label class="grid gap-2 text-sm font-medium">Salam pembuka<input v-model="editForm.general_options.opening_greeting" class="sisurat-input" maxlength="255" /></label>
+                            <label class="grid gap-2 text-sm font-medium sm:col-span-2">Isi surat<textarea v-model="editForm.body" class="sisurat-input min-h-32" maxlength="20000" /><span v-if="editForm.errors.body" class="text-xs font-normal text-destructive">{{ editForm.errors.body }}</span></label>
+                            <label class="grid gap-2 text-sm font-medium sm:col-span-2">Isi penutup<textarea v-model="editForm.general_options.closing_body" class="sisurat-input min-h-24" maxlength="20000" /></label>
+                            <label class="grid gap-2 text-sm font-medium">Salam penutup<input v-model="editForm.general_options.closing_greeting" class="sisurat-input" maxlength="255" /></label>
+                            <label class="grid gap-2 text-sm font-medium">Tanggal acara<input v-model="editForm.general_options.event_date" type="date" class="sisurat-input" /></label>
+                            <label class="grid gap-2 text-sm font-medium">Waktu acara<input v-model="editForm.general_options.event_time" class="sisurat-input" maxlength="120" /></label>
+                            <label class="grid gap-2 text-sm font-medium">Tempat acara<input v-model="editForm.general_options.event_location" class="sisurat-input" maxlength="500" /></label>
+                            <label class="grid gap-2 text-sm font-medium sm:col-span-2">Agenda<textarea v-model="editForm.general_options.event_agenda" class="sisurat-input min-h-20" maxlength="1000" /></label>
+                        </div>
+                    </section>
+
+                    <DialogFooter class="gap-2">
+                        <Button type="button" variant="outline" :disabled="editForm.processing" @click="editOpen = false">Batal</Button>
+                        <Button type="submit" class="sisurat-primary-action" :disabled="editForm.processing" :aria-busy="editForm.processing">
+                            <Pencil class="size-4" aria-hidden="true" />
+                            {{ editForm.processing ? 'Menyimpan…' : 'Simpan perubahan' }}
+                        </Button>
+                    </DialogFooter>
+                </form>
+            </DialogContent>
+        </Dialog>
         <Dialog :open="deleteOpen" @update:open="updateDeleteDialog">
             <DialogContent
                 :show-close-button="false"
@@ -1285,7 +1927,7 @@ function assignmentRows(letter: Letter) {
     width: 210mm;
     min-height: 297mm;
     margin-inline: auto;
-    padding: 18mm 22mm 20mm;
+    padding: 8mm 19mm 15mm 16mm;
     background: #fff;
     color: #111;
     font-family: Cambria, Georgia, serif;
@@ -1661,7 +2303,7 @@ function assignmentRows(letter: Letter) {
         height: auto;
         min-height: 297mm;
         margin: 0;
-        padding: 18mm 22mm 20mm;
+        padding: 8mm 19mm 15mm 16mm;
         box-shadow: none;
         break-after: page;
         page-break-after: always;
@@ -1699,4 +2341,3 @@ function assignmentRows(letter: Letter) {
     }
 }
 </style>
-

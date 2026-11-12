@@ -56,4 +56,3 @@ class LetterheadController extends Controller
         return '/images/universitas-nurul-huda-letterhead.png?v=' . $version;
     }
 }
-

@@ -49,4 +49,3 @@ class PublicFormQrController extends Controller
         return $this->links->qrCode('pmb-prospects.join', [], 'qr-calon-mahasiswa.png', $request->boolean('download'));
     }
 }
-

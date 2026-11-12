@@ -24,4 +24,3 @@ class PmbProspectSubmission extends Model
         return ['submitted_at' => 'datetime'];
     }
 }
-

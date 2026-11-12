@@ -20,81 +20,33 @@ function registrationData(): array
         'start_date' => '2026-10-01', 'end_date' => '2026-11-13'];
 }
 
-function registrationPayload(array $changes = []): array
-{
-    return [...registrationData(), 'pin' => '13579024', 'pin_confirmation' => '13579024', ...$changes];
-}
-
 function registeredDeviceParticipant(array $attributes = []): InternshipParticipant
 {
     return InternshipParticipant::factory()->create([...$attributes,
         'device_token_hash' => hash('sha256', str_repeat('a', 64)), 'device_expires_at' => now()->addDays(180)]);
 }
 
-test('visitors register school and university categories with a personal PIN without an admin account', function (string $category) {
-    $response = $this->post(route('internship.register'), registrationPayload(['participant_category' => $category, 'is_active' => false, 'role' => 'admin', 'registration_source' => 'admin', 'device_token_hash' => 'injected']));
+test('visitors register school and university categories without an account or a typed code', function (string $category) {
+    $response = $this->post(route('internship.register'), [...registrationData(), 'participant_category' => $category, 'is_active' => false, 'role' => 'admin', 'registration_source' => 'admin', 'device_token_hash' => 'injected']);
     $response->assertSessionHasNoErrors()->assertRedirect(route('internship.show'))->assertCookie(InternshipDeviceAccess::COOKIE);
     $participant = InternshipParticipant::firstOrFail();
     expect($participant->participant_category)->toBe($category);
     expect($participant->is_active)->toBeTrue();
     expect($participant->registration_source)->toBe('public');
     expect($participant->device_token_hash)->toHaveLength(64)->not->toBe('injected');
-    expect($participant->access_code_hash)->not->toBeNull();
-    expect($participant->pin_lookup_hash)->toHaveLength(64);
+    expect($participant->access_code_hash)->toBeNull();
     $this->assertDatabaseCount('users', 0);
     $this->assertGuest();
 })->with(['smk', 'sma', 'university']);
 
 test('registration requires complete identity and valid period dates', function () {
-    $this->post(route('internship.register'), [])->assertSessionHasErrors(['name', 'participant_category', 'student_number', 'institution', 'start_date', 'end_date', 'pin', 'pin_confirmation']);
-    $this->post(route('internship.register'), registrationPayload(['end_date' => '2026-09-30']))->assertSessionHasErrors('end_date');
+    $this->post(route('internship.register'), [])->assertSessionHasErrors(['name', 'participant_category', 'student_number', 'institution', 'start_date', 'end_date']);
+    $this->post(route('internship.register'), [...registrationData(), 'end_date' => '2026-09-30'])->assertSessionHasErrors('end_date');
     $this->assertDatabaseCount('internship_participants', 0);
 });
 
-test('registration opens attendance immediately when only the ordinary session is available', function () {
-    $this->followingRedirects()
-        ->post(route('internship.register'), registrationPayload())
-        ->assertInertia(fn (Assert $page) => $page
-            ->where('participant.name', 'Peserta Mandiri')
-            ->where('participant.can_attend', true)
-            ->where('attendance', null));
-
-    $this->get(route('internship.show'))
-        ->assertInertia(fn (Assert $page) => $page->where('participant.name', 'Peserta Mandiri'));
-    $this->assertDatabaseCount('internship_participants', 1);
-});
-
-test('session device proof cannot bypass revocation expiry or deactivation', function (string $change) {
-    $participant = registeredDeviceParticipant();
-    $this->withSession([InternshipDeviceAccess::SESSION => [
-        'id' => (int) $participant->id,
-        'fingerprint' => $participant->device_token_hash,
-    ]]);
-    $participant->update(match ($change) {
-        'replaced' => ['device_token_hash' => hash('sha256', str_repeat('b', 64))],
-        'expired' => ['device_expires_at' => now()->subMinute()],
-        'inactive' => ['is_active' => false],
-    });
-
-    $this->get(route('internship.show'))
-        ->assertSessionMissing(InternshipDeviceAccess::SESSION)
-        ->assertInertia(fn (Assert $page) => $page->where('participant', null));
-})->with(['replaced', 'expired', 'inactive']);
-
-test('releasing a session backed device also removes the session proof', function () {
-    $participant = registeredDeviceParticipant();
-    $this->withSession([InternshipDeviceAccess::SESSION => [
-        'id' => (int) $participant->id,
-        'fingerprint' => $participant->device_token_hash,
-    ]])->post(route('internship.leave'))
-        ->assertSessionMissing(InternshipDeviceAccess::SESSION)
-        ->assertRedirect(route('internship.show'));
-
-    expect($participant->fresh()->device_token_hash)->toBeNull();
-});
-
 test('invalid categories and malformed identity fields are rejected without server errors', function (array $changes, string $field) {
-    $this->post(route('internship.register'), registrationPayload($changes))->assertSessionHasErrors($field);
+    $this->post(route('internship.register'), [...registrationData(), ...$changes])->assertSessionHasErrors($field);
     $this->assertDatabaseCount('internship_participants', 0);
 })->with([
     [['participant_category' => 'staff'], 'participant_category'],
@@ -106,20 +58,20 @@ test('invalid categories and malformed identity fields are rejected without serv
 
 test('registration cannot overwrite or claim an existing identity', function () {
     $participant = InternshipParticipant::factory()->create(registrationData());
-    $this->post(route('internship.register'), registrationPayload(['name' => 'Nama Pengganti']))->assertSessionHasErrors('student_number')->assertCookieMissing(InternshipDeviceAccess::COOKIE);
+    $this->post(route('internship.register'), [...registrationData(), 'name' => 'Nama Pengganti'])->assertSessionHasErrors('student_number')->assertCookieMissing(InternshipDeviceAccess::COOKIE);
     expect($participant->fresh()->name)->toBe('Peserta Mandiri');
     $this->assertDatabaseCount('internship_participants', 1);
 });
 
 test('the same school number can exist at another institution without a false duplicate', function () {
     InternshipParticipant::factory()->create(registrationData());
-    $this->post(route('internship.register'), registrationPayload(['institution' => 'SMK Berbeda']))->assertSessionHasNoErrors();
+    $this->post(route('internship.register'), [...registrationData(), 'institution' => 'SMK Berbeda'])->assertSessionHasNoErrors();
     $this->assertDatabaseCount('internship_participants', 2);
 });
 
 test('an existing participant awaiting categorization cannot be duplicated by public registration', function () {
     $participant = InternshipParticipant::factory()->create([...registrationData(), 'participant_category' => null]);
-    $this->post(route('internship.register'), registrationPayload())->assertSessionHasErrors('student_number');
+    $this->post(route('internship.register'), registrationData())->assertSessionHasErrors('student_number');
     expect($participant->fresh()->participant_category)->toBeNull();
     $this->assertDatabaseCount('internship_participants', 1);
 });
@@ -144,7 +96,7 @@ test('a modified or expired device proof cannot open participant data', function
 test('an already identified device does not create another participant accidentally', function () {
     $participant = registeredDeviceParticipant();
     $this->withCookie(InternshipDeviceAccess::COOKIE, $participant->id.':'.str_repeat('a', 64))
-        ->post(route('internship.register'), registrationPayload())->assertRedirect(route('internship.show'));
+        ->post(route('internship.register'), registrationData())->assertRedirect(route('internship.show'));
     $this->assertDatabaseCount('internship_participants', 1);
 });
 

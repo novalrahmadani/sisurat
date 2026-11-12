@@ -13,6 +13,7 @@ import {
 } from '@lucide/vue';
 import { computed, nextTick, ref, watch } from 'vue';
 import AppLogoIcon from '@/components/AppLogoIcon.vue';
+import SubmissionResultDialog from '@/components/SubmissionResultDialog.vue';
 import SignaturePad from '@/components/SignaturePad.vue';
 import {
     attendanceDate,
@@ -54,6 +55,8 @@ function newSubmissionToken(): string {
 }
 
 const receiptVisible = ref(props.submitted);
+const successDialogOpen = ref(props.submitted);
+const failureDialogOpen = ref(false);
 const submissionError = ref('');
 const typeChangedNotice = ref(false);
 const form = useForm({
@@ -80,6 +83,12 @@ const errorSummary = ref<HTMLDivElement | null>(null);
 const receipt = ref<HTMLElement | null>(null);
 const errorMessages = computed(() =>
     Array.from(new Set(Object.values(form.errors).filter(Boolean))),
+);
+const failureMessage = computed(
+    () =>
+        submissionError.value ||
+        errorMessages.value.join(' ') ||
+        'Periksa kembali data yang ditandai, lalu coba kirim ulang.',
 );
 const eventDate = computed(() => attendanceDate(props.event.event_date));
 const isPmbTest = computed(() => props.event.type === 'pmb_test');
@@ -199,6 +208,7 @@ function submit(): void {
         );
     }
     if (form.hasErrors) {
+        failureDialogOpen.value = true;
         focusErrors();
         return;
     }
@@ -230,12 +240,17 @@ function submit(): void {
             form.clearErrors();
             typeChangedNotice.value = false;
             receiptVisible.value = true;
+            successDialogOpen.value = true;
             void nextTick(() => receipt.value?.focus());
         },
-        onError: focusErrors,
+        onError: () => {
+            failureDialogOpen.value = true;
+            focusErrors();
+        },
         onNetworkError: () => {
             submissionError.value =
                 'Koneksi terputus. Data Anda masih terisi. Periksa koneksi lalu kirim kembali.';
+            failureDialogOpen.value = true;
             focusErrors();
             return false;
         },
@@ -246,6 +261,7 @@ function submit(): void {
                     : response.status === 419
                       ? 'Sesi halaman telah berakhir. Muat ulang halaman dan isi kembali daftar hadir.'
                       : 'Daftar hadir belum dapat disimpan. Data Anda masih terisi; coba kirim kembali atau hubungi panitia.';
+            failureDialogOpen.value = true;
             focusErrors();
             return false;
         },
@@ -260,6 +276,7 @@ function fillAnotherParticipant(): void {
     submissionError.value = '';
     typeChangedNotice.value = false;
     receiptVisible.value = false;
+    successDialogOpen.value = false;
     void nextTick(() => nameInput.value?.focus());
 }
 </script>
@@ -917,6 +934,27 @@ function fillAnotherParticipant(): void {
                 Sekretariat PMB · Universitas Nurul Huda
             </footer>
         </main>
+        <SubmissionResultDialog
+            v-model:open="successDialogOpen"
+            variant="success"
+            eyebrow="Berhasil"
+            :title="
+                isPmbTest
+                    ? 'Daftar Hadir Tes Berhasil!'
+                    : 'Absensi Rapat Berhasil!'
+            "
+            :description="
+                isPmbTest
+                    ? 'Terima kasih telah melakukan konfirmasi kehadiran. Persiapkan diri dengan baik, percaya pada kemampuan sendiri, dan kerjakan setiap tahapan tes dengan penuh semangat. Semoga mendapatkan hasil terbaik!'
+                    : 'Terima kasih telah mengisi daftar hadir rapat. Setiap kehadiran memiliki arti. Mari ikuti rapat dengan antusias dan jadikan setiap diskusi sebagai langkah menuju perubahan positif.'
+            "
+        />
+        <SubmissionResultDialog
+            v-model:open="failureDialogOpen"
+            variant="error"
+            title="Absensi Belum Berhasil"
+            :description="failureMessage"
+        />
     </div>
 </template>
 

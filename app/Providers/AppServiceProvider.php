@@ -32,10 +32,20 @@ class AppServiceProvider extends ServiceProvider
 
         Gate::define('manage-internships', fn (User $user): bool => $user->isAdministrator());
         RateLimiter::for('internship-registration', fn (Request $request): array => [Limit::perMinute(10)->by('internship-register-'.$request->ip()), Limit::perHour(30)->by('internship-register-hour-'.$request->ip())]);
-        RateLimiter::for('internship-pin', fn (Request $request): array => [
-            Limit::perMinute(8)->by('internship-pin-'.$request->ip()),
-            Limit::perHour(30)->by('internship-pin-hour-'.$request->ip()),
-        ]);
+        RateLimiter::for('internship-pin', function (Request $request): array {
+            $identity = implode('|', array_map(
+                static fn (mixed $value): string => is_string($value) ? trim($value) : '',
+                [$request->ip(), $request->input('participant_category'), $request->input('institution'), $request->input('student_number')],
+            ));
+
+            $identityKey = hash('sha256', $identity);
+
+            return [
+                Limit::perMinute(60)->by('internship-pin-ip-'.$request->ip()),
+                Limit::perMinute(8)->by('internship-pin-identity-'.$identityKey),
+                Limit::perHour(30)->by('internship-pin-hourly-'.$identityKey),
+            ];
+        });
         RateLimiter::for('internship-pin-issuance', fn (Request $request): array => [
             Limit::perMinute(5)->by('internship-pin-issue-ip-'.$request->ip()),
             Limit::perMinute(5)->by('internship-pin-issue-session-'.hash('sha256', $request->session()->getId())),
@@ -83,4 +93,3 @@ class AppServiceProvider extends ServiceProvider
         );
     }
 }
-

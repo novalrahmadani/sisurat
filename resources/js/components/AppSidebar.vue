@@ -253,4 +253,3 @@ const settingsNavItems = computed<NavItem[]>(() => [
     </Sidebar>
     <slot />
 </template>
-

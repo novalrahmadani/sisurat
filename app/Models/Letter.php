@@ -33,12 +33,14 @@ class Letter extends Model
         'participant_faculty',
         'participant_result',
         'participation_status',
+        'content_overrides',
     ];
 
     protected function casts(): array
     {
         return [
             'institution_id' => 'integer',
+            'content_overrides' => 'array',
         ];
     }
 

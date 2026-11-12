@@ -84,7 +84,7 @@ class PmbProspectController extends Controller
         $cachePath = storage_path('framework/cache/dompdf');
         File::ensureDirectoryExists($cachePath);
         $options = new Options;
-        $options->setDefaultFont('DejaVu Sans');
+        $options->setDefaultFont('DejaVu Serif');
         $options->setIsRemoteEnabled(false);
         $options->setIsPhpEnabled(false);
         $options->setChroot(public_path());
@@ -124,4 +124,3 @@ class PmbProspectController extends Controller
         return $response;
     }
 }
-

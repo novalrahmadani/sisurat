@@ -192,7 +192,7 @@ function save(): void {
                         maxlength="100"
                         class="sisurat-input"
                         :disabled="form.processing"
-                        placeholder="Contoh: NIP.Y 00000000000000.0.000"
+                        placeholder="Contoh: NIP.Y 19951010202310.1.580"
                     />
                     <p
                         v-if="form.errors.number"

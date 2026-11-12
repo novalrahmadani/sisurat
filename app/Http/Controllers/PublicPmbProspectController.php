@@ -64,4 +64,3 @@ class PublicPmbProspectController extends Controller
         return to_route('pmb-prospects.join');
     }
 }
-

@@ -196,4 +196,3 @@ function saveSettings(): void {
         </section>
     </main>
 </template>
-

@@ -69,4 +69,3 @@ class PublicFormFlyerController extends Controller
         ]);
     }
 }
-

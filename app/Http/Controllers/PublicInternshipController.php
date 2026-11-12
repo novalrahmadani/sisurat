@@ -3,35 +3,39 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\InternshipAttendanceRequest;
-use App\Http\Requests\InternshipPinRequest;
 use App\Http\Requests\InternshipRegistrationRequest;
 use App\Models\InternshipParticipant;
 use App\Support\InternshipDeviceAccess;
 use App\Support\InternshipLocationAccess;
-use App\Support\InternshipPinAccess;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\UniqueConstraintViolationException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class PublicInternshipController extends Controller
 {
-    public function __construct(private InternshipDeviceAccess $devices, private InternshipLocationAccess $locations, private InternshipPinAccess $pins) {}
+    public function __construct(private InternshipDeviceAccess $devices, private InternshipLocationAccess $locations) {}
 
     public function show(Request $request): Response
     {
         return $this->renderPage($request);
     }
 
-    public function session(): HttpResponse
+    public function session(Request $request): JsonResponse
     {
-        return response()->noContent()->header('Cache-Control', 'private, no-store, max-age=0');
+        $participant = $this->verifiedParticipant($request);
+
+        return response()->json([
+            'authenticated' => $participant !== null,
+            'participant' => $participant?->only(['id', 'name', 'student_number', 'institution', 'study_program']),
+        ])->header('Cache-Control', 'private, no-store');
     }
 
     /** @param array{token: string, available: bool}|null $recovery */
@@ -41,18 +45,15 @@ class PublicInternshipController extends Controller
         $now->locale('id');
         $participant = $this->verifiedParticipant($request);
         $record = $participant?->attendances()->whereDate('attendance_date', $now->toDateString())->first();
-        $issuedPin = $request->session()->pull('internship_issued_pin');
 
         return Inertia::render('internship/Public', [
             'participant' => $participant ? [...$participant->only(['id', 'name', 'student_number', 'institution', 'study_program']),
                 'participant_category' => $participant->participant_category, 'category_label' => $participant->categoryLabel(), 'class_level' => $participant->class_level,
                 'start_date' => $participant->start_date->toDateString(), 'end_date' => $participant->end_date->toDateString(),
-                'can_attend' => $participant->canAttend($now->toDateString()), 'has_pin' => $participant->pin_lookup_hash !== null] : null,
-            'issuedPin' => $participant && is_array($issuedPin) && ($issuedPin['id'] ?? null) === $participant->id ? $issuedPin['pin'] : null,
+                'can_attend' => $participant->canAttend($now->toDateString())] : null,
             'attendance' => $record?->presentation(),
             'today' => ['date' => $now->toDateString(), 'label' => $now->translatedFormat('l, d F Y'), 'server_time' => $now->toIso8601String()],
             'receipt' => $request->session()->pull('internship_receipt'),
-            'sessionNotice' => $request->session()->pull('internship_session_notice'),
             'location' => $this->locations->presentation(),
             'recovery' => $recovery,
         ])->withViewData('publicInternship', true);
@@ -65,47 +66,16 @@ class PublicInternshipController extends Controller
         }
         try {
             DB::transaction(function () use ($request): void {
-                $participant = InternshipParticipant::query()->create([...$request->safe()->except(['pin', 'pin_confirmation']), 'is_active' => true, 'registration_source' => 'public']);
-                $pin = $request->validated('pin');
-                $this->pins->assign($participant, $pin);
+                $data = $request->validated();
+                $pin = $data['pin'];
+                unset($data['pin'], $data['pin_confirmation']);
+                $participant = InternshipParticipant::query()->create([...$data, 'access_code_hash' => Hash::make($pin), 'is_active' => true, 'registration_source' => 'public']);
                 $this->devices->remember($request, $participant);
-                $request->session()->put('internship_issued_pin', ['id' => $participant->id, 'pin' => $pin]);
             }, 5);
         } catch (UniqueConstraintViolationException) {
-            throw ValidationException::withMessages(['student_number' => 'Identitas ini sudah terdaftar. Pilih Masuk dengan PIN atau gunakan perangkat pendaftaran sebelumnya. Jika belum memiliki PIN, hubungi admin PMB untuk pemulihan.']);
+            throw ValidationException::withMessages(['student_number' => 'Identitas ini sudah terdaftar. Gunakan perangkat pendaftaran sebelumnya atau hubungi admin PMB.']);
         }
         $request->session()->put('internship_receipt', 'Pendaftaran peserta berhasil. Data Anda telah masuk ke administrasi magang PMB. Silakan lanjutkan absensi sesuai periode magang.');
-
-        return to_route('internship.show');
-    }
-
-    public function verifyPin(InternshipPinRequest $request): RedirectResponse
-    {
-        $pin = $request->validated('pin');
-        DB::transaction(function () use ($request, $pin): void {
-            $participant = InternshipParticipant::query()->where('pin_lookup_hash', $this->pins->fingerprint($pin))->lockForUpdate()->first();
-            if (! $participant || ! $participant->is_active || ! $participant->access_code_hash
-                || ! Hash::check($pin, $participant->access_code_hash)) {
-                throw ValidationException::withMessages(['pin' => 'PIN tidak sesuai atau peserta tidak aktif. Periksa kembali PIN Anda.']);
-            }
-            $this->devices->remember($request, $participant);
-            $participant->update(['recovery_token_hash' => null, 'recovery_expires_at' => null]);
-        }, 5);
-
-        return to_route('internship.show');
-    }
-
-    public function issuePin(Request $request): RedirectResponse
-    {
-        DB::transaction(function () use ($request): void {
-            $participant = $this->verifiedParticipant($request, true);
-            if (! $participant) {
-                throw ValidationException::withMessages(['access' => 'Akses peserta belum dikenali. Masuk dengan PIN atau gunakan tautan pemulihan dari admin PMB.']);
-            }
-            $pin = $this->pins->issue($participant);
-            $this->devices->remember($request, $participant);
-            $request->session()->put('internship_issued_pin', ['id' => $participant->id, 'pin' => $pin]);
-        }, 5);
 
         return to_route('internship.show');
     }
@@ -147,6 +117,61 @@ class PublicInternshipController extends Controller
         return to_route('internship.show');
     }
 
+    public function verifyPin(Request $request): RedirectResponse
+    {
+        return $this->verifyParticipantPin($request, 'pin');
+    }
+
+    private function verifyParticipantPin(Request $request, string $pinField): RedirectResponse
+    {
+        $data = $request->validate([
+            'participant_category' => ['required', Rule::in(array_keys(InternshipParticipant::CATEGORIES))],
+            'institution' => ['required', 'string', 'max:200'],
+            'student_number' => ['required', 'string', 'max:100'],
+            $pinField => ['required', 'digits:6'],
+        ], [
+            'participant_category.required' => 'Pilih kategori peserta.',
+            'participant_category.in' => 'Kategori peserta tidak valid.',
+            'institution.required' => 'Isi nama sekolah atau perguruan tinggi.',
+            'student_number.required' => 'Isi NIM atau nomor identitas Anda.',
+            $pinField.'.required' => 'Isi PIN absensi 6 digit.',
+            $pinField.'.digits' => 'PIN absensi harus terdiri dari 6 angka.',
+        ]);
+        $participant = InternshipParticipant::query()
+            ->where('participant_category', $data['participant_category'])
+            ->where('institution', trim($data['institution']))
+            ->where('student_number', trim($data['student_number']))
+            ->first();
+        if (! $participant || ! $participant->is_active || ! $participant->access_code_hash
+            || ! Hash::check($data[$pinField], $participant->access_code_hash)) {
+            throw ValidationException::withMessages([$pinField => 'NIM atau PIN tidak sesuai, atau peserta tidak aktif.']);
+        }
+        $request->session()->regenerate();
+        $request->session()->put('internship_access', ['id' => $participant->id, 'fingerprint' => $participant->access_code_hash, 'expires_at' => now()->addHours(12)->timestamp]);
+
+        return to_route('internship.show');
+    }
+
+    public function issuePin(Request $request): RedirectResponse
+    {
+        $participant = $this->verifiedParticipant($request, true);
+        if (! $participant) {
+            throw ValidationException::withMessages(['pin' => 'Masuk dengan PIN terlebih dahulu untuk mengubah PIN absensi.']);
+        }
+        $data = $request->validate([
+            'pin' => ['required', 'digits:6', 'confirmed'],
+        ], [
+            'pin.required' => 'Buat PIN absensi 6 digit.',
+            'pin.digits' => 'PIN absensi harus terdiri dari 6 angka.',
+            'pin.confirmed' => 'Konfirmasi PIN tidak sama.',
+        ]);
+        $participant->update(['access_code_hash' => Hash::make($data['pin'])]);
+        $request->session()->put('internship_access', ['id' => $participant->id, 'fingerprint' => $participant->access_code_hash, 'expires_at' => now()->addHours(12)->timestamp]);
+        $request->session()->put('internship_receipt', 'PIN absensi berhasil diperbarui.');
+
+        return to_route('internship.show');
+    }
+
     public function submit(InternshipAttendanceRequest $request): RedirectResponse
     {
         $data = $request->validated();
@@ -154,7 +179,7 @@ class PublicInternshipController extends Controller
         DB::transaction(function () use ($request, $data, $signature): void {
             $participant = $this->verifiedParticipant($request, true);
             if (! $participant) {
-                throw ValidationException::withMessages(['access' => 'Akses peserta belum dikenali. Masuk dengan PIN pribadi untuk melanjutkan absensi.']);
+                throw ValidationException::withMessages(['access' => 'Akses perangkat tidak tersedia. Daftar sebagai peserta baru atau minta pemulihan akses kepada admin jika sudah terdaftar.']);
             }
             $now = CarbonImmutable::now('Asia/Jakarta');
             if (! $participant->canAttend($now->toDateString())) {

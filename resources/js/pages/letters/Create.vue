@@ -950,10 +950,15 @@ function attachKnownInstitution(item: LetterItem): LetterItem {
 function applyCatalogInstitutions(ids: number[]): void {
     if (form.type !== 'permission' || form.processing || importing.value)
         return;
-    const chosenIds = new Set(ids);
-    const chosen = currentInstitutions.value.filter((institution) =>
-        chosenIds.has(institution.id),
+    const institutionsById = new Map(
+        currentInstitutions.value.map((institution) => [
+            institution.id,
+            institution,
+        ]),
     );
+    const chosen = ids
+        .map((id) => institutionsById.get(id))
+        .filter((institution) => institution !== undefined);
     const existing = form.items.filter((item) => !isBlankItem(item));
     const existingIds = new Set(existing.map((item) => item.institution_id));
     const existingNames = new Set(existing.map(targetIdentity));

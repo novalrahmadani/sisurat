@@ -21,7 +21,7 @@ function letterBatchPayload(string $type, array $items): array
         'number_prefix' => 'PPMBPM-UNUHA/TU.2.1',
         'signatory_title' => 'Ketua Pusat PMB',
         'signatory_name' => 'Wardianto, M.Kom',
-        'signatory_number' => 'NIP.Y 00000000000000.0.000',
+        'signatory_number' => 'NIP.Y 19951010202310.1.580',
         'event_start' => '2026-10-07',
         'event_end' => '2026-10-09',
         'event_location' => 'Kampus Universitas Nurul Huda',

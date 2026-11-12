@@ -64,4 +64,3 @@ class StorePmbProspectSubmissionRequest extends FormRequest
         $this->merge($normalized);
     }
 }
-

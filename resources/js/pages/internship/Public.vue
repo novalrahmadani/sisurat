@@ -6,8 +6,6 @@ import {
     CalendarDays,
     CheckCircle2,
     Clock3,
-    Copy,
-    KeyRound,
     Info,
     LocateFixed,
     LogOut,
@@ -16,8 +14,8 @@ import {
 } from '@lucide/vue';
 import { computed, onMounted, ref, watch } from 'vue';
 import SignaturePad from '@/components/SignaturePad.vue';
-import AlertError from '@/components/AlertError.vue';
 import InputError from '@/components/InputError.vue';
+import SubmissionResultDialog from '@/components/SubmissionResultDialog.vue';
 import PublicLayout from '@/layouts/PublicLayout.vue';
 import { home } from '@/routes';
 import {
@@ -27,7 +25,6 @@ import {
     recover,
     verifyPin,
     issuePin,
-    session as internshipSession,
 } from '@/routes/internship';
 
 type Participant = {
@@ -42,7 +39,6 @@ type Participant = {
     start_date: string;
     end_date: string;
     can_attend: boolean;
-    has_pin: boolean;
 };
 type Attendance = {
     checked_in_at: string;
@@ -65,10 +61,8 @@ const props = defineProps<{
     attendance: Attendance | null;
     today: { date: string; label: string; server_time: string };
     receipt: string | null;
-    sessionNotice: string | null;
     location: { configured: boolean; radius_meters: number };
     recovery: { token: string; available: boolean } | null;
-    issuedPin: string | null;
 }>();
 const registration = useForm({
     name: '',
@@ -77,10 +71,10 @@ const registration = useForm({
     institution: '',
     study_program: '',
     class_level: '',
-    start_date: props.today.date,
-    end_date: '',
     pin: '',
     pin_confirmation: '',
+    start_date: props.today.date,
+    end_date: '',
 });
 const checkForm = useForm<CheckData>({
     action: 'check_in',
@@ -92,18 +86,33 @@ const checkForm = useForm<CheckData>({
     position_captured_at: null,
 });
 const recoveryForm = useForm<{ access?: string }>({});
-const pinForm = useForm({ pin: '' });
-const pinIssueForm = useForm<{ access?: string }>({});
-const showPin = ref(false);
-const showRegistrationPin = ref(false);
-const copyMessage = ref('');
-const refreshingSession = ref(false);
-const sessionError = ref('');
+const loginForm = useForm({
+    participant_category: '',
+    institution: '',
+    student_number: '',
+    pin: '',
+});
+const pinForm = useForm({ pin: '', pin_confirmation: '' });
 const readingLocation = ref(false);
 const secureLocation = ref(false);
 const locationError = ref('');
+const attendanceReceipt = computed(
+    () =>
+        props.receipt?.startsWith('Jam masuk berhasil') ||
+        props.receipt?.startsWith('Jam pulang berhasil') ||
+        false,
+);
+const successDialogOpen = ref(attendanceReceipt.value);
+const failureDialogOpen = ref(false);
+const failureMessage = computed(
+    () =>
+        locationError.value ||
+        checkForm.errors.action ||
+        checkForm.errors.access ||
+        checkForm.errors.location ||
+        'Kehadiran belum berhasil dicatat. Periksa kembali data dan lokasi, lalu coba lagi.',
+);
 const signatureKey = ref(0);
-const returningParticipant = ref(true);
 const action = computed(() => (props.attendance ? 'check_out' : 'check_in'));
 const complete = computed(() => Boolean(props.attendance?.checked_out_at));
 const university = computed(
@@ -174,98 +183,37 @@ watch(
         checkForm.resetAndClearErrors();
         signatureKey.value++;
         locationError.value = '';
-        copyMessage.value = '';
     },
 );
-async function prepareSession(): Promise<boolean> {
-    if (refreshingSession.value) return false;
-    refreshingSession.value = true;
-    sessionError.value = '';
-    const controller = new AbortController();
-    const timeout = window.setTimeout(() => controller.abort(), 10000);
-    try {
-        const response = await fetch(internshipSession.url(), {
-            credentials: 'same-origin',
-            cache: 'no-store',
-            headers: { Accept: 'application/json' },
-            signal: controller.signal,
-        });
-        if (response.status !== 204) throw new Error('Session refresh failed');
-        return true;
-    } catch {
-        sessionError.value =
-            'Koneksi belum dapat diperbarui. Periksa internet dan coba lagi. Data formulir belum dikirim.';
-        return false;
-    } finally {
-        window.clearTimeout(timeout);
-        refreshingSession.value = false;
-    }
-}
-async function registerParticipant() {
-    if (registration.processing || !(await prepareSession())) return;
+watch(attendanceReceipt, (isVisible) => {
+    successDialogOpen.value = isVisible;
+});
+function registerParticipant() {
     registration.post(register.url(), {
-        preserveScroll: false,
-        onSuccess: () => {
-            registration.resetAndClearErrors();
-            showRegistrationPin.value = false;
-            returningParticipant.value = true;
-        },
-    });
-}
-async function enterWithPin() {
-    if (pinForm.processing || !(await prepareSession())) return;
-    pinForm.post(verifyPin.url(), {
-        preserveScroll: false,
-        onFinish: () => pinForm.reset('pin'),
-    });
-}
-async function createPin() {
-    if (pinIssueForm.processing || refreshingSession.value) return;
-    if (
-        props.participant?.has_pin &&
-        !window.confirm(
-            'Buat PIN baru? PIN sebelumnya akan berhenti berlaku. Simpan PIN baru setelah ditampilkan.',
-        )
-    )
-        return;
-    if (!(await prepareSession())) return;
-    pinIssueForm.post(issuePin.url(), {
         preserveScroll: true,
-        onSuccess: () => {
-            copyMessage.value = '';
-        },
+        onSuccess: () => registration.resetAndClearErrors(),
     });
 }
-async function copyPin() {
-    if (!props.issuedPin) return;
-    try {
-        await navigator.clipboard.writeText(props.issuedPin);
-        copyMessage.value = 'PIN berhasil disalin.';
-    } catch {
-        copyMessage.value =
-            'Silakan catat atau salin PIN yang ditampilkan secara manual.';
-    }
-}
-async function activateDevice() {
-    if (
-        props.recovery?.available &&
-        !recoveryForm.processing &&
-        (await prepareSession())
-    )
+function activateDevice() {
+    if (props.recovery?.available)
         recoveryForm.post(recover.url(props.recovery.token));
 }
+function loginWithPin() {
+    loginForm.post(verifyPin.url(), { preserveScroll: true });
+}
+function updatePin() {
+    pinForm.post(issuePin.url(), {
+        preserveScroll: true,
+        onSuccess: () => pinForm.resetAndClearErrors(),
+    });
+}
 async function recordAttendance() {
-    if (
-        checkForm.processing ||
-        readingLocation.value ||
-        refreshingSession.value
-    )
-        return;
     locationError.value = '';
     checkForm.clearErrors();
     if (!secureLocation.value) {
         locationError.value =
             'GPS memerlukan alamat HTTPS dan izin lokasi. Hubungi admin PMB untuk alamat absensi yang dapat digunakan dari HP.';
+        failureDialogOpen.value = true;
         return;
     }
     if (!checkForm.signature) {
@@ -273,6 +221,7 @@ async function recordAttendance() {
             'signature',
             'Bubuhkan tanda tangan terlebih dahulu.',
         );
+        failureDialogOpen.value = true;
         return;
     }
     readingLocation.value = true;
@@ -290,8 +239,26 @@ async function recordAttendance() {
         checkForm.longitude = position.coords.longitude;
         checkForm.accuracy = position.coords.accuracy;
         checkForm.position_captured_at = Math.floor(position.timestamp / 1000);
-        if (!(await prepareSession())) return;
-        checkForm.post(submit.url(), { preserveScroll: true });
+        checkForm.post(submit.url(), {
+            preserveScroll: true,
+            onError: () => {
+                failureDialogOpen.value = true;
+            },
+            onNetworkError: () => {
+                locationError.value =
+                    'Koneksi terputus. Kehadiran belum tersimpan. Periksa koneksi lalu coba kembali.';
+                failureDialogOpen.value = true;
+                return false;
+            },
+            onHttpException: (response) => {
+                locationError.value =
+                    response.status === 429
+                        ? 'Terlalu banyak pengiriman. Tunggu sebentar lalu coba kembali.'
+                        : 'Kehadiran belum tersimpan. Muat ulang halaman jika masalah tetap terjadi, atau hubungi admin PMB.';
+                failureDialogOpen.value = true;
+                return false;
+            },
+        });
     } catch (error) {
         const code = (error as GeolocationPositionError).code;
         locationError.value =
@@ -300,26 +267,18 @@ async function recordAttendance() {
                 : code === 3
                   ? 'Pembacaan lokasi melewati batas waktu. Pastikan GPS aktif lalu coba kembali.'
                   : 'Lokasi belum dapat dibaca. Aktifkan layanan lokasi dan coba kembali di area terbuka dekat kantor PMB.';
+        failureDialogOpen.value = true;
     } finally {
         readingLocation.value = false;
     }
 }
-async function releaseDevice() {
-    if (recoveryForm.processing || refreshingSession.value) return;
+function releaseDevice() {
     if (
         window.confirm(
-            props.participant?.has_pin
-                ? 'Keluar dari data peserta pada perangkat ini? Anda dapat masuk kembali menggunakan PIN pribadi.'
-                : 'Peserta ini belum memiliki PIN. Buat dan simpan PIN terlebih dahulu agar dapat masuk kembali tanpa bantuan admin. Tetap keluar?',
+            'Lepaskan akses perangkat ini? Untuk menggunakan data peserta yang sama lagi, Anda perlu meminta tautan akses kepada admin PMB.',
         )
     ) {
-        if (!(await prepareSession())) return;
-        recoveryForm.post(leave.url(), {
-            onSuccess: () => {
-                returningParticipant.value = true;
-                pinForm.resetAndClearErrors();
-            },
-        });
+        recoveryForm.post(leave.url());
     }
 }
 function dateLabel(date: string) {
@@ -385,7 +344,7 @@ function dateLabel(date: string) {
                             v-for="(step, i) in [
                                 {
                                     title: 'Daftarkan data diri',
-                                    text: 'Lengkapi identitas dan periode magang satu kali, lalu buat PIN pribadi 8 angka untuk akses absensi.',
+                                    text: 'Lengkapi identitas dan periode magang satu kali. Peserta tidak perlu membuat akun.',
                                 },
                                 {
                                     title: 'Catat kehadiran masuk',
@@ -393,7 +352,7 @@ function dateLabel(date: string) {
                                 },
                                 {
                                     title: 'Catat kehadiran pulang',
-                                    text: 'Buka kembali absensi. Jika data belum dikenali, cukup masukkan PIN. Lokasi diperiksa kembali saat absensi pulang.',
+                                    text: 'Gunakan perangkat dan browser yang sama. Lokasi diperiksa kembali saat absensi pulang.',
                                 },
                             ]"
                             :key="step.title"
@@ -427,8 +386,10 @@ function dateLabel(date: string) {
                         <h3 class="font-semibold text-white">
                             Sudah terdaftar atau berganti HP?
                         </h3>
-                        Cukup masukkan PIN pribadi 8 angka. Data peserta akan
-                        terbaca otomatis tanpa mengisi identitas kembali.
+                        Masuk dengan NIS/NIM dan PIN yang dibuat saat
+                        pendaftaran. Jika PIN atau akses hilang, mintalah
+                        tautan pemulihan kepada admin PMB. Data tidak perlu
+                        didaftarkan ulang.
                     </div>
                 </aside>
                 <section
@@ -443,60 +404,6 @@ function dateLabel(date: string) {
                         <CheckCircle2 class="mt-0.5 size-5 shrink-0" />{{
                             receipt
                         }}
-                    </div>
-                    <div
-                        v-if="sessionNotice"
-                        role="status"
-                        class="mb-5 flex gap-3 rounded-2xl border border-amber-300/50 bg-amber-50 p-4 text-sm leading-6 text-amber-950 dark:bg-amber-950 dark:text-amber-100"
-                    >
-                        <Info class="mt-0.5 size-5 shrink-0" />{{
-                            sessionNotice
-                        }}
-                    </div>
-                    <InputError
-                        class="mb-4"
-                        role="alert"
-                        :message="sessionError"
-                    />
-                    <InputError
-                        class="mb-4"
-                        :message="pinIssueForm.errors.access"
-                    />
-                    <div
-                        v-if="participant && issuedPin && !recovery"
-                        role="status"
-                        class="mb-6 rounded-2xl border border-primary/25 bg-primary/5 p-5"
-                    >
-                        <p
-                            class="flex items-center gap-2 text-sm font-semibold text-primary dark:text-emerald-300"
-                        >
-                            <KeyRound class="size-4" />PIN pribadi Anda
-                        </p>
-                        <p
-                            class="my-4 font-mono text-3xl font-bold tracking-[.2em] text-foreground sm:text-4xl"
-                            data-testid="issued-pin"
-                        >
-                            {{ issuedPin }}
-                        </p>
-                        <p class="text-xs leading-6 text-muted-foreground">
-                            Simpan PIN ini sekarang. PIN hanya ditampilkan saat
-                            dibuat. Gunakan untuk membuka absensi dari HP atau
-                            browser lain. Jangan bagikan kepada peserta lain.
-                        </p>
-                        <button
-                            type="button"
-                            class="sisurat-secondary-action mt-4 min-h-11"
-                            @click="copyPin"
-                        >
-                            <Copy class="size-4" />Salin PIN
-                        </button>
-                        <p
-                            v-if="copyMessage"
-                            role="status"
-                            class="mt-2 text-xs leading-6"
-                        >
-                            {{ copyMessage }}
-                        </p>
                     </div>
                     <div v-if="recovery">
                         <h2 id="form-title" class="text-xl font-semibold">
@@ -516,9 +423,7 @@ function dateLabel(date: string) {
                         <button
                             v-if="recovery.available"
                             class="sisurat-primary-action mt-6 w-full justify-center"
-                            :disabled="
-                                recoveryForm.processing || refreshingSession
-                            "
+                            :disabled="recoveryForm.processing"
                             @click="activateDevice"
                         >
                             Gunakan perangkat ini<ArrowRight class="size-4" />
@@ -530,443 +435,219 @@ function dateLabel(date: string) {
                         >
                     </div>
                     <div v-else-if="!participant">
-                        <div
-                            class="mb-6 grid grid-cols-2 gap-2 rounded-2xl bg-muted p-1.5"
-                            role="group"
-                            aria-label="Pilihan peserta magang"
+                        <p
+                            class="text-xs font-semibold tracking-wide text-primary uppercase dark:text-emerald-300"
                         >
-                            <button
-                                type="button"
-                                class="min-h-12 rounded-xl px-3 py-2 text-sm font-medium"
-                                :class="
-                                    returningParticipant
-                                        ? 'bg-card text-primary shadow-sm'
-                                        : 'text-muted-foreground'
-                                "
-                                :aria-pressed="returningParticipant"
-                                @click="returningParticipant = true"
-                            >
-                                Masuk dengan PIN
-                            </button>
-                            <button
-                                type="button"
-                                class="min-h-12 rounded-xl px-3 py-2 text-sm font-medium"
-                                :class="
-                                    !returningParticipant
-                                        ? 'bg-card text-primary shadow-sm'
-                                        : 'text-muted-foreground'
-                                "
-                                :aria-pressed="!returningParticipant"
-                                @click="returningParticipant = false"
-                            >
-                                Peserta baru
-                            </button>
-                        </div>
-                        <div v-if="returningParticipant">
-                            <h2 id="form-title" class="text-xl font-semibold">
-                                Masukkan PIN pribadi
-                            </h2>
-                            <p
-                                class="mt-3 text-sm leading-7 text-muted-foreground"
-                            >
-                                Masukkan 8 angka PIN Anda. Sistem akan langsung
-                                membuka identitas dan absensi yang sudah
-                                terdaftar.
-                            </p>
-                            <InputError
-                                class="mt-3"
-                                :message="checkForm.errors.access"
-                            />
-                            <form
-                                class="mt-6 space-y-4"
-                                @submit.prevent="enterWithPin"
-                            >
-                                <AlertError
-                                    v-if="pinForm.errors.pin"
-                                    id="pin-error"
-                                    title="Periksa kembali PIN Anda"
-                                    :errors="[pinForm.errors.pin]"
-                                    class="border-red-300/70 bg-red-50 text-red-800 dark:border-red-800 dark:bg-red-950/50 dark:text-red-200"
-                                    aria-live="assertive"
-                                />
+                            Langkah awal
+                        </p>
+                        <h2 id="form-title" class="mt-2 text-xl font-semibold">
+                            Pendaftaran Peserta Magang
+                        </h2>
+                        <p class="mt-2 text-sm leading-6 text-muted-foreground">
+                            Lengkapi data sesuai identitas dan surat pengantar
+                            magang. Data akan tercatat pada administrasi PMB.
+                        </p>
+                        <InputError
+                            class="mt-3"
+                            :message="checkForm.errors.access"
+                        />
+                        <form
+                            class="mb-6 rounded-2xl border border-border bg-muted/30 p-4 sm:p-5"
+                            @submit.prevent="loginWithPin"
+                        >
+                            <h3 class="font-semibold">Sudah terdaftar? Masuk dengan PIN</h3>
+                            <p class="mt-1 text-xs leading-5 text-muted-foreground">Masukkan kategori, sekolah/perguruan tinggi, NIS/NISN atau NIM, dan PIN 6 digit yang Anda buat saat pendaftaran.</p>
+                            <div class="mt-4 grid gap-3 sm:grid-cols-2">
                                 <div>
-                                    <label
-                                        for="attendance-pin"
-                                        class="mb-2 block text-sm font-medium"
-                                        >PIN absensi</label
-                                    >
-                                    <input
-                                        id="attendance-pin"
-                                        v-model="pinForm.pin"
-                                        :type="showPin ? 'text' : 'password'"
-                                        inputmode="numeric"
-                                        pattern="[0-9]{8}"
-                                        minlength="8"
-                                        maxlength="8"
-                                        autocomplete="off"
-                                        required
-                                        class="sisurat-input min-h-14 w-full font-mono text-2xl tracking-[.2em]"
-                                        placeholder="8 angka"
-                                        :aria-invalid="
-                                            Boolean(pinForm.errors.pin)
-                                        "
-                                        aria-describedby="pin-help pin-error"
-                                    />
+                                    <label for="login-category" class="mb-1 block text-xs font-medium">Kategori peserta</label>
+                                    <select id="login-category" v-model="loginForm.participant_category" class="sisurat-input min-h-11 w-full" required>
+                                        <option value="" disabled>Pilih kategori</option>
+                                        <option value="smk">Siswa SMK</option>
+                                        <option value="sma">Siswa SMA</option>
+                                        <option value="university">Mahasiswa</option>
+                                    </select>
+                                    <InputError :message="loginForm.errors.participant_category" />
                                 </div>
-                                <label
-                                    class="flex min-h-11 items-center gap-3 text-sm text-muted-foreground"
-                                    ><input
-                                        v-model="showPin"
-                                        type="checkbox"
-                                        class="size-4 accent-primary"
-                                    />Tampilkan PIN</label
-                                >
-                                <button
-                                    type="submit"
-                                    :disabled="
-                                        pinForm.processing || refreshingSession
-                                    "
-                                    class="sisurat-primary-action min-h-12 w-full justify-center"
-                                >
-                                    <KeyRound class="size-4" />{{
-                                        refreshingSession
-                                            ? 'Menyiapkan akses…'
-                                            : pinForm.processing
-                                              ? 'Memeriksa PIN…'
-                                              : 'Buka absensi'
-                                    }}<ArrowRight class="size-4" />
-                                </button>
-                                <p
-                                    id="pin-help"
-                                    class="text-xs leading-6 text-muted-foreground"
-                                >
-                                    Tidak memerlukan akun atau login admin.
-                                    Lokasi PMB tetap diperiksa saat Anda
-                                    menyimpan absensi.
-                                </p>
-                            </form>
-                            <div
-                                class="mt-5 rounded-2xl border border-border bg-muted/50 p-4 text-sm leading-7"
-                            >
-                                <p class="font-semibold">
-                                    Lupa PIN atau peserta lama belum punya PIN?
-                                </p>
-                                <p class="mt-2 text-muted-foreground">
-                                    Buka dari browser yang masih mengenali data
-                                    Anda, lalu pilih “Buat PIN” atau “Ganti
-                                    PIN”. Jika semua akses hilang, hubungi admin
-                                    PMB untuk pemulihan satu kali. Data tidak
-                                    perlu didaftarkan ulang.
-                                </p>
-                            </div>
-                            <p
-                                class="mt-5 text-xs leading-6 text-muted-foreground"
-                            >
-                                Gunakan alamat website SISURAT yang sama untuk
-                                pendaftaran dan absensi berikutnya.
-                            </p>
-                        </div>
-                        <div v-else>
-                            <p
-                                class="text-xs font-semibold tracking-wide text-primary uppercase dark:text-emerald-300"
-                            >
-                                Langkah awal
-                            </p>
-                            <h2
-                                id="form-title"
-                                class="mt-2 text-xl font-semibold"
-                            >
-                                Pendaftaran Peserta Magang
-                            </h2>
-                            <p
-                                class="mt-2 text-sm leading-6 text-muted-foreground"
-                            >
-                                Lengkapi data sesuai identitas dan surat
-                                pengantar magang. Data akan tercatat pada
-                                administrasi PMB.
-                            </p>
-                            <InputError
-                                class="mt-3"
-                                :message="checkForm.errors.access"
-                            />
-                            <form
-                                class="mt-6 space-y-5"
-                                @submit.prevent="registerParticipant"
-                            >
                                 <div>
+                                    <label for="login-institution" class="mb-1 block text-xs font-medium">Asal sekolah/perguruan tinggi</label>
+                                    <input id="login-institution" v-model="loginForm.institution" class="sisurat-input min-h-11 w-full" required maxlength="200" autocomplete="organization" />
+                                    <InputError :message="loginForm.errors.institution" />
+                                </div>
+                                <div>
+                                    <label for="login-student-number" class="mb-1 block text-xs font-medium">NIS/NISN atau NIM</label>
+                                    <input id="login-student-number" v-model="loginForm.student_number" class="sisurat-input min-h-11 w-full" required autocomplete="username" />
+                                    <InputError :message="loginForm.errors.student_number" />
+                                </div>
+                                <div>
+                                    <label for="login-pin" class="mb-1 block text-xs font-medium">PIN absensi</label>
+                                    <input id="login-pin" v-model="loginForm.pin" class="sisurat-input min-h-11 w-full" type="password" inputmode="numeric" pattern="[0-9]{6}" minlength="6" maxlength="6" required autocomplete="current-password" />
+                                    <InputError :message="loginForm.errors.pin" />
+                                </div>
+                            </div>
+                            <button type="submit" class="sisurat-secondary-action mt-3" :disabled="loginForm.processing">{{ loginForm.processing ? 'Memeriksa PIN…' : 'Masuk dengan PIN' }}</button>
+                        </form>
+                        <form
+                            class="mt-6 space-y-5"
+                            @submit.prevent="registerParticipant"
+                        >
+                            <div>
+                                <label
+                                    for="participant-category"
+                                    class="mb-2 block text-sm font-medium"
+                                    >Kategori peserta<span
+                                        class="ml-1 text-red-600"
+                                        aria-hidden="true"
+                                        >*</span
+                                    ></label
+                                >
+                                <select
+                                    id="participant-category"
+                                    v-model="registration.participant_category"
+                                    class="sisurat-input min-h-12 w-full"
+                                    required
+                                >
+                                    <option value="" disabled>
+                                        Pilih kategori peserta
+                                    </option>
+                                    <option value="smk">Siswa SMK</option>
+                                    <option value="sma">Siswa SMA</option>
+                                    <option value="university">
+                                        Mahasiswa
+                                    </option>
+                                </select>
+                                <InputError
+                                    :message="
+                                        registration.errors.participant_category
+                                    "
+                                />
+                            </div>
+                            <div class="grid gap-5 sm:grid-cols-2">
+                                <div
+                                    v-for="field in fields"
+                                    :key="field.key"
+                                    :class="
+                                        field.key === 'institution'
+                                            ? 'sm:col-span-2'
+                                            : ''
+                                    "
+                                >
                                     <label
-                                        for="participant-category"
+                                        :for="'registration-' + field.key"
                                         class="mb-2 block text-sm font-medium"
-                                        >Kategori peserta<span
+                                        >{{ field.label
+                                        }}<span
+                                            v-if="field.required"
                                             class="ml-1 text-red-600"
                                             aria-hidden="true"
                                             >*</span
+                                        ><span
+                                            v-else
+                                            class="ml-1 text-xs font-normal text-muted-foreground"
+                                            >(opsional)</span
                                         ></label
                                     >
-                                    <select
-                                        id="participant-category"
-                                        v-model="
-                                            registration.participant_category
-                                        "
+                                    <input
+                                        :id="'registration-' + field.key"
+                                        v-model="registration[field.key]"
                                         class="sisurat-input min-h-12 w-full"
-                                        required
-                                    >
-                                        <option value="" disabled>
-                                            Pilih kategori peserta
-                                        </option>
-                                        <option value="smk">Siswa SMK</option>
-                                        <option value="sma">Siswa SMA</option>
-                                        <option value="university">
-                                            Mahasiswa
-                                        </option>
-                                    </select>
+                                        :required="field.required"
+                                        :maxlength="field.max"
+                                        :placeholder="field.placeholder"
+                                        :autocomplete="field.autocomplete"
+                                        :aria-invalid="
+                                            Boolean(
+                                                registration.errors[field.key],
+                                            )
+                                        "
+                                    />
                                     <InputError
                                         :message="
-                                            registration.errors
-                                                .participant_category
+                                            registration.errors[field.key]
                                         "
                                     />
                                 </div>
-                                <div class="grid gap-5 sm:grid-cols-2">
-                                    <div
-                                        v-for="field in fields"
-                                        :key="field.key"
-                                        :class="
-                                            field.key === 'institution'
-                                                ? 'sm:col-span-2'
-                                                : ''
-                                        "
-                                    >
+                            </div>
+                            <div class="grid gap-5 sm:grid-cols-2">
+                                <div>
+                                    <label for="registration-pin" class="mb-2 block text-sm font-medium">Buat PIN absensi (6 digit)<span class="ml-1 text-red-600" aria-hidden="true">*</span></label>
+                                    <input id="registration-pin" v-model="registration.pin" class="sisurat-input min-h-12 w-full" type="password" inputmode="numeric" pattern="[0-9]{6}" minlength="6" maxlength="6" required autocomplete="new-password" />
+                                    <InputError :message="registration.errors.pin" />
+                                </div>
+                                <div>
+                                    <label for="registration-pin-confirmation" class="mb-2 block text-sm font-medium">Ulangi PIN<span class="ml-1 text-red-600" aria-hidden="true">*</span></label>
+                                    <input id="registration-pin-confirmation" v-model="registration.pin_confirmation" class="sisurat-input min-h-12 w-full" type="password" inputmode="numeric" pattern="[0-9]{6}" minlength="6" maxlength="6" required autocomplete="new-password" />
+                                    <InputError :message="registration.errors.pin_confirmation" />
+                                </div>
+                            </div>
+                            <fieldset
+                                class="rounded-2xl border border-border p-4"
+                            >
+                                <legend class="px-1 text-sm font-medium">
+                                    Periode magang
+                                </legend>
+                                <div class="grid gap-4 sm:grid-cols-2">
+                                    <div>
                                         <label
-                                            :for="'registration-' + field.key"
-                                            class="mb-2 block text-sm font-medium"
-                                            >{{ field.label
-                                            }}<span
-                                                v-if="field.required"
+                                            for="registration-start"
+                                            class="mb-2 block text-sm"
+                                            >Tanggal mulai<span
                                                 class="ml-1 text-red-600"
-                                                aria-hidden="true"
                                                 >*</span
-                                            ><span
-                                                v-else
-                                                class="ml-1 text-xs font-normal text-muted-foreground"
-                                                >(opsional)</span
                                             ></label
-                                        >
-                                        <input
-                                            :id="'registration-' + field.key"
-                                            v-model="registration[field.key]"
-                                            class="sisurat-input min-h-12 w-full"
-                                            :required="field.required"
-                                            :maxlength="field.max"
-                                            :placeholder="field.placeholder"
-                                            :autocomplete="field.autocomplete"
-                                            :aria-invalid="
-                                                Boolean(
-                                                    registration.errors[
-                                                        field.key
-                                                    ],
-                                                )
+                                        ><input
+                                            id="registration-start"
+                                            v-model="registration.start_date"
+                                            type="date"
+                                            class="sisurat-input min-h-12 w-full min-w-0"
+                                            required
+                                        /><InputError
+                                            :message="
+                                                registration.errors.start_date
                                             "
                                         />
-                                        <InputError
+                                    </div>
+                                    <div>
+                                        <label
+                                            for="registration-end"
+                                            class="mb-2 block text-sm"
+                                            >Tanggal selesai<span
+                                                class="ml-1 text-red-600"
+                                                >*</span
+                                            ></label
+                                        ><input
+                                            id="registration-end"
+                                            v-model="registration.end_date"
+                                            type="date"
+                                            class="sisurat-input min-h-12 w-full min-w-0"
+                                            :min="registration.start_date"
+                                            required
+                                        /><InputError
                                             :message="
-                                                registration.errors[field.key]
+                                                registration.errors.end_date
                                             "
                                         />
                                     </div>
                                 </div>
-                                <fieldset
-                                    class="rounded-2xl border border-border p-4"
-                                >
-                                    <legend class="px-1 text-sm font-medium">
-                                        Periode magang
-                                    </legend>
-                                    <div class="grid gap-4 sm:grid-cols-2">
-                                        <div>
-                                            <label
-                                                for="registration-start"
-                                                class="mb-2 block text-sm"
-                                                >Tanggal mulai<span
-                                                    class="ml-1 text-red-600"
-                                                    >*</span
-                                                ></label
-                                            ><input
-                                                id="registration-start"
-                                                v-model="
-                                                    registration.start_date
-                                                "
-                                                type="date"
-                                                class="sisurat-input min-h-12 w-full min-w-0"
-                                                required
-                                            /><InputError
-                                                :message="
-                                                    registration.errors
-                                                        .start_date
-                                                "
-                                            />
-                                        </div>
-                                        <div>
-                                            <label
-                                                for="registration-end"
-                                                class="mb-2 block text-sm"
-                                                >Tanggal selesai<span
-                                                    class="ml-1 text-red-600"
-                                                    >*</span
-                                                ></label
-                                            ><input
-                                                id="registration-end"
-                                                v-model="registration.end_date"
-                                                type="date"
-                                                class="sisurat-input min-h-12 w-full min-w-0"
-                                                :min="registration.start_date"
-                                                required
-                                            /><InputError
-                                                :message="
-                                                    registration.errors.end_date
-                                                "
-                                            />
-                                        </div>
-                                    </div>
-                                </fieldset>
-                                <fieldset
-                                    class="rounded-2xl border border-border p-4"
-                                >
-                                    <legend class="px-1 text-sm font-medium">
-                                        Buat PIN absensi
-                                    </legend>
-                                    <p
-                                        id="registration-pin-help"
-                                        class="mb-4 text-xs leading-6 text-muted-foreground"
-                                    >
-                                        Buat PIN pribadi 8 angka yang mudah Anda
-                                        ingat. PIN ini digunakan untuk membuka
-                                        absensi berikutnya tanpa mengisi data
-                                        diri kembali. Jangan bagikan PIN kepada
-                                        orang lain.
-                                    </p>
-                                    <div class="grid gap-4 sm:grid-cols-2">
-                                        <div>
-                                            <label
-                                                for="registration-pin"
-                                                class="mb-2 block text-sm"
-                                                >PIN pribadi<span
-                                                    class="ml-1 text-red-600"
-                                                    aria-hidden="true"
-                                                    >*</span
-                                                ></label
-                                            >
-                                            <input
-                                                id="registration-pin"
-                                                v-model="registration.pin"
-                                                :type="
-                                                    showRegistrationPin
-                                                        ? 'text'
-                                                        : 'password'
-                                                "
-                                                inputmode="numeric"
-                                                pattern="[0-9]{8}"
-                                                minlength="8"
-                                                maxlength="8"
-                                                autocomplete="new-password"
-                                                required
-                                                class="sisurat-input min-h-12 w-full font-mono tracking-widest"
-                                                placeholder="Buat 8 angka"
-                                                :aria-invalid="
-                                                    Boolean(
-                                                        registration.errors.pin,
-                                                    )
-                                                "
-                                                aria-describedby="registration-pin-help registration-pin-error"
-                                            />
-                                            <InputError
-                                                id="registration-pin-error"
-                                                class="mt-2"
-                                                :message="
-                                                    registration.errors.pin
-                                                "
-                                            />
-                                        </div>
-                                        <div>
-                                            <label
-                                                for="registration-pin-confirmation"
-                                                class="mb-2 block text-sm"
-                                                >Ulangi PIN<span
-                                                    class="ml-1 text-red-600"
-                                                    aria-hidden="true"
-                                                    >*</span
-                                                ></label
-                                            >
-                                            <input
-                                                id="registration-pin-confirmation"
-                                                v-model="
-                                                    registration.pin_confirmation
-                                                "
-                                                :type="
-                                                    showRegistrationPin
-                                                        ? 'text'
-                                                        : 'password'
-                                                "
-                                                inputmode="numeric"
-                                                pattern="[0-9]{8}"
-                                                minlength="8"
-                                                maxlength="8"
-                                                autocomplete="new-password"
-                                                required
-                                                class="sisurat-input min-h-12 w-full font-mono tracking-widest"
-                                                placeholder="Ketik PIN yang sama"
-                                                :aria-invalid="
-                                                    Boolean(
-                                                        registration.errors
-                                                            .pin_confirmation,
-                                                    )
-                                                "
-                                                aria-describedby="registration-pin-confirmation-error"
-                                            />
-                                            <InputError
-                                                id="registration-pin-confirmation-error"
-                                                class="mt-2"
-                                                :message="
-                                                    registration.errors
-                                                        .pin_confirmation
-                                                "
-                                            />
-                                        </div>
-                                    </div>
-                                    <label
-                                        class="mt-3 flex min-h-11 items-center gap-3 text-sm text-muted-foreground"
-                                        ><input
-                                            v-model="showRegistrationPin"
-                                            type="checkbox"
-                                            class="size-4 accent-primary"
-                                        />Tampilkan PIN pendaftaran</label
-                                    >
-                                </fieldset>
-                                <p
-                                    class="flex gap-2 rounded-xl bg-muted/60 p-3 text-xs leading-6 text-muted-foreground"
-                                >
-                                    <Info class="mt-1 size-4 shrink-0" />Gunakan
-                                    perangkat pribadi dan ingat PIN yang Anda
-                                    buat. PIN digunakan jika Anda berganti HP
-                                    atau data belum dikenali pada browser.
-                                </p>
-                                <button
-                                    type="submit"
-                                    class="sisurat-primary-action min-h-12 w-full justify-center"
-                                    :disabled="
-                                        registration.processing ||
-                                        refreshingSession
-                                    "
-                                >
-                                    {{
-                                        refreshingSession
-                                            ? 'Menyiapkan formulir…'
-                                            : registration.processing
-                                              ? 'Menyimpan data peserta…'
-                                              : 'Daftar dan lanjutkan ke absensi'
-                                    }}<ArrowRight class="size-4" />
-                                </button>
-                            </form>
-                        </div>
+                            </fieldset>
+                            <p
+                                class="flex gap-2 rounded-xl bg-muted/60 p-3 text-xs leading-6 text-muted-foreground"
+                            >
+                                <Info class="mt-1 size-4 shrink-0" />Simpan PIN
+                                ini. PIN dapat digunakan untuk masuk dari
+                                perangkat lain, dan dapat diubah admin PMB.
+                            </p>
+                            <button
+                                type="submit"
+                                class="sisurat-primary-action min-h-12 w-full justify-center"
+                                :disabled="registration.processing"
+                            >
+                                {{
+                                    registration.processing
+                                        ? 'Menyimpan data peserta…'
+                                        : 'Daftar dan lanjutkan ke absensi'
+                                }}<ArrowRight class="size-4" />
+                            </button>
+                        </form>
                     </div>
                     <div v-else>
                         <div class="flex items-start justify-between gap-3">
@@ -991,15 +672,12 @@ function dateLabel(date: string) {
                             </div>
                             <button
                                 type="button"
-                                class="inline-flex items-center gap-2 rounded-xl border border-border p-3 text-xs text-muted-foreground"
-                                aria-label="Ganti peserta dan lepaskan akses perangkat"
-                                title="Ganti peserta dan lepaskan akses perangkat"
-                                :disabled="
-                                    recoveryForm.processing || refreshingSession
-                                "
+                                class="rounded-xl border border-border p-3 text-muted-foreground"
+                                aria-label="Lepaskan akses perangkat"
+                                title="Lepaskan akses perangkat"
                                 @click="releaseDevice"
                             >
-                                <LogOut class="size-4" />Ganti peserta
+                                <LogOut class="size-4" />
                             </button>
                         </div>
                         <div
@@ -1042,35 +720,23 @@ function dateLabel(date: string) {
                                 </p>
                             </div>
                         </div>
-                        <div
-                            class="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border p-4"
-                        >
-                            <p
-                                class="min-w-0 flex-1 text-xs leading-6 text-muted-foreground"
-                            >
-                                {{
-                                    participant.has_pin
-                                        ? 'Gunakan PIN pribadi jika membuka absensi dari perangkat lain.'
-                                        : 'Buat PIN agar dapat membuka data ini dari perangkat lain tanpa bantuan admin.'
-                                }}
-                            </p>
-                            <button
-                                type="button"
-                                class="sisurat-secondary-action min-h-11 shrink-0"
-                                :disabled="
-                                    pinIssueForm.processing || refreshingSession
-                                "
-                                @click="createPin"
-                            >
-                                <KeyRound class="size-4" />{{
-                                    pinIssueForm.processing
-                                        ? 'Membuat PIN…'
-                                        : participant.has_pin
-                                          ? 'Ganti PIN'
-                                          : 'Buat PIN'
-                                }}
-                            </button>
-                        </div>
+                        <details class="mt-5 rounded-2xl border border-border p-4">
+                            <summary class="cursor-pointer text-sm font-semibold">Ubah PIN absensi</summary>
+                            <p class="mt-2 text-xs leading-5 text-muted-foreground">Buat PIN baru 6 digit. PIN lama akan langsung tidak berlaku.</p>
+                            <form class="mt-4 grid gap-3 sm:grid-cols-2" @submit.prevent="updatePin">
+                                <div>
+                                    <label for="change-pin" class="mb-1 block text-xs font-medium">PIN baru</label>
+                                    <input id="change-pin" v-model="pinForm.pin" class="sisurat-input min-h-11 w-full" type="password" inputmode="numeric" pattern="[0-9]{6}" minlength="6" maxlength="6" required autocomplete="new-password" />
+                                    <InputError :message="pinForm.errors.pin" />
+                                </div>
+                                <div>
+                                    <label for="change-pin-confirmation" class="mb-1 block text-xs font-medium">Ulangi PIN baru</label>
+                                    <input id="change-pin-confirmation" v-model="pinForm.pin_confirmation" class="sisurat-input min-h-11 w-full" type="password" inputmode="numeric" pattern="[0-9]{6}" minlength="6" maxlength="6" required autocomplete="new-password" />
+                                    <InputError :message="pinForm.errors.pin_confirmation" />
+                                </div>
+                                <button type="submit" class="sisurat-primary-action sm:col-span-2 sm:justify-self-start" :disabled="pinForm.processing">{{ pinForm.processing ? 'Menyimpan PIN…' : 'Simpan PIN baru' }}</button>
+                            </form>
+                        </details>
                         <div class="mt-5 grid grid-cols-2 gap-3">
                             <div
                                 v-for="item in [
@@ -1220,7 +886,6 @@ function dateLabel(date: string) {
                                 class="sisurat-primary-action min-h-12 w-full justify-center"
                                 :disabled="
                                     checkForm.processing ||
-                                    refreshingSession ||
                                     readingLocation ||
                                     !checkForm.signature ||
                                     !location.configured ||
@@ -1249,5 +914,18 @@ function dateLabel(date: string) {
                 </section>
             </div>
         </div>
+        <SubmissionResultDialog
+            v-model:open="successDialogOpen"
+            variant="success"
+            eyebrow="Berhasil"
+            title="Absensi Magang Berhasil!"
+            description="Terima kasih! Kehadiran magang Anda telah berhasil dicatat. Selamat menjalankan aktivitas dan tetap semangat!"
+        />
+        <SubmissionResultDialog
+            v-model:open="failureDialogOpen"
+            variant="error"
+            title="Absensi Magang Belum Berhasil"
+            :description="failureMessage"
+        />
     </PublicLayout>
 </template>

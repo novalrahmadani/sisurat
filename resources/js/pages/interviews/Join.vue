@@ -6,6 +6,7 @@ import { Head, useForm } from '@inertiajs/vue3';
 import { CheckCircle2, ClipboardList, LoaderCircle, Send } from '@lucide/vue';
 import { computed, nextTick, ref, watch } from 'vue';
 import AppLogoIcon from '@/components/AppLogoIcon.vue';
+import SubmissionResultDialog from '@/components/SubmissionResultDialog.vue';
 import { submit as submitInterview } from '@/routes/interviews';
 
 type InterviewQuestion = {
@@ -65,6 +66,8 @@ const form = useForm({
     answers: emptyAnswers(),
 });
 const receiptVisible = ref(props.submitted);
+const successDialogOpen = ref(props.submitted);
+const failureDialogOpen = ref(false);
 const questionsUpdated = ref(false);
 const submissionError = ref('');
 const nameInput = ref<HTMLInputElement | null>(null);
@@ -101,6 +104,12 @@ const errorMessages = computed(() =>
             ),
         ),
     ),
+);
+const failureMessage = computed(
+    () =>
+        submissionError.value ||
+        errorMessages.value.join(' ') ||
+        'Periksa kembali jawaban yang ditandai, lalu coba kirim ulang.',
 );
 
 watch(
@@ -173,6 +182,7 @@ function submit(): void {
         }
     });
     if (form.hasErrors) {
+        failureDialogOpen.value = true;
         focusErrors();
         return;
     }
@@ -185,12 +195,17 @@ function submit(): void {
             form.clearErrors();
             questionsUpdated.value = false;
             receiptVisible.value = true;
+            successDialogOpen.value = true;
             void nextTick(() => receipt.value?.focus());
         },
-        onError: focusErrors,
+        onError: () => {
+            failureDialogOpen.value = true;
+            focusErrors();
+        },
         onNetworkError: () => {
             submissionError.value =
                 'Koneksi terputus. Isian Anda masih tersedia di halaman ini. Periksa koneksi lalu kirim kembali.';
+            failureDialogOpen.value = true;
             focusErrors();
             return false;
         },
@@ -203,6 +218,7 @@ function submit(): void {
                       : response.status === 404
                         ? 'Form wawancara sudah tidak tersedia. Hubungi panitia PMB untuk mendapatkan tautan yang sesuai.'
                         : 'Jawaban belum dapat disimpan. Isian Anda masih tersedia di halaman ini; coba kirim kembali atau hubungi panitia.';
+            failureDialogOpen.value = true;
             focusErrors();
             return false;
         },
@@ -223,6 +239,7 @@ function fillAnotherParticipant(): void {
     submissionError.value = '';
     questionsUpdated.value = false;
     receiptVisible.value = false;
+    successDialogOpen.value = false;
     void nextTick(() => nameInput.value?.focus());
 }
 </script>
@@ -647,5 +664,18 @@ function fillAnotherParticipant(): void {
                 Sekretariat PMB · Universitas Nurul Huda
             </footer>
         </main>
+        <SubmissionResultDialog
+            v-model:open="successDialogOpen"
+            variant="success"
+            eyebrow="Berhasil"
+            title="Tes Wawancara PMB Berhasil Dikirim!"
+            description="Terima kasih telah menyelesaikan tes wawancara PMB. Percayalah pada potensi diri, tetap optimis, dan jadikan setiap proses sebagai langkah awal menuju masa depan yang lebih baik. Semoga sukses!"
+        />
+        <SubmissionResultDialog
+            v-model:open="failureDialogOpen"
+            variant="error"
+            title="Jawaban Belum Berhasil Dikirim"
+            :description="failureMessage"
+        />
     </div>
 </template>
